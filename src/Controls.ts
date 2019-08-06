@@ -1,17 +1,17 @@
 export class Controls {
-    static INSTANCE;
+    public static INSTANCE: Controls;
 
-    static getInstance() {
+    public static getInstance() {
         if (!Controls.INSTANCE) {
             Controls.INSTANCE = new Controls();
         }
         return Controls.INSTANCE;
     }
 
-    leftFunctions = []
-    rightFunctions = []
-    upFunctions = []
-    downFunctions = []
+    private leftFunctions: Function[] = []
+    private rightFunctions: Function[] = []
+    private upFunctions: Function[] = []
+    private downFunctions: Function[] = []
 
     constructor() {
         document.addEventListener("keydown", (event) => {
@@ -30,19 +30,19 @@ export class Controls {
         });
     }
 
-    onLeft(method) {
+    public onLeft(method: Function) {
         this.leftFunctions.push(method);
     }
     
-    onRight(method) {
+    public onRight(method: Function) {
         this.rightFunctions.push(method);
     }
     
-    onUp(method) {
+    public onUp(method: Function) {
         this.upFunctions.push(method);
     }
 
-    onDown(method) {
+    public onDown(method: Function) {
         this.downFunctions.push(method);
     }
 

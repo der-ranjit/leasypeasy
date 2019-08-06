@@ -1,28 +1,20 @@
-import {isEven} from "./Utils.js";
-import { Square } from "./Square.js";
+import {isEven} from "./Utils";
+import { Square } from "./Square";
 
 export class Board {
-    board;
-    fieldWidth;
-    context;
-    columns;
-    rows;
-    totalWidth;
-    totalHeight;
+    public field: Array<number[]>;
+    public totalWidth: number;
+    public totalHeight: number;
     
-    pieces = [];
+    private pieces: Square[] = [];
 
-    constructor(columns, rows, fieldWidth, context) {
-        this.columns = columns;
-        this.rows = rows;
-        this.fieldWidth = fieldWidth;
-        this.context = context;
-        this.board = this.createBoard(columns, rows);
+    constructor(public columns: number, public rows: number, public fieldWidth: number, public context: CanvasRenderingContext2D) {
+        this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
         this.totalHeight = this.rows * this.fieldWidth;
     }
 
-    createBoard(columns, rows) {
+    public createBoard(columns: number, rows: number): Array<number[]> {
         const board = new Array(columns);
         for (let i = 0; i < columns; i++) {
             board[i] = [];
@@ -39,7 +31,7 @@ export class Board {
         return board;
     }
 
-    createPiece(startColumn, startRow, width, color = "white") {
+    public createPiece(startColumn: number, startRow: number, width: number, color = "white") {
         const offsetCenterX = this.fieldWidth / 2 - width / 2;
         const offsetCenterY = this.fieldWidth / 2 - width / 2;
         const posX = startColumn * this.fieldWidth + offsetCenterX;
@@ -49,35 +41,35 @@ export class Board {
         return piece;
     }
 
-    movePieceRight(piece) {
-        let newX = piece.x;
+    public movePieceRight(piece: Square) {
+        let newX = piece.posX;
         newX += this.fieldWidth;
         if (newX + piece.width < this.totalWidth) {
-            piece.x = newX;
+            piece.posX = newX;
         }
     }
     
-    movePieceLeft(piece) {
-        let newX = piece.x;
+    public movePieceLeft(piece: Square) {
+        let newX = piece.posX;
         newX -= this.fieldWidth;
         if (newX >= 0) {
-            piece.x = newX;
+            piece.posX = newX;
         }
     }
 
-    movePieceUp(piece) {
-        let newY = piece.y;
+    public movePieceUp(piece: Square) {
+        let newY = piece.posY;
         newY -= this.fieldWidth;
         if (newY > 0) {
-            piece.y = newY;
+            piece.posY = newY;
         }
     }
 
-    movePieceDown(piece) {
-        let newY = piece.y;
+    public movePieceDown(piece: Square) {
+        let newY = piece.posY;
         newY += this.fieldWidth;
         if (newY + piece.width < this.totalHeight) {
-            piece.y = newY;
+            piece.posY = newY;
         }
     }
 }
