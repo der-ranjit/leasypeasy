@@ -1,0 +1,16 @@
+{
+  "name": "leasypeasy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -w && lite-server dist/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lite-server": "^2.5.3",
+    "tsc": "^1.20150623.0"
+  }
+}
