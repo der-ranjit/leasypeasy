@@ -2,9 +2,9 @@ import {isEven} from "../Utils";
 import { Square } from "../Engine/Square";
 import { Piece } from "./Piece";
 import { Controls } from "../Engine/Controls";
-import { start } from "repl";
+import { RenderObject } from "../Engine/RenderObject";
 
-export class Board {
+export class Board extends RenderObject {
     public field: Array<number[]>;
     public totalWidth: number;
     public totalHeight: number;
@@ -14,11 +14,20 @@ export class Board {
 
 
     constructor(public columns: number, public rows: number, public fieldWidth: number, public context: CanvasRenderingContext2D) {
+        super();
         this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
         this.totalHeight = this.rows * this.fieldWidth;
 
         this.initControls();
+    }
+
+    public update() {
+
+    }
+
+    public draw() {
+
     }
 
     public createBoard(columns: number, rows: number): Array<number[]> {

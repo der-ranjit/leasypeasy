@@ -1,5 +1,4 @@
 import { RenderObject } from "./RenderObject";
-import { Renderer } from "./Renderer";
 
 export class Square extends RenderObject {
     constructor (
@@ -10,9 +9,6 @@ export class Square extends RenderObject {
         public context: CanvasRenderingContext2D
     ) {
         super();
-
-        const renderer = Renderer.getInstance();
-        renderer.addRenderObject(this);
     }
 
     public update(delta: number) {
