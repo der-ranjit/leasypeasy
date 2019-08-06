@@ -1,5 +1,5 @@
-import {isEven} from "./Utils";
-import { Square } from "./Square";
+import {isEven} from "../Utils";
+import { Square } from "../Engine/Square";
 
 export class Board {
     public field: Array<number[]>;

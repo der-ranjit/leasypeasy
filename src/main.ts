@@ -1,5 +1,5 @@
-import { Board } from "./Board";
-import { Controls } from "./Controls";
+import { Board } from "./GameParts/Board";
+import { Controls } from "./Engine/Controls";
 import { executeRandomly } from "./Utils";
 
 const main = () => {
