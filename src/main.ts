@@ -1,6 +1,6 @@
-import { Board } from "./Board.js";
-import { Controls } from "./Controls.js";
-import { executeRandomly } from "./Utils.js";
+import { Board } from "./Board";
+import { Controls } from "./Controls";
+import { executeRandomly } from "./Utils";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
