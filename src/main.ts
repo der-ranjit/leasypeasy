@@ -1,5 +1,4 @@
 import { Board } from "./GameParts/Board";
-import { Controls } from "./Engine/Controls";
 import { executeRandomly } from "./Utils";
 
 const main = () => {
@@ -18,23 +17,18 @@ const main = () => {
             const playerStartColumn = 2;
             const playerStartRow = 3;
             const playerWidth = 15;
-            const player = board.createPiece(playerStartColumn, playerStartRow, playerWidth);
-        
-            const controls = Controls.getInstance();
-            controls.onLeft(() => board.movePieceLeft(player));
-            controls.onUp(() => board.movePieceUp(player));
-            controls.onRight(() => board.movePieceRight(player));
-            controls.onDown(() => board.movePieceDown(player));
-            
+            const player = board.createPlayer(playerStartColumn, playerStartRow, playerWidth);
+
+            const playerMoveDistance = board.fieldWidth;
             const movementFunctions = [
-                () => board.movePieceLeft(player),
-                () => board.movePieceUp(player),
-                () => board.movePieceRight(player),
-                () => board.movePieceDown(player),
+                () => player.moveLeft(playerMoveDistance),
+                () => player.moveUp(playerMoveDistance),
+                () => player.moveRight(playerMoveDistance),
+                () => player.moveDown(playerMoveDistance),
             ]
         
             setInterval(() => {
-                executeRandomly(movementFunctions);
+                // executeRandomly(movementFunctions);
             }, 100)
         }
     }
