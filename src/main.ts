@@ -28,7 +28,7 @@ const main = () => {
             ]
         
             setInterval(() => {
-                // executeRandomly(movementFunctions);
+                executeRandomly(movementFunctions);
             }, 100)
         }
     }
