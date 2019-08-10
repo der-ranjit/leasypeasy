@@ -1,6 +1,6 @@
 import {isEven} from "../Utils";
 import { Square } from "../Engine/Square";
-import { Piece } from "./Piece";
+import { ShapedPiece, PieceShape } from "./ShapedPiece";
 import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";
 import { Point } from "../Engine/Point";
@@ -10,8 +10,8 @@ export class Board extends RenderObject {
     public totalWidth: number;
     public totalHeight: number;
     
-    private pieces: Piece[] = [];
-    private player: Piece | null = null;
+    private pieces: ShapedPiece[] = [];
+    private player: ShapedPiece | null = null;
 
 
     constructor(
@@ -57,27 +57,23 @@ export class Board extends RenderObject {
         return field;
     }
 
-    public createPlayer(startColumn: number, startRow: number, width: number, color = "white"): Piece {
+    public createPlayer(column: number, row: number, width: number, color = "white"): ShapedPiece {
         if(!this.player) {
-            const player = this.createPiece(startColumn, startRow, width, color);
+            const player = this.createPiece(column, row, width, color, PieceShape.CIRCLE);
             this.player = player;
         }
         return this.player;
     }
 
-    public addPiece(startColumn: number, startRow: number, width: number, color?: string): Piece {
-        const piece = this.createPiece(startColumn, startRow, width, color);
+    public addPiece(column: number, row: number, width: number, color?: string): ShapedPiece {
+        const piece = this.createPiece(column, row, width, color);
         this.pieces.push(piece);
         return piece;
     }
 
-    private createPiece(startColumn: number, startRow: number, width: number, color = "black"): Piece {
-        const offsetCenterX = this.fieldWidth / 2 - width / 2;
-        const offsetCenterY = this.fieldWidth / 2 - width / 2;
-        const posX = this.position.x + startColumn * this.fieldWidth + offsetCenterX;
-        const posY = this.position.y + startRow * this.fieldWidth + offsetCenterY;
-        const position = new Point(posX, posY);
-        const piece = new Piece(position, width, color, this, this.context);
+    private createPiece(column: number, row: number, width: number, color = "black", shapeType = PieceShape.SQUARE): ShapedPiece {
+        const position = new Point(column, row);
+        const piece = new ShapedPiece(position, width, color, shapeType, this, this.context);
         return piece;
     }
 

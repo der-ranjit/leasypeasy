@@ -1,23 +1,13 @@
-import { RenderObject } from "./RenderObject";
 import { Point } from "./Point";
+import { Rectangle } from "./Rectangle";
 
-export class Square extends RenderObject {
+export class Square extends Rectangle {
     constructor (
         public position: Point,
         public width: number,
         public color = "black",
         public context: CanvasRenderingContext2D
     ) {
-        super();
+        super(position, width, width, color, context);
     }
-
-    public update(delta: number) {
-
-    }
-
-    public draw(delta: number) {
-        this.context.fillStyle = this.color;
-        this.context.fillRect(this.position.x, this.position.y, this.width, this.width);
-    }
-
 }

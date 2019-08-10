@@ -18,7 +18,7 @@ const main = () => {
             
             const playerStartColumn = 2;
             const playerStartRow = 3;
-            const playerWidth = 15;
+            const playerWidth = 25;
             const player = board.createPlayer(playerStartColumn, playerStartRow, playerWidth);
 
             const playerMoveDistance = board.fieldWidth;
