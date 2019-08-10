@@ -22,7 +22,14 @@ const main = () => {
             const playerStartRow = 3;
             const player = board.createPlayer(playerStartColumn, playerStartRow, pieceWidth);
             
-            const colors: Color[] = [Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE];
+            const colors: Color[] = [
+                Color.RED,
+                Color.GREEN,
+                Color.BLUE,
+                Color.YELLOW,
+                Color.MAGENTA,
+                Color.CYAN
+            ];
             const addRandomPiece = () => {
                 const randomColor = colors[randomInt(0, colors.length)];
                 const randomColumn = randomInt(0, board.columns);
