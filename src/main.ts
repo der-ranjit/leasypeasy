@@ -21,14 +21,6 @@ const main = () => {
             const playerStartRow = 3;
             const player = board.createPlayer(playerStartColumn, playerStartRow, pieceWidth);
             
-            const playerMoveDistance = board.fieldWidth;
-            const movementFunctions = [
-                () => player.moveLeft(playerMoveDistance),
-                () => player.moveUp(playerMoveDistance),
-                () => player.moveRight(playerMoveDistance),
-                () => player.moveDown(playerMoveDistance),
-            ]
-            
             const colors = ["red", "green", "yellow", "blue"];
             const addRandomPiece = () => {
                 const randomColor = colors[randomInt(0, colors.length)];
@@ -41,15 +33,6 @@ const main = () => {
             setInterval(() => {
                 addRandomPiece();
             }, 2000);
-
-
-            // setInterval(() => {
-            //     executeRandomly(movementFunctions);
-            // }, 100)
-            
-            canvas.addEventListener("click", (event) => {
-                // board.addPieceAtMousePosition(event);
-            })
         }
     }
 }
