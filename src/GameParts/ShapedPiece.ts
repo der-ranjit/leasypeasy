@@ -73,6 +73,11 @@ export class ShapedPiece {
         }
     }
 
+    public setColor(color: string) {
+        this.color = color;
+        this.shape.color = color;
+    }
+
     private createCenteredSquare(position: Point, context: CanvasRenderingContext2D): Square {
         const offsetCenterX = this.ownerBoard.fieldWidth / 2 - this.width / 2;
         const offsetCenterY = this.ownerBoard.fieldWidth / 2 - this.width / 2;
