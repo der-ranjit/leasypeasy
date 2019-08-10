@@ -7,8 +7,8 @@ const main = () => {
     if (canvas) {
         const context = canvas.getContext("2d");
         if (context) {
-            const boardRows = 5;
-            const boardColumns = 5;
+            const boardRows = 13;
+            const boardColumns = 13;
             const boardFieldWidth = 50;
             const boardPosition = new Point(0, 0);
             
@@ -40,7 +40,7 @@ const main = () => {
             }
             setInterval(() => {
                 addRandomPiece();
-            }, 3500);
+            }, 2000);
 
 
             // setInterval(() => {
