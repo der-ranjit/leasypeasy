@@ -41,7 +41,8 @@ export class ShapedPiece {
 
     public moveRight(moveDistance: number) {
         let newX = this.shape.position.x + moveDistance;
-        if (newX + this.width < this.ownerBoard.position.x + this.ownerBoard.totalWidth) {
+        const width = this.shapeType === PieceShape.SQUARE ? this.width : this.width / 2;
+        if (newX + width < this.ownerBoard.position.x + this.ownerBoard.totalWidth) {
             this.shape.position.x = newX;
         }
     }
@@ -62,7 +63,8 @@ export class ShapedPiece {
 
     public moveDown(moveDistance: number) {
         let newY = this.shape.position.y + moveDistance;
-        if (newY + this.width < this.ownerBoard.position.y + this.ownerBoard.totalHeight) {
+        const width = this.shapeType === PieceShape.SQUARE ? this.width : this.width / 2;
+        if (newY + width < this.ownerBoard.position.y + this.ownerBoard.totalHeight) {
             this.shape.position.y = newY;
         }
     }
