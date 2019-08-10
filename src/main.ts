@@ -1,7 +1,5 @@
 import { Board } from "./GameParts/Board";
-import { randomInt } from "./Utils";
 import { Point } from "./Engine/Point";
-import { Color } from "./Engine/Color";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -32,14 +30,3 @@ const main = () => {
 window.onload = () => {
     main();
 }
-
-
-
-
-
-
-
-
-
-
-
