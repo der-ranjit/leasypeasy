@@ -24,7 +24,6 @@ export class Color {
         const r = clamp(0, 255, color1.r + color2.r);
         const g = clamp(0, 255, color1.g + color2.g);
         const b = clamp(0, 255, color1.b + color2.b);
-        console.log(r,g, b);
         return new Color(r, g, b);
     }
 
