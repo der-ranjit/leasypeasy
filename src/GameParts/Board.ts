@@ -4,6 +4,7 @@ import { ShapedPiece, PieceShape } from "./ShapedPiece";
 import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";
 import { Point } from "../Engine/Point";
+import { Color } from "../Engine/Color";
 
 export class Board extends RenderObject {
     public field: Array<number[]>;
@@ -49,16 +50,16 @@ export class Board extends RenderObject {
                     this.position.y + y * this.fieldWidth
                 );
                 if (!isEven(x) && isEven(y) || isEven(x) && !isEven(y)) {
-                    field[x][y] = new Square(position, this.fieldWidth, "black", this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.context); 
                 } else {
-                    field[x][y] = new Square(position, this.fieldWidth, "grey", this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, Color.GREY, this.context); 
                 }
             }   
         }
         return field;
     }
 
-    public createPlayer(column: number, row: number, width: number, color = "white"): ShapedPiece {
+    public createPlayer(column: number, row: number, width: number, color = Color.WHITE): ShapedPiece {
         if(!this.player) {
             const player = this.createPiece(column, row, width, color, PieceShape.CIRCLE);
             this.player = player;
@@ -66,7 +67,7 @@ export class Board extends RenderObject {
         return this.player;
     }
 
-    public addPiece(column: number, row: number, width: number, color?: string): ShapedPiece {
+    public addPiece(column: number, row: number, width: number, color?: Color): ShapedPiece {
         const piece = this.createPiece(column, row, width, color);
         this.pieces.push(piece);
         return piece;
@@ -75,7 +76,7 @@ export class Board extends RenderObject {
     public addPieceAtMousePosition(mouseEvent: MouseEvent) {
         const mousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY)
         const fieldCoords = this.getFieldCoordsByPoint(mousePosition); 
-        this.addPiece(fieldCoords.x, fieldCoords.y, 20, "green");
+        this.addPiece(fieldCoords.x, fieldCoords.y, 20, Color.GREEN);
     }
 
     public isFieldEmpty(column: number, row: number): boolean {
@@ -85,7 +86,7 @@ export class Board extends RenderObject {
         });
     }
 
-    private createPiece(column: number, row: number, width: number, color = "black", shapeType = PieceShape.SQUARE): ShapedPiece {
+    private createPiece(column: number, row: number, width: number, color = Color.BLACK, shapeType = PieceShape.SQUARE): ShapedPiece {
         const position = new Point(column, row);
         const piece = new ShapedPiece(position, width, color, shapeType, this, this.context);
         return piece;

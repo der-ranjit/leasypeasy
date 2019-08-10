@@ -2,6 +2,7 @@ import { Square } from "../Engine/Square";
 import { Board } from "./Board";
 import { Point } from "../Engine/Point";
 import { Circle } from "../Engine/Circle";
+import { Color } from "../Engine/Color";
 
 export enum PieceShape {
     SQUARE,
@@ -18,7 +19,7 @@ export class ShapedPiece {
     constructor(
         position: Point,
         public width: number,
-        public color: string,
+        public color: Color,
         public shapeType: PieceShape,
         private ownerBoard: Board,
         context: CanvasRenderingContext2D
@@ -73,7 +74,7 @@ export class ShapedPiece {
         }
     }
 
-    public setColor(color: string) {
+    public setColor(color: Color) {
         this.color = color;
         this.shape.color = color;
     }

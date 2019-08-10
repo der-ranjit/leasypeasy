@@ -1,12 +1,13 @@
 import { RenderObject } from "./RenderObject";
 import { Point } from "./Point";
+import { Color } from "./Color";
 
 export class Rectangle extends RenderObject {
     constructor (
         public position: Point,
         public width: number,
         public height: number,
-        public color = "black",
+        public color = Color.BLACK,
         public context: CanvasRenderingContext2D
     ) {
         super();
@@ -17,7 +18,7 @@ export class Rectangle extends RenderObject {
     }
 
     public draw(delta: number) {
-        this.context.fillStyle = this.color;
+        this.context.fillStyle = this.color.toString();
         this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }

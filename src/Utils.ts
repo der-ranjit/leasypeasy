@@ -14,3 +14,13 @@ export function executeRandomly(functionsArray: Function[]) {
 export function randomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 } 
+
+export function clamp(min: number, max: number, value: number): number {
+    if (value < min) {
+        return min;
+    }
+    if (value > max) {
+        return max;
+    }
+    return value;
+}

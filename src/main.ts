@@ -1,6 +1,7 @@
 import { Board } from "./GameParts/Board";
 import { randomInt } from "./Utils";
 import { Point } from "./Engine/Point";
+import { Color } from "./Engine/Color";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -21,7 +22,7 @@ const main = () => {
             const playerStartRow = 3;
             const player = board.createPlayer(playerStartColumn, playerStartRow, pieceWidth);
             
-            const colors = ["red", "green", "yellow", "blue"];
+            const colors: Color[] = [Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE];
             const addRandomPiece = () => {
                 const randomColor = colors[randomInt(0, colors.length)];
                 const randomColumn = randomInt(0, board.columns);
