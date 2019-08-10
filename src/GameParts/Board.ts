@@ -94,15 +94,21 @@ export class Board extends RenderObject {
         const player = this.player;
         if (player) {
             const playerField = this.getFieldCoordsByPoint(player.position);
-            const inSameField = this.pieces.find(piece => {
+            const sameFieldPiece = this.pieces.find(piece => {
                 const pieceField = this.getFieldCoordsByPoint(piece.position);
                 return pieceField.x === playerField.x && pieceField.y === playerField.y
-            })
+            });
             
-            if (inSameField) {
-                console.log("diwha");
+            if (sameFieldPiece) {
+                this.removePiece(sameFieldPiece);
             }
         }
+    }
+
+    private removePiece(piece: ShapedPiece) {
+        const index = this.pieces.indexOf(piece);
+        this.pieces.splice(index, 1);
+        piece.destroy();
     }
 
     private initControls() {

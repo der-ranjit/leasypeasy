@@ -28,6 +28,13 @@ export class Renderer {
         this.renderObjects.push(renderObject);
     }
 
+    public removeRenderObject(renderObject: RenderObject) {
+        const index = this.renderObjects.indexOf(renderObject);
+        if (index !== -1) {
+            this.renderObjects.splice(index, 1);
+        }
+    }
+
     public stop() {
         this.started = false;
     }

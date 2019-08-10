@@ -39,6 +39,10 @@ export class ShapedPiece {
         }
     }
 
+    public destroy() {
+        this.shape.removeFromRenderer();
+    }
+
     public moveRight(moveDistance: number) {
         let newX = this.shape.position.x + moveDistance;
         const width = this.shapeType === PieceShape.SQUARE ? this.width : this.width / 2;
