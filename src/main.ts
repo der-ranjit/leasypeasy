@@ -1,5 +1,5 @@
 import { Board } from "./GameParts/Board";
-import { executeRandomly } from "./Utils";
+import { executeRandomly, randomInt } from "./Utils";
 import { Point } from "./Engine/Point";
 
 const main = () => {
@@ -29,12 +29,26 @@ const main = () => {
                 () => player.moveDown(playerMoveDistance),
             ]
             
+            const colors = ["red", "green", "yellow", "blue"];
+            const addRandomPiece = () => {
+                const randomColor = colors[randomInt(0, colors.length)];
+                const randomColumn = randomInt(0, board.columns);
+                const randomRow = randomInt(0, board.rows);
+                if (board.isFieldEmpty(randomColumn, randomRow)) {
+                    board.addPiece(randomColumn, randomRow, 25, randomColor);
+                }
+            }
+            setInterval(() => {
+                addRandomPiece();
+            }, 3500);
+
+
             // setInterval(() => {
             //     executeRandomly(movementFunctions);
             // }, 100)
             
             canvas.addEventListener("click", (event) => {
-                board.addPieceAtMousePosition(event);
+                // board.addPieceAtMousePosition(event);
             })
         }
     }

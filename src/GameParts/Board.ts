@@ -78,6 +78,13 @@ export class Board extends RenderObject {
         this.addPiece(fieldCoords.x, fieldCoords.y, 20, "green");
     }
 
+    public isFieldEmpty(column: number, row: number): boolean {
+        return !this.pieces.find(piece => {
+            const pieceField = this.getFieldCoordsByPoint(piece.position);
+            return pieceField.x === column && pieceField.y === row;
+        });
+    }
+
     private createPiece(column: number, row: number, width: number, color = "black", shapeType = PieceShape.SQUARE): ShapedPiece {
         const position = new Point(column, row);
         const piece = new ShapedPiece(position, width, color, shapeType, this, this.context);
@@ -134,5 +141,4 @@ export class Board extends RenderObject {
             }
         });
     }
-    
 }
