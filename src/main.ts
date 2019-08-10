@@ -7,9 +7,9 @@ const main = () => {
     if (canvas) {
         const context = canvas.getContext("2d");
         if (context) {
-            const boardRows = 13;
-            const boardColumns = 13;
-            const boardFieldWidth = 50;
+            const boardRows = 18;
+            const boardColumns = 18;
+            const boardFieldWidth = 35;
             const boardPosition = new Point(0, 0);
             
             const board = new Board(boardColumns, boardRows, boardFieldWidth, boardPosition, context);
