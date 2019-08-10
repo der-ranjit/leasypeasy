@@ -1,5 +1,5 @@
 import { Board } from "./GameParts/Board";
-import { executeRandomly, randomInt } from "./Utils";
+import { randomInt } from "./Utils";
 import { Point } from "./Engine/Point";
 
 const main = () => {
