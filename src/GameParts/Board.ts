@@ -3,6 +3,7 @@ import { Square } from "../Engine/Square";
 import { Piece } from "./Piece";
 import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";
+import { Point } from "../Engine/Point";
 
 export class Board extends RenderObject {
     public field: Array<number[]>;
@@ -13,7 +14,13 @@ export class Board extends RenderObject {
     private player: Piece | null = null;
 
 
-    constructor(public columns: number, public rows: number, public fieldWidth: number, public context: CanvasRenderingContext2D) {
+    constructor(
+        public columns: number,
+        public rows: number,
+        public fieldWidth: number,
+        public position: Point,
+        public context: CanvasRenderingContext2D
+    ) {
         super();
         this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
@@ -23,7 +30,6 @@ export class Board extends RenderObject {
     }
 
     public update() {
-
     }
 
     public draw() {
@@ -37,10 +43,14 @@ export class Board extends RenderObject {
         }
         for (let x = 0; x < columns; x++) {
             for (let y = 0; y < rows; y++) {
+                const position = new Point(
+                    this.position.x + x * this.fieldWidth,
+                    this.position.y + y * this.fieldWidth
+                );
                 if (!isEven(x) && isEven(y) || isEven(x) && !isEven(y)) {
-                    field[x][y] = new Square(x * this.fieldWidth, y * this.fieldWidth, this.fieldWidth, "black", this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, "black", this.context); 
                 } else {
-                    field[x][y] = new Square(x * this.fieldWidth, y * this.fieldWidth, this.fieldWidth, "grey", this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, "grey", this.context); 
                 }
             }   
         }
@@ -64,9 +74,10 @@ export class Board extends RenderObject {
     private createPiece(startColumn: number, startRow: number, width: number, color = "black"): Piece {
         const offsetCenterX = this.fieldWidth / 2 - width / 2;
         const offsetCenterY = this.fieldWidth / 2 - width / 2;
-        const posX = startColumn * this.fieldWidth + offsetCenterX;
-        const posY = startRow * this.fieldWidth + offsetCenterY;
-        const piece = new Piece(posX, posY, width, color, this, this.context);
+        const posX = this.position.x + startColumn * this.fieldWidth + offsetCenterX;
+        const posY = this.position.y + startRow * this.fieldWidth + offsetCenterY;
+        const position = new Point(posX, posY);
+        const piece = new Piece(position, width, color, this, this.context);
         return piece;
     }
 

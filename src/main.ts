@@ -1,5 +1,6 @@
 import { Board } from "./GameParts/Board";
 import { executeRandomly } from "./Utils";
+import { Point } from "./Engine/Point";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -9,8 +10,9 @@ const main = () => {
             const boardRows = 5;
             const boardColumns = 5;
             const boardFieldWidth = 50;
+            const boardPosition = new Point(0, 0);
         
-            const board = new Board(boardColumns, boardRows, boardFieldWidth, context);
+            const board = new Board(boardColumns, boardRows, boardFieldWidth, boardPosition, context);
             canvas.width = board.totalWidth;
             canvas.height = board.totalHeight;
             

@@ -1,9 +1,9 @@
 import { RenderObject } from "./RenderObject";
+import { Point } from "./Point";
 
 export class Square extends RenderObject {
     constructor (
-        public posX: number,
-        public posY: number,
+        public position: Point,
         public width: number,
         public color = "black",
         public context: CanvasRenderingContext2D
@@ -17,7 +17,7 @@ export class Square extends RenderObject {
 
     public draw(delta: number) {
         this.context.fillStyle = this.color;
-        this.context.fillRect(this.posX, this.posY, this.width, this.width);
+        this.context.fillRect(this.position.x, this.position.y, this.width, this.width);
     }
 
 }
