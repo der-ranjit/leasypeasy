@@ -108,7 +108,7 @@ export class Board extends RenderObject {
             });
             
             if (sameFieldPiece) {
-                player.setColor(sameFieldPiece.color);
+                player.setColor(Color.mix(player.color, sameFieldPiece.color));
                 this.removePiece(sameFieldPiece);
             }
         }
