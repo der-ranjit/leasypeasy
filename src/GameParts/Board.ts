@@ -30,6 +30,7 @@ export class Board extends RenderObject {
     }
 
     public update() {
+        this.checkForSameField();
     }
 
     public draw() {
@@ -72,7 +73,8 @@ export class Board extends RenderObject {
     }
 
     public addPieceAtMousePosition(mouseEvent: MouseEvent) {
-        const fieldCoords = this.getFieldCoordsByMouseEvent(mouseEvent); 
+        const mousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY)
+        const fieldCoords = this.getFieldCoordsByPoint(mousePosition); 
         this.addPiece(fieldCoords.x, fieldCoords.y, 20, "green");
     }
 
@@ -82,12 +84,25 @@ export class Board extends RenderObject {
         return piece;
     }
 
-    private getFieldCoordsByMouseEvent(mouseEvent: MouseEvent): Point {
-        const mouseX = mouseEvent.clientX;
-        const mouseY = mouseEvent.clientY;
-        const fieldColumn = this.position.x + Math.floor(mouseX / this.fieldWidth);
-        const fieldRow = this.position.y + Math.floor(mouseY / this.fieldWidth);
+    private getFieldCoordsByPoint(point: Point): Point {
+        const fieldColumn = this.position.x + Math.floor(point.x / this.fieldWidth);
+        const fieldRow = this.position.y + Math.floor(point.y / this.fieldWidth);
         return new Point(fieldColumn, fieldRow);
+    }
+
+    private checkForSameField() {
+        const player = this.player;
+        if (player) {
+            const playerField = this.getFieldCoordsByPoint(player.position);
+            const inSameField = this.pieces.find(piece => {
+                const pieceField = this.getFieldCoordsByPoint(piece.position);
+                return pieceField.x === playerField.x && pieceField.y === playerField.y
+            })
+            
+            if (inSameField) {
+                console.log("diwha");
+            }
+        }
     }
 
     private initControls() {

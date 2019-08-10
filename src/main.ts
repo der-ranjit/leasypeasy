@@ -29,9 +29,9 @@ const main = () => {
                 () => player.moveDown(playerMoveDistance),
             ]
             
-            setInterval(() => {
-                executeRandomly(movementFunctions);
-            }, 100)
+            // setInterval(() => {
+            //     executeRandomly(movementFunctions);
+            // }, 100)
             
             canvas.addEventListener("click", (event) => {
                 board.addPieceAtMousePosition(event);
