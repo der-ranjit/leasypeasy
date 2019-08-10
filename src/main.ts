@@ -16,10 +16,10 @@ const main = () => {
             canvas.width = board.totalWidth;
             canvas.height = board.totalHeight;
             
+            const pieceWidth = board.fieldWidth / 2;
             const playerStartColumn = 2;
             const playerStartRow = 3;
-            const playerWidth = 25;
-            const player = board.createPlayer(playerStartColumn, playerStartRow, playerWidth);
+            const player = board.createPlayer(playerStartColumn, playerStartRow, pieceWidth);
             
             const playerMoveDistance = board.fieldWidth;
             const movementFunctions = [
@@ -35,7 +35,7 @@ const main = () => {
                 const randomColumn = randomInt(0, board.columns);
                 const randomRow = randomInt(0, board.rows);
                 if (board.isFieldEmpty(randomColumn, randomRow)) {
-                    board.addPiece(randomColumn, randomRow, 25, randomColor);
+                    board.addPiece(randomColumn, randomRow, pieceWidth, randomColor);
                 }
             }
             setInterval(() => {
