@@ -71,10 +71,23 @@ export class Board extends RenderObject {
         return piece;
     }
 
+    public addPieceAtMousePosition(mouseEvent: MouseEvent) {
+        const fieldCoords = this.getFieldCoordsByMouseEvent(mouseEvent); 
+        this.addPiece(fieldCoords.x, fieldCoords.y, 20, "green");
+    }
+
     private createPiece(column: number, row: number, width: number, color = "black", shapeType = PieceShape.SQUARE): ShapedPiece {
         const position = new Point(column, row);
         const piece = new ShapedPiece(position, width, color, shapeType, this, this.context);
         return piece;
+    }
+
+    private getFieldCoordsByMouseEvent(mouseEvent: MouseEvent): Point {
+        const mouseX = mouseEvent.clientX;
+        const mouseY = mouseEvent.clientY;
+        const fieldColumn = this.position.x + Math.floor(mouseX / this.fieldWidth);
+        const fieldRow = this.position.y + Math.floor(mouseY / this.fieldWidth);
+        return new Point(fieldColumn, fieldRow);
     }
 
     private initControls() {
