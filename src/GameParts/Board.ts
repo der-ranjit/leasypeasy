@@ -1,4 +1,4 @@
-import {isEven} from "../Utils";
+import {isEven, randomInt} from "../Utils";
 import { Square } from "../Engine/Square";
 import { ShapedPiece, PieceShape } from "./ShapedPiece";
 import { Controls } from "../Engine/Controls";
@@ -13,7 +13,14 @@ export class Board extends RenderObject {
     
     private pieces: ShapedPiece[] = [];
     private player: ShapedPiece | null = null;
-
+    private colors: Color[] = [
+        Color.RED,
+        Color.GREEN,
+        Color.BLUE,
+        Color.YELLOW,
+        Color.MAGENTA,
+        Color.CYAN
+    ];
 
     constructor(
         public columns: number,
@@ -77,6 +84,15 @@ export class Board extends RenderObject {
         const mousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY)
         const fieldCoords = this.getFieldCoordsByPoint(mousePosition); 
         this.addPiece(fieldCoords.x, fieldCoords.y, 20, Color.GREEN);
+    }
+
+    public addRandomPiece() {
+        const randomColor = this.colors[randomInt(0, this.colors.length)];
+        const randomColumn = randomInt(0, this.columns);
+        const randomRow = randomInt(0, this.rows);
+        if (this.isFieldEmpty(randomColumn, randomRow)) {
+            this.addPiece(randomColumn, randomRow, this.fieldWidth / 2, randomColor);
+        }
     }
 
     public isFieldEmpty(column: number, row: number): boolean {
