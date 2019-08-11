@@ -5,6 +5,7 @@ import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";
 import { Point } from "../Engine/Point";
 import { Color } from "../Engine/Color";
+import { Renderer } from "../Engine/Renderer";
 
 export class Board extends RenderObject {
     public field: Array<number[]>;
@@ -27,9 +28,9 @@ export class Board extends RenderObject {
         public rows: number,
         public fieldWidth: number,
         public position: Point,
-        public context: CanvasRenderingContext2D
+        public renderer: Renderer
     ) {
-        super();
+        super(renderer);
         this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
         this.totalHeight = this.rows * this.fieldWidth;
@@ -57,9 +58,9 @@ export class Board extends RenderObject {
                     this.position.y + y * this.fieldWidth
                 );
                 if (!isEven(x) && isEven(y) || isEven(x) && !isEven(y)) {
-                    field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.renderer); 
                 } else {
-                    field[x][y] = new Square(position, this.fieldWidth, Color.GREY, this.context); 
+                    field[x][y] = new Square(position, this.fieldWidth, Color.GREY, this.renderer); 
                 }
             }   
         }
@@ -104,7 +105,7 @@ export class Board extends RenderObject {
 
     private createPiece(column: number, row: number, width: number, color = Color.BLACK, shapeType = PieceShape.SQUARE): ShapedPiece {
         const position = new Point(column, row);
-        const piece = new ShapedPiece(position, width, color, shapeType, this, this.context);
+        const piece = new ShapedPiece(position, width, color, shapeType, this, this.renderer);
         return piece;
     }
 

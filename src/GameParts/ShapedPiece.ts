@@ -3,6 +3,7 @@ import { Board } from "./Board";
 import { Point } from "../Engine/Point";
 import { Circle } from "../Engine/Circle";
 import { Color } from "../Engine/Color";
+import { Renderer } from "../Engine/Renderer";
 
 export enum PieceShape {
     SQUARE,
@@ -22,20 +23,20 @@ export class ShapedPiece {
         public color: Color,
         public shapeType: PieceShape,
         private ownerBoard: Board,
-        context: CanvasRenderingContext2D
+        renderer: Renderer
     ) {
         let posX = this.ownerBoard.position.x + position.x * this.ownerBoard.fieldWidth;
         let posY = this.ownerBoard.position.y + position.y * this.ownerBoard.fieldWidth;
         let shapePosition = new Point(posX, posY);
         switch(shapeType) {
             case PieceShape.SQUARE:
-                this.shape = this.createCenteredSquare(shapePosition, context);
+                this.shape = this.createCenteredSquare(shapePosition, renderer);
                 break;
             case PieceShape.CIRCLE:
-                this.shape = this.createCenteredCircle(shapePosition, context);
+                this.shape = this.createCenteredCircle(shapePosition, renderer);
                 break;
             default:
-                this.shape = this.createCenteredSquare(shapePosition, context);
+                this.shape = this.createCenteredSquare(shapePosition, renderer);
                 break;
         }
     }
@@ -79,20 +80,20 @@ export class ShapedPiece {
         this.shape.color = color;
     }
 
-    private createCenteredSquare(position: Point, context: CanvasRenderingContext2D): Square {
+    private createCenteredSquare(position: Point, renderer: Renderer): Square {
         const offsetCenterX = this.ownerBoard.fieldWidth / 2 - this.width / 2;
         const offsetCenterY = this.ownerBoard.fieldWidth / 2 - this.width / 2;
         position.x += offsetCenterX;
         position.y += offsetCenterY;
-        return new Square(position, this.width, this.color, context);
+        return new Square(position, this.width, this.color, renderer);
     }
 
-    private createCenteredCircle(position: Point, context: CanvasRenderingContext2D): Circle {
+    private createCenteredCircle(position: Point, renderer: Renderer): Circle {
         const radius = this.width / 2;
         const offsetCenterX = this.ownerBoard.fieldWidth / 2;
         const offsetCenterY = this.ownerBoard.fieldWidth / 2;
         position.x += offsetCenterX;    
         position.y += offsetCenterY;
-        return new Circle(position, radius, this.color, context);
+        return new Circle(position, radius, this.color, renderer);
     }
 }
