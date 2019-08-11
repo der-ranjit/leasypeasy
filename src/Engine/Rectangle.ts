@@ -19,7 +19,9 @@ export class Rectangle extends RenderObject {
     }
 
     public draw(delta: number) {
-        this.renderer.context.fillStyle = this.color.toString();
-        this.renderer.context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        // this.renderer.context.fillStyle = this.color.toString();
+        this.renderer.context.strokeStyle = this.color.toString();
+        // this.renderer.context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        this.renderer.context.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
 }

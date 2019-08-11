@@ -57,17 +57,13 @@ export class Board extends RenderObject {
                     this.position.x + x * this.fieldWidth,
                     this.position.y + y * this.fieldWidth
                 );
-                if (!isEven(x) && isEven(y) || isEven(x) && !isEven(y)) {
-                    field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.renderer); 
-                } else {
-                    field[x][y] = new Square(position, this.fieldWidth, Color.GREY, this.renderer); 
-                }
+                field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.renderer); 
             }   
         }
         return field;
     }
 
-    public createPlayer(column: number, row: number, width: number, color = Color.WHITE): ShapedPiece {
+    public createPlayer(column: number, row: number, width: number, color = Color.BLACK): ShapedPiece {
         if(!this.player) {
             const player = this.createPiece(column, row, width, color, PieceShape.CIRCLE);
             this.player = player;
