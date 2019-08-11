@@ -8,25 +8,41 @@ export class Controls {
         return Controls.INSTANCE;
     }
 
+    public isLeftPressed = false;
+    public isRightPressed = false;
+    public isUpPressed = false;
+    public isDownPressed = false;
+
     private leftFunctions: Function[] = []
     private rightFunctions: Function[] = []
     private upFunctions: Function[] = []
     private downFunctions: Function[] = []
 
     constructor() {
-        document.addEventListener("keydown", (event) => {
+        document.addEventListener("keydown", event => {
             if (event.key === "ArrowRight") {
+                this.isRightPressed = true;
                 this.rightFunctions.forEach(method => method());
             } 
             if (event.key === "ArrowLeft") {
+                this.isLeftPressed = true;
                 this.leftFunctions.forEach(method => method());
             } 
             if (event.key === "ArrowUp") {
+                this.isUpPressed = true;
                 this.upFunctions.forEach(method => method());
             } 
             if (event.key === "ArrowDown") {
+                this.isDownPressed = true;
                 this.downFunctions.forEach(method => method());
             } 
+        });
+
+        document.addEventListener("keyup", event =>  {
+            this.isLeftPressed = false;
+            this.isRightPressed = false;
+            this.isDownPressed = false;
+            this.isUpPressed = false;
         });
     }
 
