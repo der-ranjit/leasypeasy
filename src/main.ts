@@ -13,7 +13,7 @@ const main = () => {
             const boardColumns = 10;
             const boardFieldWidth = 60;
             const boardPosition = new Point(0, 0);
-            const boardFieldFillColor = new Color(235, 235, 235);
+            const boardFieldFillColor = new Color(245, 245, 245);
             const boardFieldStrokeColor = Color.BLACK;
             
             const board = new Board(
