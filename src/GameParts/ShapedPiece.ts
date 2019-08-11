@@ -20,7 +20,8 @@ export class ShapedPiece {
     constructor(
         position: Point,
         public width: number,
-        public color: Color,
+        public fillColor: Color,
+        public strokeColor: Color,
         public shapeType: PieceShape,
         private ownerBoard: Board,
         renderer: Renderer
@@ -75,9 +76,11 @@ export class ShapedPiece {
         }
     }
 
-    public setColor(color: Color) {
-        this.color = color;
-        this.shape.color = color;
+    public setColor(fill: Color, stroke: Color) {
+        this.fillColor = fill;
+        this.strokeColor = stroke;
+        this.shape.fillColor = fill;
+        this.shape.strokeColor = stroke;
     }
 
     private createCenteredSquare(position: Point, renderer: Renderer): Square {
@@ -85,7 +88,7 @@ export class ShapedPiece {
         const offsetCenterY = this.ownerBoard.fieldWidth / 2 - this.width / 2;
         position.x += offsetCenterX;
         position.y += offsetCenterY;
-        return new Square(position, this.width, this.color, renderer);
+        return new Square(position, this.width, this.fillColor, this.strokeColor, renderer);
     }
 
     private createCenteredCircle(position: Point, renderer: Renderer): Circle {
@@ -94,6 +97,6 @@ export class ShapedPiece {
         const offsetCenterY = this.ownerBoard.fieldWidth / 2;
         position.x += offsetCenterX;    
         position.y += offsetCenterY;
-        return new Circle(position, radius, this.color, renderer);
+        return new Circle(position, radius, this.fillColor, this.strokeColor, renderer);
     }
 }

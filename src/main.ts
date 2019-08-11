@@ -1,6 +1,7 @@
 import { Board } from "./GameParts/Board";
 import { Point } from "./Engine/Point";
 import { Renderer } from "./Engine/Renderer";
+import { Color } from "./Engine/Color";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -8,12 +9,21 @@ const main = () => {
         const context = canvas.getContext("2d");
         if (context) {
             const renderer = new Renderer(context);
-            const boardRows = 18;
-            const boardColumns = 18;
-            const boardFieldWidth = 35;
+            const boardRows = 10;
+            const boardColumns = 10;
+            const boardFieldWidth = 60;
             const boardPosition = new Point(0, 0);
+            const boardFieldFillColor = new Color(235, 235, 235);
+            const boardFieldStrokeColor = Color.BLACK;
             
-            const board = new Board(boardColumns, boardRows, boardFieldWidth, boardPosition, renderer);
+            const board = new Board(
+                boardColumns,
+                boardRows,
+                boardFieldWidth,
+                boardPosition,
+                boardFieldFillColor,
+                boardFieldStrokeColor,
+                renderer);
             canvas.width = board.totalWidth;
             canvas.height = board.totalHeight;
             

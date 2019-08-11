@@ -28,6 +28,8 @@ export class Board extends RenderObject {
         public rows: number,
         public fieldWidth: number,
         public position: Point,
+        public fieldColor: Color,
+        public fieldOutlineColor: Color,
         public renderer: Renderer
     ) {
         super(renderer);
@@ -57,22 +59,22 @@ export class Board extends RenderObject {
                     this.position.x + x * this.fieldWidth,
                     this.position.y + y * this.fieldWidth
                 );
-                field[x][y] = new Square(position, this.fieldWidth, Color.BLACK, this.renderer); 
+                field[x][y] = new Square(position, this.fieldWidth, this.fieldColor, this.fieldOutlineColor, this.renderer); 
             }   
         }
         return field;
     }
 
-    public createPlayer(column: number, row: number, width: number, color = Color.BLACK): ShapedPiece {
+    public createPlayer(column: number, row: number, width: number, fillColor = Color.BLACK, strokeColor = Color.BLACK): ShapedPiece {
         if(!this.player) {
-            const player = this.createPiece(column, row, width, color, PieceShape.CIRCLE);
+            const player = this.createPiece(column, row, width, fillColor, strokeColor, PieceShape.CIRCLE);
             this.player = player;
         }
         return this.player;
     }
 
-    public addPiece(column: number, row: number, width: number, color?: Color): ShapedPiece {
-        const piece = this.createPiece(column, row, width, color);
+    public addPiece(column: number, row: number, width: number, fillColor?: Color, strokeColor?: Color): ShapedPiece {
+        const piece = this.createPiece(column, row, width, fillColor, strokeColor);
         this.pieces.push(piece);
         return piece;
     }
@@ -84,11 +86,11 @@ export class Board extends RenderObject {
     }
 
     public addRandomPiece() {
-        const randomColor = this.colors[randomInt(0, this.colors.length)];
+        const randomFillColor = this.colors[randomInt(0, this.colors.length)];
         const randomColumn = randomInt(0, this.columns);
         const randomRow = randomInt(0, this.rows);
         if (this.isFieldEmpty(randomColumn, randomRow)) {
-            this.addPiece(randomColumn, randomRow, this.fieldWidth / 2, randomColor);
+            this.addPiece(randomColumn, randomRow, this.fieldWidth / 2, Color.WHITE, randomFillColor);
         }
     }
 
@@ -99,9 +101,9 @@ export class Board extends RenderObject {
         });
     }
 
-    private createPiece(column: number, row: number, width: number, color = Color.BLACK, shapeType = PieceShape.SQUARE): ShapedPiece {
+    private createPiece(column: number, row: number, width: number, fillColor = Color.WHITE, strokeColor = Color.BLACK, shapeType = PieceShape.SQUARE): ShapedPiece {
         const position = new Point(column, row);
-        const piece = new ShapedPiece(position, width, color, shapeType, this, this.renderer);
+        const piece = new ShapedPiece(position, width, fillColor, strokeColor, shapeType, this, this.renderer);
         return piece;
     }
 
@@ -121,7 +123,8 @@ export class Board extends RenderObject {
             });
             
             if (sameFieldPiece) {
-                player.setColor(Color.mix(player.color, sameFieldPiece.color));
+                const playerColor = Color.mix(player.fillColor, sameFieldPiece.strokeColor);
+                player.setColor(playerColor, playerColor);
                 this.removePiece(sameFieldPiece);
             }
         }

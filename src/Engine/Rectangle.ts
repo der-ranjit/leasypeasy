@@ -8,7 +8,8 @@ export class Rectangle extends RenderObject {
         public position: Point,
         public width: number,
         public height: number,
-        public color = Color.BLACK,
+        public fillColor = Color.BLACK,
+        public strokeColor = Color.BLACK,
         public renderer: Renderer
     ) {
         super(renderer);
@@ -19,9 +20,9 @@ export class Rectangle extends RenderObject {
     }
 
     public draw(delta: number) {
-        // this.renderer.context.fillStyle = this.color.toString();
-        this.renderer.context.strokeStyle = this.color.toString();
-        // this.renderer.context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        this.renderer.context.fillStyle = this.fillColor.toString();
+        this.renderer.context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        this.renderer.context.strokeStyle = this.strokeColor.toString();
         this.renderer.context.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
 }

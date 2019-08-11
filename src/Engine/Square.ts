@@ -7,9 +7,10 @@ export class Square extends Rectangle {
     constructor (
         public position: Point,
         public width: number,
-        public color = Color.BLACK,
+        public fillColor = Color.BLACK,
+        public strokeColor = Color.BLACK,
         public renderer: Renderer
     ) {
-        super(position, width, width, color, renderer);
+        super(position, width, width, fillColor, strokeColor, renderer);
     }
 }
