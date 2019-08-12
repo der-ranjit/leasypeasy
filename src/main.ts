@@ -36,6 +36,8 @@ const main = () => {
             
             setInterval(() => {
                 board.addRandomPiece();
+                // board.addRow();
+                // canvas.height = board.totalHeight;
             }, 1500);
         }
     }
