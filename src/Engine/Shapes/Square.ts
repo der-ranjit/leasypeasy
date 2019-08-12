@@ -5,13 +5,13 @@ import { Renderer } from "../Renderer";
 
 export class Square extends Rectangle {
     constructor (
-        public renderer: Renderer,
-        public position: Point,
+        position: Point,
         public width: number,
-        public fillColor = Color.BLACK,
-        public strokeColor = Color.BLACK,
-        public lineWidth = 1
+        renderer: Renderer,
+        fillColor = Color.BLACK,
+        strokeColor = Color.BLACK,
+        lineWidth = 1
     ) {
-        super(renderer, position, width, width, fillColor, strokeColor, lineWidth);
+        super(position, width, width, renderer, fillColor, strokeColor, lineWidth);
     }
 }

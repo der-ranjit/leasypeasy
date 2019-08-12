@@ -1,11 +1,13 @@
-import {isEven, randomInt} from "../Utils";
+import { randomInt} from "../Utils";
 import { Square } from "../Engine/Shapes/Square";
-import { ShapedPiece, PieceShape } from "./ShapedPiece";
+import { ShapeType } from "../Engine/Shapes/Shape";
+import { ShapedPiece } from "./ShapedPiece";
 import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";
 import { Point } from "../Engine/Point";
 import { Color } from "../Engine/Color";
 import { Renderer } from "../Engine/Renderer";
+import { Circle } from "../Engine/Shapes/Circle";
 
 export class Board extends RenderObject {
     public field: Array<number[]>;
@@ -30,9 +32,9 @@ export class Board extends RenderObject {
         public position: Point,
         public fieldColor: Color,
         public fieldOutlineColor: Color,
-        public renderer: Renderer
+        renderer: Renderer
     ) {
-        super(renderer);
+        super(renderer, Color.BLACK, Color.BLACK, 1);
         this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
         this.totalHeight = this.rows * this.fieldWidth;
@@ -59,7 +61,7 @@ export class Board extends RenderObject {
                     this.position.x + x * this.fieldWidth,
                     this.position.y + y * this.fieldWidth
                 );
-                field[x][y] = new Square(this.renderer, position, this.fieldWidth, this.fieldColor, this.fieldOutlineColor); 
+                field[x][y] = new Square(position, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor); 
             }   
         }
         return field;
@@ -68,7 +70,7 @@ export class Board extends RenderObject {
     public createPlayer(column: number, row: number, width: number, fillColor = Color.BLACK, strokeColor = Color.BLACK): ShapedPiece {
         if(!this.player) {
             const playerLineWidth = 1;
-            const player = this.createPiece(column, row, width, fillColor, strokeColor, playerLineWidth, PieceShape.CIRCLE);
+            const player = this.createPiece(column, row, width, fillColor, strokeColor, playerLineWidth, Circle);
             this.player = player;
         }
         return this.player;
@@ -111,7 +113,7 @@ export class Board extends RenderObject {
         fillColor = Color.WHITE,
         strokeColor = Color.BLACK,
         lineWidth = 1,
-        shapeType = PieceShape.SQUARE
+        shapeType: ShapeType = Square
     ): ShapedPiece {
         const position = new Point(column, row);
         const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType);

@@ -2,18 +2,19 @@ import { RenderObject } from "../RenderObject";
 import { Point } from "../Point";
 import { Color } from "../Color";
 import { Renderer } from "../Renderer";
+import { Shape } from "./Shape";
 
-export class Rectangle extends RenderObject {
+export class Rectangle extends Shape {
     constructor (
-        public renderer: Renderer,
-        public position: Point,
+        position: Point,
         public width: number,
         public height: number,
-        public fillColor = Color.BLACK,
-        public strokeColor = Color.BLACK,
-        public lineWidth = 1,
+        renderer: Renderer,
+        fillColor = Color.BLACK,
+        strokeColor = Color.BLACK,
+        lineWidth = 1,
     ) {
-        super(renderer);
+        super(position, renderer, fillColor, strokeColor, lineWidth);
     }
 
     public update(delta: number) {
@@ -21,16 +22,16 @@ export class Rectangle extends RenderObject {
     }
 
     public draw(delta: number) {
-        this.renderer.context.save();
+        this.context.save();
 
-        this.renderer.context.fillStyle = this.fillColor.toString();
-        this.renderer.context.strokeStyle = this.strokeColor.toString();
-        this.renderer.context.lineWidth = this.lineWidth;
+        this.context.fillStyle = this.fillColor.toString();
+        this.context.strokeStyle = this.strokeColor.toString();
+        this.context.lineWidth = this.lineWidth;
 
-        this.renderer.context.beginPath();
-        this.renderer.context.fillRect(this.position.x, this.position.y, this.width, this.height);
-        this.renderer.context.strokeRect(this.position.x, this.position.y, this.width, this.height);
+        this.context.beginPath();
+        this.context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        this.context.strokeRect(this.position.x, this.position.y, this.width, this.height);
 
-        this.renderer.context.restore();
+        this.context.restore();
     }
 }
