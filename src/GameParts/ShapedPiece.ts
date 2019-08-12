@@ -5,10 +5,11 @@ import { Circle } from "../Engine/Shapes/Circle";
 import { Color } from "../Engine/Color";
 import { Renderer } from "../Engine/Renderer";
 import { Shape, ShapeType } from "../Engine/Shapes/Shape";
-import { Rectangle } from "../Engine/Shapes/Rectangle";
+import { randomInt } from "../Utils";
 
 export class ShapedPiece {
     private shape!: Shape;
+    private changeColorIntervalID: number | null = null;
 
     public get position() {
         return this.shape.position;
@@ -38,7 +39,25 @@ export class ShapedPiece {
     }
 
     public destroy() {
+        this.stopRandomColorChange();
         this.shape.destroy();
+    }
+
+    public startRandomColorChange(colors: Color[], intervalMS = 500) {
+        this.changeColorIntervalID = <any>setInterval(() => {
+            this.changeToRandomColor(colors);
+        }, intervalMS)
+    }
+    
+    public stopRandomColorChange() {
+        if (this.changeColorIntervalID) {
+            clearInterval(this.changeColorIntervalID);
+        }
+    }
+
+    public changeToRandomColor(colors: Color[]) {
+        const randomColor = colors[randomInt(0, colors.length)];
+        this.setColor(Color.WHITE, randomColor);
     }
 
     public moveRight(moveDistance: number) {

@@ -36,7 +36,7 @@ const main = () => {
             
             setInterval(() => {
                 board.addRandomPiece();
-            }, 2000);
+            }, 1500);
         }
     }
 }

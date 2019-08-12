@@ -95,8 +95,15 @@ export class Board extends RenderObject {
         const randomRow = randomInt(0, this.rows);
         const width = this.fieldWidth / 2;
         const lineWidth = 4;
+        const maxPieces = 6;
         if (this.isFieldEmpty(randomColumn, randomRow)) {
-            this.addPiece(randomColumn, randomRow, width, Color.WHITE, randomFillColor, lineWidth);
+            const addedPiece = this.addPiece(randomColumn, randomRow, width, Color.WHITE, randomFillColor, lineWidth);
+            addedPiece.startRandomColorChange(this.colors, 1000);
+            if (this.pieces.length > maxPieces) {
+                const destroyPiece = this.pieces[0];
+                this.pieces.splice(0, 1);
+                destroyPiece.destroy();
+            }
         }
     }
 
