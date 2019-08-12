@@ -1,5 +1,5 @@
 import {isEven, randomInt} from "../Utils";
-import { Square } from "../Engine/Square";
+import { Square } from "../Engine/Shapes/Square";
 import { ShapedPiece, PieceShape } from "./ShapedPiece";
 import { Controls } from "../Engine/Controls";
 import { RenderObject } from "../Engine/RenderObject";

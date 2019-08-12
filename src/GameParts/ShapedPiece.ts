@@ -1,7 +1,7 @@
-import { Square } from "../Engine/Square";
+import { Square } from "../Engine/Shapes/Square";
 import { Board } from "./Board";
 import { Point } from "../Engine/Point";
-import { Circle } from "../Engine/Circle";
+import { Circle } from "../Engine/Shapes/Circle";
 import { Color } from "../Engine/Color";
 import { Renderer } from "../Engine/Renderer";
 
