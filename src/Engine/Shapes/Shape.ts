@@ -18,4 +18,6 @@ export abstract class Shape extends RenderObject {
     ) {
         super(renderer, fillColor, strokeColor, lineWidth);
     }
+
+    public abstract centerArountPoint(point: Point): void;
 }

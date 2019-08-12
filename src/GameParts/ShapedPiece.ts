@@ -5,9 +5,10 @@ import { Circle } from "../Engine/Shapes/Circle";
 import { Color } from "../Engine/Color";
 import { Renderer } from "../Engine/Renderer";
 import { Shape, ShapeType } from "../Engine/Shapes/Shape";
+import { Rectangle } from "../Engine/Shapes/Rectangle";
 
 export class ShapedPiece {
-    private shape: Shape;
+    private shape!: Shape;
 
     public get position() {
         return this.shape.position;
@@ -23,19 +24,16 @@ export class ShapedPiece {
         public lineWidth = 1,
         public shapeType: ShapeType,
     ) {
-        let posX = this.ownerBoard.position.x + position.x * this.ownerBoard.fieldWidth;
-        let posY = this.ownerBoard.position.y + position.y * this.ownerBoard.fieldWidth;
-        let shapePosition = new Point(posX, posY);
-        switch(shapeType) {
-            case Square:
-                this.shape = this.createCenteredSquare(shapePosition, renderer);
-                break;
-            case Circle:
-                this.shape = this.createCenteredCircle(shapePosition, renderer);
-                break;
-            default:
-                this.shape = this.createCenteredSquare(shapePosition, renderer);
-                break;
+        if (shapeType === Circle) {
+            const radius = this.width / 2;
+            this.shape = new Circle(position, radius, renderer, fillColor, strokeColor, lineWidth);
+        }
+        if (shapeType === Square) {
+            this.shape = new Square(position, width, renderer, fillColor, strokeColor, lineWidth)
+        }
+        
+        if (this.shape) {
+            this.shape.centerArountPoint(position);
         }
     }
 
@@ -77,22 +75,5 @@ export class ShapedPiece {
         this.fillColor = fill;
         this.strokeColor = stroke;
         this.shape.setColor(fill, stroke);
-    }
-
-    private createCenteredSquare(position: Point, renderer: Renderer): Square {
-        const offsetCenterX = this.ownerBoard.fieldWidth / 2 - this.width / 2;
-        const offsetCenterY = this.ownerBoard.fieldWidth / 2 - this.width / 2;
-        position.x += offsetCenterX;
-        position.y += offsetCenterY;
-        return new Square(position, this.width, renderer, this.fillColor, this.strokeColor, this.lineWidth);
-    }
-
-    private createCenteredCircle(position: Point, renderer: Renderer): Circle {
-        const radius = this.width / 2;
-        const offsetCenterX = this.ownerBoard.fieldWidth / 2;
-        const offsetCenterY = this.ownerBoard.fieldWidth / 2;
-        position.x += offsetCenterX;    
-        position.y += offsetCenterY;
-        return new Circle(position, radius, renderer, this.fillColor, this.strokeColor, this.lineWidth);
     }
 }

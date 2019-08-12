@@ -34,4 +34,11 @@ export class Rectangle extends Shape {
 
         this.context.restore();
     }
+
+    public centerArountPoint(point: Point) {
+        const offsetX = this.width / 2;
+        const offsetY = this.height / 2;
+        const offsetPosition = new Point(-offsetX, -offsetY);
+        this.position.add(offsetPosition);
+    };
 }

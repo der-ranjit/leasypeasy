@@ -29,6 +29,7 @@ export class Board extends RenderObject {
         public columns: number,
         public rows: number,
         public fieldWidth: number,
+        public fieldHeight: number,
         public position: Point,
         public fieldColor: Color,
         public fieldOutlineColor: Color,
@@ -37,7 +38,7 @@ export class Board extends RenderObject {
         super(renderer, Color.BLACK, Color.BLACK, 1);
         this.field = this.createBoard(columns, rows);
         this.totalWidth = this.columns * this.fieldWidth;
-        this.totalHeight = this.rows * this.fieldWidth;
+        this.totalHeight = this.rows * this.fieldHeight;
 
         this.initControls();
     }
@@ -59,7 +60,7 @@ export class Board extends RenderObject {
             for (let y = 0; y < rows; y++) {
                 const position = new Point(
                     this.position.x + x * this.fieldWidth,
-                    this.position.y + y * this.fieldWidth
+                    this.position.y + y * this.fieldHeight
                 );
                 field[x][y] = new Square(position, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor); 
             }   
@@ -115,14 +116,16 @@ export class Board extends RenderObject {
         lineWidth = 1,
         shapeType: ShapeType = Square
     ): ShapedPiece {
-        const position = new Point(column, row);
+        let fieldCenterX = this.position.x + column * this.fieldWidth + this.fieldWidth / 2;
+        let fieldCenterY = this.position.y + row * this.fieldHeight + this.fieldHeight / 2;
+        const position = new Point(fieldCenterX, fieldCenterY);
         const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType);
         return piece;
     }
 
     private getFieldCoordsByPoint(point: Point): Point {
         const fieldColumn = this.position.x + Math.floor(point.x / this.fieldWidth);
-        const fieldRow = this.position.y + Math.floor(point.y / this.fieldWidth);
+        const fieldRow = this.position.y + Math.floor(point.y / this.fieldHeight);
         return new Point(fieldColumn, fieldRow);
     }
 
@@ -158,7 +161,7 @@ export class Board extends RenderObject {
         });
         controls.onUp(() => {
             if (this.player) {
-                this.player.moveUp(this.fieldWidth)
+                this.player.moveUp(this.fieldHeight)
             }
         });
         controls.onRight(() => {
@@ -168,7 +171,7 @@ export class Board extends RenderObject {
         });
         controls.onDown(() => {
             if (this.player) {
-                this.player.moveDown(this.fieldWidth)
+                this.player.moveDown(this.fieldHeight)
             }
         });
     }

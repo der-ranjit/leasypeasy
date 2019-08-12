@@ -33,4 +33,8 @@ export class Circle extends Shape {
 
         this.context.restore();
     }
+
+    public centerArountPoint(point: Point) {
+        this.position = point;
+    } 
 }
