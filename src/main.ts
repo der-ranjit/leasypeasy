@@ -13,10 +13,21 @@ const main = () => {
             const boardColumns = 10;
             const boardFieldWidth = 50;
             const boardFieldHeight = 50;
-            const boardPosition = new Point(0, 0);
             const boardFieldFillColor = new Color(245, 245, 245);
             const boardFieldStrokeColor = Color.BLACK;
             
+            const extraColumns = 7;
+            const extraRows = 4;
+            const boardWidth = boardFieldWidth * (boardColumns + extraColumns);
+            const boardHeight = boardFieldHeight * (boardRows + extraRows);
+            const centeredWidth = boardFieldWidth * extraColumns / 2
+            const centeredHeight = boardFieldHeight * extraRows / 2
+
+            const boardPosition = new Point(0, 0);
+
+            canvas.width = boardWidth;
+            canvas.height = boardHeight;
+
             const board = new Board(
                 boardColumns,
                 boardRows,
@@ -26,8 +37,6 @@ const main = () => {
                 boardFieldFillColor,
                 boardFieldStrokeColor,
                 renderer);
-            canvas.width = board.totalWidth + 200;
-            canvas.height = board.totalHeight;
             
             const pieceWidth = board.fieldWidth / 2;
             const playerStartColumn = 2;

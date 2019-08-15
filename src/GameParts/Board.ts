@@ -92,8 +92,8 @@ export class Board extends RenderObject {
                 this.field[column] = [];
             }
             const squarePosition = new Point(
-                this.position.x + column * this.fieldWidth,
-                this.position.y + row * this.fieldHeight,
+                0 + column * this.fieldWidth,
+                0 + row * this.fieldHeight,
             )
             this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor)
         }
