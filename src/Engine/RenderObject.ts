@@ -3,6 +3,7 @@ import { Color } from "./Color";
 
 export abstract class RenderObject {
     public shouldBeDrawn = true;
+    public zIndex = 1;
 
     constructor(
         protected renderer: Renderer,

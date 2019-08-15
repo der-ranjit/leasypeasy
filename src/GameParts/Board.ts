@@ -73,7 +73,7 @@ export class Board extends RenderObject {
     public createPlayer(column: number, row: number, width: number, fillColor = Color.BLACK, strokeColor = Color.BLACK): ShapedPiece {
         if(!this.player) {
             const playerLineWidth = 1;
-            const player = this.createPiece(column, row, width, fillColor, strokeColor, playerLineWidth, Circle);
+            const player = this.createPiece(column, row, width, fillColor, strokeColor, playerLineWidth, Circle, 2);
             this.player = player;
         }
         return this.player;
@@ -81,6 +81,22 @@ export class Board extends RenderObject {
 
     public addColumn() {
         
+    }
+
+    public addField(position: Point) {
+        // TODO calculate position correctly (board and canvas position)
+        const column = Math.floor(position.x / this.fieldWidth);
+        const row = Math.floor(position.y / this.fieldHeight);
+        if (!this.existsField(column, row)) {
+            if (!this.field[column]) {
+                this.field[column] = [];
+            }
+            const squarePosition = new Point(
+                this.position.x + column * this.fieldWidth,
+                this.position.y + row * this.fieldHeight,
+            )
+            this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor)
+        }
     }
 
     public addRow() {
@@ -133,7 +149,8 @@ export class Board extends RenderObject {
     }
 
     public existsField(column: number, row: number) {
-        return this.field[column] && this.field[column][row];
+        const result = this.field[column] && this.field[column][row];
+        return !!result;
     }
 
     private createPiece(
@@ -143,10 +160,11 @@ export class Board extends RenderObject {
         fillColor = Color.WHITE,
         strokeColor = Color.BLACK,
         lineWidth = 1,
-        shapeType: ShapeType = Square
+        shapeType: ShapeType = Square,
+        zIndex = 1
     ): ShapedPiece {
         const position = this.getCenterOfField(column, row);
-        const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType);
+        const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType, zIndex);
         return piece;
     }
 

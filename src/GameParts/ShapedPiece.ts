@@ -24,6 +24,7 @@ export class ShapedPiece {
         public strokeColor: Color,
         public lineWidth = 1,
         public shapeType: ShapeType,
+        zIndex = 1
     ) {
         if (shapeType === Circle) {
             const radius = this.width / 2;
@@ -34,6 +35,7 @@ export class ShapedPiece {
         }
         
         if (this.shape) {
+            this.shape.zIndex = zIndex;
             this.shape.centerArountPoint(boardField);
         }
     }

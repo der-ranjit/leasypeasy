@@ -36,7 +36,10 @@ export class Renderer {
             requestAnimationFrame(() => {
                 const delta = Date.now() - this.lastRenderTimestamp;
                 this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
-                for (const object of this.renderObjects) {
+                const zIndexSortedRenderObjects = this.renderObjects.sort((a, b) => {
+                    return a.zIndex - b.zIndex;
+                });
+                for (const object of zIndexSortedRenderObjects) {
                     object.update(delta);
                     object.draw(delta);
                 }
