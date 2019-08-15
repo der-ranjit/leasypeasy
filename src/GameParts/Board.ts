@@ -96,6 +96,9 @@ export class Board extends RenderObject {
                 0 + row * this.fieldHeight,
             )
             this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor)
+        } else {
+            this.field[column][row].destroy();
+            this.field[column][row] = <any>null;
         }
     }
 
