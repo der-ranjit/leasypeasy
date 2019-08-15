@@ -38,7 +38,7 @@ const main = () => {
                 board.addRandomPiece();
                 // board.addRow();
                 // canvas.height = board.totalHeight;
-            }, 1500);
+            }, 200);
 
             canvas.addEventListener("click", mouseEvent => {
                 const position = new Point(mouseEvent.clientX, mouseEvent.clientY);

@@ -125,19 +125,24 @@ export class Board extends RenderObject {
 
     public addRandomPiece() {
         const randomFillColor = this.colors[randomInt(0, this.colors.length)];
-        const randomColumn = randomInt(0, this.columns);
-        const randomRow = randomInt(0, this.rows);
-        const width = this.fieldWidth / 2;
-        const lineWidth = 4;
-        const maxPieces = 6;
-        if (this.isFieldEmpty(randomColumn, randomRow)) {
-            const addedPiece = this.addPiece(randomColumn, randomRow, width, Color.WHITE, randomFillColor, lineWidth);
-            addedPiece.startRandomColorChange(this.colors, 1000);
-            if (this.pieces.length > maxPieces) {
-                const destroyPiece = this.pieces[0];
-                this.pieces.splice(0, 1);
-                destroyPiece.destroy();
+        const randomColumn = randomInt(0, this.field.length - 1);
+        const exists = !!this.field[randomColumn];
+        if (exists) {
+            const randomRow = randomInt(0, this.field[randomColumn].length - 1);
+            const width = this.fieldWidth / 2;
+            const lineWidth = 4;
+            const maxPieces = 6;
+            if (this.existsField(randomColumn, randomRow) && this.isFieldEmpty(randomColumn, randomRow)) {
+                const addedPiece = this.addPiece(randomColumn, randomRow, width, Color.WHITE, randomFillColor, lineWidth);
+                addedPiece.startRandomColorChange(this.colors, 1000);
+                if (this.pieces.length > maxPieces) {
+                    const destroyPiece = this.pieces[0];
+                    this.pieces.splice(0, 1);
+                    destroyPiece.destroy();
+                }
             }
+        } else {
+            this.addRandomPiece();
         }
     }
 
