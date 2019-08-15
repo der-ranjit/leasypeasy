@@ -18,7 +18,7 @@ export class ShapedPiece {
     constructor(
         renderer: Renderer,
         private ownerBoard: Board,
-        position: Point,
+        private boardField: Point,
         public width: number,
         public fillColor: Color,
         public strokeColor: Color,
@@ -27,14 +27,14 @@ export class ShapedPiece {
     ) {
         if (shapeType === Circle) {
             const radius = this.width / 2;
-            this.shape = new Circle(position, radius, renderer, fillColor, strokeColor, lineWidth);
+            this.shape = new Circle(boardField, radius, renderer, fillColor, strokeColor, lineWidth);
         }
         if (shapeType === Square) {
-            this.shape = new Square(position, width, renderer, fillColor, strokeColor, lineWidth)
+            this.shape = new Square(boardField, width, renderer, fillColor, strokeColor, lineWidth)
         }
         
         if (this.shape) {
-            this.shape.centerArountPoint(position);
+            this.shape.centerArountPoint(boardField);
         }
     }
 
@@ -60,33 +60,55 @@ export class ShapedPiece {
         this.setColor(Color.WHITE, randomColor);
     }
 
-    public moveRight(moveDistance: number) {
-        let newX = this.shape.position.x + moveDistance;
-        const width = this.shapeType === Square ? this.width : this.width / 2;
-        if (newX + width < this.ownerBoard.position.x + this.ownerBoard.totalWidth) {
-            this.shape.position.x = newX;
+    public moveRight(fields: number) {
+        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        if (fieldCoords) {
+            let column = fieldCoords.x + fields;
+            let row = fieldCoords.y
+            const field = this.ownerBoard.existsField(column, row);
+            if (field) {
+                this.boardField = this.ownerBoard.getCenterOfField(column, row);
+                this.shape.centerArountPoint(this.boardField);
+            }
         }
     }
     
-    public moveLeft(moveDistance: number) {
-        let newX = this.shape.position.x - moveDistance;
-        if (newX >= 0) {
-            this.shape.position.x = newX;
+    public moveLeft(fields: number) {
+        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        if (fieldCoords) {
+            let column = fieldCoords.x - fields;
+            let row = fieldCoords.y
+            const field = this.ownerBoard.existsField(column, row);
+            if (field) {
+                this.boardField = this.ownerBoard.getCenterOfField(column, row);
+                this.shape.centerArountPoint(this.boardField);
+            }
         }
     }
 
-    public moveUp(moveDistance: number) {
-        let newY = this.shape.position.y - moveDistance;
-        if (newY > 0) {
-            this.shape.position.y = newY;
+    public moveUp(fields: number) {
+        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        if (fieldCoords) {
+            let column = fieldCoords.x;
+            let row = fieldCoords.y - fields;
+            const field = this.ownerBoard.existsField(column, row);
+            if (field) {
+                this.boardField = this.ownerBoard.getCenterOfField(column, row);
+                this.shape.centerArountPoint(this.boardField);
+            }
         }
     }
 
-    public moveDown(moveDistance: number) {
-        let newY = this.shape.position.y + moveDistance;
-        const width = this.shapeType === Square ? this.width : this.width / 2;
-        if (newY + width < this.ownerBoard.position.y + this.ownerBoard.totalHeight) {
-            this.shape.position.y = newY;
+    public moveDown(fields: number) {
+        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        if (fieldCoords) {
+            let column = fieldCoords.x;
+            let row = fieldCoords.y + fields;
+            const field = this.ownerBoard.existsField(column, row);
+            if (field) {
+                this.boardField = this.ownerBoard.getCenterOfField(column, row);
+                this.shape.centerArountPoint(this.boardField);
+            }
         }
     }
 

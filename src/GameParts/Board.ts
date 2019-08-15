@@ -101,8 +101,10 @@ export class Board extends RenderObject {
 
     public addPieceAtMousePosition(mouseEvent: MouseEvent) {
         const mousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY)
-        const fieldCoords = this.getFieldCoordsByPoint(mousePosition); 
-        this.addPiece(fieldCoords.x, fieldCoords.y, 20, Color.GREEN);
+        const fieldCoords = this.getFieldCoordsByPoint(mousePosition);
+        if (fieldCoords) {
+            this.addPiece(fieldCoords.x, fieldCoords.y, 20, Color.GREEN);
+        }
     }
 
     public addRandomPiece() {
@@ -126,8 +128,12 @@ export class Board extends RenderObject {
     public isFieldEmpty(column: number, row: number): boolean {
         return !this.pieces.find(piece => {
             const pieceField = this.getFieldCoordsByPoint(piece.position);
-            return pieceField.x === column && pieceField.y === row;
+            return pieceField && pieceField.x === column && pieceField.y === row;
         });
+    }
+
+    public existsField(column: number, row: number) {
+        return this.field[column] && this.field[column][row];
     }
 
     private createPiece(
@@ -139,32 +145,42 @@ export class Board extends RenderObject {
         lineWidth = 1,
         shapeType: ShapeType = Square
     ): ShapedPiece {
-        let fieldCenterX = this.position.x + column * this.fieldWidth + this.fieldWidth / 2;
-        let fieldCenterY = this.position.y + row * this.fieldHeight + this.fieldHeight / 2;
-        const position = new Point(fieldCenterX, fieldCenterY);
+        const position = this.getCenterOfField(column, row);
         const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType);
         return piece;
     }
 
-    private getFieldCoordsByPoint(point: Point): Point {
+    public getFieldCoordsByPoint(point: Point): Point | null {
         const fieldColumn = this.position.x + Math.floor(point.x / this.fieldWidth);
         const fieldRow = this.position.y + Math.floor(point.y / this.fieldHeight);
-        return new Point(fieldColumn, fieldRow);
+        if (this.existsField(fieldColumn, fieldRow)) {
+            return new Point(fieldColumn, fieldRow);
+        }
+        return null;
+    }
+
+    public getCenterOfField(column: number, row: number): Point {
+        let fieldCenterX = this.position.x + column * this.fieldWidth + this.fieldWidth / 2;
+        let fieldCenterY = this.position.y + row * this.fieldHeight + this.fieldHeight / 2;
+        const position = new Point(fieldCenterX, fieldCenterY);
+        return position;
     }
 
     private checkForSameField() {
         const player = this.player;
         if (player) {
             const playerField = this.getFieldCoordsByPoint(player.position);
-            const sameFieldPiece = this.pieces.find(piece => {
-                const pieceField = this.getFieldCoordsByPoint(piece.position);
-                return pieceField.x === playerField.x && pieceField.y === playerField.y
-            });
-            
-            if (sameFieldPiece) {
-                const playerColor = Color.mix(player.fillColor, sameFieldPiece.strokeColor);
-                player.setColor(playerColor, playerColor);
-                this.removePiece(sameFieldPiece);
+            if (playerField) {
+                const sameFieldPiece = this.pieces.find(piece => {
+                    const pieceField = this.getFieldCoordsByPoint(piece.position);
+                    return pieceField && pieceField.x === playerField.x && pieceField.y === playerField.y
+                });
+                
+                if (sameFieldPiece) {
+                    const playerColor = Color.mix(player.fillColor, sameFieldPiece.strokeColor);
+                    player.setColor(playerColor, playerColor);
+                    this.removePiece(sameFieldPiece);
+                }
             }
         }
     }
@@ -179,22 +195,22 @@ export class Board extends RenderObject {
         const controls = Controls.getInstance();
         controls.onLeft(() => {
             if (this.player) {
-                this.player.moveLeft(this.fieldWidth)
+                this.player.moveLeft(1)
             }
         });
         controls.onUp(() => {
             if (this.player) {
-                this.player.moveUp(this.fieldHeight)
+                this.player.moveUp(1)
             }
         });
         controls.onRight(() => {
             if (this.player) {
-                this.player.moveRight(this.fieldWidth)
+                this.player.moveRight(1)
             }
         });
         controls.onDown(() => {
             if (this.player) {
-                this.player.moveDown(this.fieldHeight)
+                this.player.moveDown(1)
             }
         });
     }
