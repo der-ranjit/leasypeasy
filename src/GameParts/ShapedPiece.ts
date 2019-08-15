@@ -46,6 +46,7 @@ export class ShapedPiece {
     }
 
     public startRandomColorChange(colors: Color[], intervalMS = 500) {
+        this.stopRandomColorChange();
         this.changeColorIntervalID = <any>setInterval(() => {
             this.changeToRandomColor(colors);
         }, intervalMS)
