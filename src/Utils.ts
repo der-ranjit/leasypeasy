@@ -24,3 +24,15 @@ export function clamp(min: number, max: number, value: number): number {
     }
     return value;
 }
+
+export function debounce(func: Function, time: number) {
+    let lastCall = 0;
+    return function (...args: any[]) {
+      const now = (new Date).getTime();
+      if (now - lastCall < time) {
+        return;
+      }
+      lastCall = now;
+      return func(...args);
+    }
+}

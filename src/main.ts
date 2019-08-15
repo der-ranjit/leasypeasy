@@ -2,6 +2,7 @@ import { Board } from "./GameParts/Board";
 import { Point } from "./Engine/Point";
 import { Renderer } from "./Engine/Renderer";
 import { Color } from "./Engine/Color";
+import { debounce } from "./Utils";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -52,16 +53,17 @@ const main = () => {
             let pointerDown = false;
             canvas.addEventListener("mousedown", _ => pointerDown = true);
             canvas.addEventListener("mouseup", _ => pointerDown = false);
-            canvas.addEventListener("click", mouseEvent => addFieldAddPosition(mouseEvent));
+            canvas.addEventListener("click", mouseEvent => debouncedAddFieldPosition(mouseEvent));
             canvas.addEventListener("mousemove", mouseEvent => {
                 if (pointerDown) {
-                    addFieldAddPosition(mouseEvent);
+                    debouncedAddFieldPosition(mouseEvent);
                 } 
             })
             const addFieldAddPosition = (mouseEvent: MouseEvent) => {
                 const position = new Point(mouseEvent.clientX, mouseEvent.clientY);
                 board.addField(position);
             }
+            const debouncedAddFieldPosition = debounce(addFieldAddPosition, 200);
         }
     }
 }
