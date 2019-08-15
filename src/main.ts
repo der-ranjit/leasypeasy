@@ -49,9 +49,14 @@ const main = () => {
                 // canvas.height = board.totalHeight;
             }, 200);
 
-            canvas.addEventListener("click", mouseEvent => {
-                const position = new Point(mouseEvent.clientX, mouseEvent.clientY);
-                board.addField(position);
+            let pointerDown = false;
+            canvas.addEventListener("mousedown", _ => pointerDown = true);
+            canvas.addEventListener("mouseup", _ => pointerDown = false);
+            canvas.addEventListener("mousemove", mouseEvent => {
+                if (pointerDown) {
+                    const position = new Point(mouseEvent.clientX, mouseEvent.clientY);
+                    board.addField(position);
+                } 
             })
         }
     }
