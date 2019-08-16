@@ -64,7 +64,7 @@ export class ShapedPiece {
     }
 
     public moveRight(fields: number) {
-        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        const fieldCoords = this.ownerBoard.getBoardFieldByPosition(this.boardField);
         if (fieldCoords) {
             let column = fieldCoords.x + fields;
             let row = fieldCoords.y
@@ -77,7 +77,7 @@ export class ShapedPiece {
     }
     
     public moveLeft(fields: number) {
-        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        const fieldCoords = this.ownerBoard.getBoardFieldByPosition(this.boardField);
         if (fieldCoords) {
             let column = fieldCoords.x - fields;
             let row = fieldCoords.y
@@ -90,7 +90,7 @@ export class ShapedPiece {
     }
 
     public moveUp(fields: number) {
-        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        const fieldCoords = this.ownerBoard.getBoardFieldByPosition(this.boardField);
         if (fieldCoords) {
             let column = fieldCoords.x;
             let row = fieldCoords.y - fields;
@@ -103,7 +103,7 @@ export class ShapedPiece {
     }
 
     public moveDown(fields: number) {
-        const fieldCoords = this.ownerBoard.getFieldCoordsByPoint(this.boardField);
+        const fieldCoords = this.ownerBoard.getBoardFieldByPosition(this.boardField);
         if (fieldCoords) {
             let column = fieldCoords.x;
             let row = fieldCoords.y + fields;

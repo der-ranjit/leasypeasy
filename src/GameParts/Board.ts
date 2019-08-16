@@ -8,6 +8,20 @@ import { Point } from "../Engine/Point";
 import { Color } from "../Engine/Color";
 import { Renderer } from "../Engine/Renderer";
 import { Circle } from "../Engine/Shapes/Circle";
+import { Rectangle } from "../Engine/Shapes/Rectangle";
+
+export class BoardField {
+    private rectangle: Rectangle;
+
+    public get position(): Point {
+        return this.rectangle.position;
+    }
+    
+    constructor(
+        public column: number,
+        public row: number,
+    ) {}
+}
 
 export class Board extends RenderObject {
     public field: Array<Square[]>;
@@ -120,7 +134,7 @@ export class Board extends RenderObject {
 
     public addPieceAtMousePosition(mouseEvent: MouseEvent) {
         const mousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY)
-        const fieldCoords = this.getFieldCoordsByPoint(mousePosition);
+        const fieldCoords = this.getBoardFieldByPosition(mousePosition);
         if (fieldCoords) {
             this.addPiece(fieldCoords.x, fieldCoords.y, 20, Color.GREEN);
         }
@@ -151,7 +165,7 @@ export class Board extends RenderObject {
 
     public isFieldEmpty(column: number, row: number): boolean {
         return !this.pieces.find(piece => {
-            const pieceField = this.getFieldCoordsByPoint(piece.position);
+            const pieceField = this.getBoardFieldByPosition(piece.position);
             return pieceField && pieceField.x === column && pieceField.y === row;
         });
     }
@@ -176,9 +190,9 @@ export class Board extends RenderObject {
         return piece;
     }
 
-    public getFieldCoordsByPoint(point: Point): Point | null {
-        const fieldColumn = this.position.x + Math.floor(point.x / this.fieldWidth);
-        const fieldRow = this.position.y + Math.floor(point.y / this.fieldHeight);
+    public getBoardFieldByPosition(position: Point): Point | null {
+        const fieldColumn = this.position.x + Math.floor(position.x / this.fieldWidth);
+        const fieldRow = this.position.y + Math.floor(position.y / this.fieldHeight);
         if (this.existsField(fieldColumn, fieldRow)) {
             return new Point(fieldColumn, fieldRow);
         }
@@ -195,10 +209,10 @@ export class Board extends RenderObject {
     private checkForSameField() {
         const player = this.player;
         if (player) {
-            const playerField = this.getFieldCoordsByPoint(player.position);
+            const playerField = this.getBoardFieldByPosition(player.position);
             if (playerField) {
                 const sameFieldPiece = this.pieces.find(piece => {
-                    const pieceField = this.getFieldCoordsByPoint(piece.position);
+                    const pieceField = this.getBoardFieldByPosition(piece.position);
                     return pieceField && pieceField.x === playerField.x && pieceField.y === playerField.y
                 });
                 
