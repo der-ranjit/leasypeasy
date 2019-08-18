@@ -13,5 +13,12 @@ export class Point {
     public add(point: Point) {
         this.x += point.x;
         this.y += point.y;
+        return this;
+    }
+
+    public multiply(factor: number) {
+        this.x *= factor;
+        this.y *= factor;
+        return this;
     }
 }

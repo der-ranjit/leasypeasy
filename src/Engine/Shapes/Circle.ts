@@ -15,10 +15,10 @@ export class Circle extends Shape {
         super(position, renderer, fillColor, strokeColor, lineWidth);
     }
 
-    public update(delta: number) {
+    public updateShape(delta: number) {
 
     }
-
+    
     public draw(delta: number) {
         this.context.save();
 
