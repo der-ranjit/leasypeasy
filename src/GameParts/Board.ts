@@ -11,7 +11,7 @@ import { Circle } from "../Engine/Shapes/Circle";
 import { Rectangle } from "../Engine/Shapes/Rectangle";
 
 export class BoardField {
-    private rectangle: Rectangle;
+    private rectangle!: Rectangle;
 
     public get position(): Point {
         return this.rectangle.position;
