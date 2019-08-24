@@ -1,6 +1,9 @@
 import { RenderObject } from "./RenderObject";
 
 export class Renderer {
+    public static RENDER_LOOP_END_EVENT = "renderLoopEnd";
+
+
     private renderObjects: RenderObject[] = [];
     private started = false;
     private lastRenderTimestamp = 0;
@@ -43,6 +46,7 @@ export class Renderer {
                     object.update(delta);
                     object.draw(delta);
                 }
+                window.dispatchEvent(new Event(Renderer.RENDER_LOOP_END_EVENT));
                 this.lastRenderTimestamp = Date.now();
                 this.loop();
             });
