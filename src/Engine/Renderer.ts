@@ -1,7 +1,9 @@
 import { RenderObject } from "./RenderObject";
+import { Subject } from "rxjs";
 
 export class Renderer {
-    public static RENDER_LOOP_END_EVENT = "renderLoopEnd";
+    public static onLoopStart$ = new Subject<void>();
+    public static onLoopEnd$ = new Subject<void>();
 
 
     private renderObjects: RenderObject[] = [];
@@ -37,6 +39,8 @@ export class Renderer {
     private loop() {
         if (this.started) {
             requestAnimationFrame(() => {
+                Renderer.onLoopStart$.next();
+
                 const delta = Date.now() - this.lastRenderTimestamp;
                 this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
                 const zIndexSortedRenderObjects = this.renderObjects.sort((a, b) => {
@@ -46,7 +50,8 @@ export class Renderer {
                     object.update(delta);
                     object.draw(delta);
                 }
-                window.dispatchEvent(new Event(Renderer.RENDER_LOOP_END_EVENT));
+                
+                Renderer.onLoopEnd$.next();
                 this.lastRenderTimestamp = Date.now();
                 this.loop();
             });

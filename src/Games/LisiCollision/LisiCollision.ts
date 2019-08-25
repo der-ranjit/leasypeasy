@@ -23,7 +23,7 @@ export const LisiCollision = (renderer: Renderer) => {
         }
     })
 
-    window.addEventListener(Renderer.RENDER_LOOP_END_EVENT, () => {
+    Renderer.onLoopEnd$.subscribe(() => {
         const isColliding = Collision.isColliding(circle, circle2);
         if (isColliding) {
             circle.setColor(Color.RED);
@@ -33,5 +33,5 @@ export const LisiCollision = (renderer: Renderer) => {
             circle.setColor(Color.YELLOW);
             circle2.setColor(Color.YELLOW);
         }
-    })
+    });
 }
