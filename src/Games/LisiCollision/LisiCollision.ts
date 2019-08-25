@@ -45,18 +45,10 @@ export const LisiCollision = (renderer: Renderer) => {
     })
 
     const checkForCollision = (circleA: Circle, circleB: Circle) => {
-        const distance = getDistanceBetween(circleA.position, circleB.position);
+        const distance = Point.distanceBetween(circleA.position, circleB.position);
         const radii = circleA.radius + circleB.radius;
         const isColliding = distance <= radii;
 
         return isColliding;
     }
-
-    const getDistanceBetween = (pointA: Point, pointB: Point) => {
-        const a = Math.abs(pointB.x - pointA.x);
-        const b = Math.abs(pointB.y - pointA.y);
-        const distance = Math.sqrt((a * a) + (b * b));
-        return distance;
-    }
-
 }

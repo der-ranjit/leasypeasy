@@ -51,7 +51,7 @@ export abstract class Shape extends RenderObject {
     }
 
     public move(point: Point) {
-        const newPosition = Point.ADD(this.position, point)
+        const newPosition = Point.add(this.position, point)
         if (this.checkBoundary) {
             if (newPosition.x > this.renderer.context.canvas.width
                 || newPosition.x < 0
