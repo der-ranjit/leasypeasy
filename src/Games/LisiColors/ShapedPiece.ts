@@ -1,11 +1,11 @@
-import { Square } from "../Engine/Shapes/Square";
+import { Square } from "../../Engine/Shapes/Square";
 import { Board } from "./Board";
-import { Point } from "../Engine/Point";
-import { Circle } from "../Engine/Shapes/Circle";
-import { Color } from "../Engine/Color";
-import { Renderer } from "../Engine/Renderer";
-import { Shape, ShapeType } from "../Engine/Shapes/Shape";
-import { randomInt } from "../Utils";
+import { Point } from "../../Engine/Point";
+import { Circle } from "../../Engine/Shapes/Circle";
+import { Color } from "../../Engine/Color";
+import { Renderer } from "../../Engine/Renderer";
+import { Shape, ShapeType } from "../../Engine/Shapes/Shape";
+import { randomInt } from "../../Utils";
 
 export class ShapedPiece {
     private shape!: Shape;

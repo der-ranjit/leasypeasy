@@ -1,14 +1,14 @@
-import { randomInt} from "../Utils";
-import { Square } from "../Engine/Shapes/Square";
-import { ShapeType } from "../Engine/Shapes/Shape";
+import { randomInt} from "../../Utils";
+import { Square } from "../../Engine/Shapes/Square";
+import { ShapeType } from "../../Engine/Shapes/Shape";
 import { ShapedPiece } from "./ShapedPiece";
-import { Controls } from "../Engine/Controls";
-import { RenderObject } from "../Engine/RenderObject";
-import { Point } from "../Engine/Point";
-import { Color } from "../Engine/Color";
-import { Renderer } from "../Engine/Renderer";
-import { Circle } from "../Engine/Shapes/Circle";
-import { Rectangle } from "../Engine/Shapes/Rectangle";
+import { Controls } from "../../Engine/Controls";
+import { RenderObject } from "../../Engine/RenderObject";
+import { Point } from "../../Engine/Point";
+import { Color } from "../../Engine/Color";
+import { Renderer } from "../../Engine/Renderer";
+import { Circle } from "../../Engine/Shapes/Circle";
+import { Rectangle } from "../../Engine/Shapes/Rectangle";
 
 export class BoardField {
     private rectangle!: Rectangle;
