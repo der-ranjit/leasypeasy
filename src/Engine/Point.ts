@@ -3,7 +3,12 @@ export class Point {
     public static add(pointA: Point, pointB: Point): Point {
         const newX = pointB.x += pointA.x;
         const newY = pointB.y += pointA.y;
+        return new Point(newX, newY);
+    }
 
+    public static multiply(point: Point, factor: number) {
+        const newX = point.x *= factor;
+        const newY = point.y *= factor;
         return new Point(newX, newY);
     }
 
