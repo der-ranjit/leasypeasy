@@ -39,10 +39,18 @@ export class Controls {
         });
 
         document.addEventListener("keyup", event =>  {
-            this.isLeftPressed = false;
-            this.isRightPressed = false;
-            this.isDownPressed = false;
-            this.isUpPressed = false;
+            if (event.key === "ArrowRight") {
+                this.isRightPressed = false;
+            } 
+            if (event.key === "ArrowLeft") {
+                this.isLeftPressed = false;
+            } 
+            if (event.key === "ArrowUp") {
+                this.isUpPressed = false;
+            } 
+            if (event.key === "ArrowDown") {
+                this.isDownPressed = false;
+            } 
         });
     }
 
