@@ -233,22 +233,22 @@ export class Board extends RenderObject {
 
     private initControls() {
         const controls = Controls.getInstance();
-        controls.onLeft(() => {
+        controls.onKeyDown("ArrowLeft").subscribe(() => {
             if (this.player) {
                 this.player.moveLeft(1)
             }
         });
-        controls.onUp(() => {
+        controls.onKeyDown("ArrowUp").subscribe(() => {
             if (this.player) {
                 this.player.moveUp(1)
             }
         });
-        controls.onRight(() => {
+        controls.onKeyDown("ArrowRight").subscribe(() => {
             if (this.player) {
                 this.player.moveRight(1)
             }
         });
-        controls.onDown(() => {
+        controls.onKeyDown("ArrowDown").subscribe(() => {
             if (this.player) {
                 this.player.moveDown(1)
             }

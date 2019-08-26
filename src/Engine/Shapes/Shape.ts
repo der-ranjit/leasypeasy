@@ -36,19 +36,19 @@ export abstract class Shape extends RenderObject {
 
     public update(delta: number) {
         if (this.isControlled) {
-            if (this.controls.isLeftPressed) {
+            if (this.controls.isKeyPressed("ArrowLeft")) {
                 this.velocity.x = -this.speed
                 this.acceleration = 0.98;
             }
-            if (this.controls.isRightPressed) {
+            if (this.controls.isKeyPressed("ArrowRight")) {
                 this.velocity.x = this.speed;
                 this.acceleration = 0.98;
             }
-            if (this.controls.isDownPressed) {
+            if (this.controls.isKeyPressed("ArrowDown")) {
                 this.velocity.y = this.speed;
                 this.acceleration = 0.98;
             }
-            if (this.controls.isUpPressed) {
+            if (this.controls.isKeyPressed("ArrowUp")) {
                 this.velocity.y = -this.speed;
                 this.acceleration = 0.98;
             }

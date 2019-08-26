@@ -4,6 +4,9 @@ import { Point } from "../../Engine/Point";
 import { Color } from "../../Engine/Color";
 import { Collision } from "../../Engine/Collision";
 import { Rectangle } from "../../Engine/Shapes/Rectangle";
+import { Controls } from "../../Engine/Controls";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 export const LisiCollision = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
@@ -30,13 +33,12 @@ export const LisiCollision = (renderer: Renderer) => {
     let controlledIndex = 0;
     const controllables = [circle1, rect1, circle3];
 
-    window.addEventListener("keydown", (event: KeyboardEvent) => {
-        if (event.key === "Enter") {
-            controlledIndex = (controlledIndex + 1) % controllables.length;
-            controllables.forEach(contrallable => contrallable.isControlled = false);
-            controllables[controlledIndex].isControlled = true;
-        }
-    })
+    const controls = Controls.getInstance();
+    controls.onKeyDown("Enter").subscribe(() => {
+        controlledIndex = (controlledIndex + 1) % controllables.length;
+        controllables.forEach(contrallable => contrallable.isControlled = false);
+        controllables[controlledIndex].isControlled = true;
+    });
 
     const collisionColor = Color.RED;
     Renderer.onLoopEnd$.subscribe(() => {

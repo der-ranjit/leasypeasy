@@ -1,3 +1,5 @@
+import { Observable, fromEvent, Subject } from "rxjs";
+
 export class Controls {
     public static INSTANCE: Controls;
 
@@ -8,66 +10,66 @@ export class Controls {
         return Controls.INSTANCE;
     }
 
-    public isLeftPressed = false;
-    public isRightPressed = false;
-    public isUpPressed = false;
-    public isDownPressed = false;
-
-    private leftFunctions: Function[] = []
-    private rightFunctions: Function[] = []
-    private upFunctions: Function[] = []
-    private downFunctions: Function[] = []
+    private isKeyDown = false;
+    private pressedKeys: string[] = []
+    private onKeyDown$ = new Subject<KeyboardEvent>();
+    private onKeyUp$ = new Subject<KeyboardEvent>();
 
     constructor() {
-        document.addEventListener("keydown", event => {
-            if (event.key === "ArrowRight") {
-                this.isRightPressed = true;
-                this.rightFunctions.forEach(method => method());
-            } 
-            if (event.key === "ArrowLeft") {
-                this.isLeftPressed = true;
-                this.leftFunctions.forEach(method => method());
-            } 
-            if (event.key === "ArrowUp") {
-                this.isUpPressed = true;
-                this.upFunctions.forEach(method => method());
-            } 
-            if (event.key === "ArrowDown") {
-                this.isDownPressed = true;
-                this.downFunctions.forEach(method => method());
-            } 
+        window.addEventListener("keydown", event => {
+            this.addPressedKey(event.key);
+            this.isKeyDown = true;
+            this.onKeyDown$.next(event);
         });
 
-        document.addEventListener("keyup", event =>  {
-            if (event.key === "ArrowRight") {
-                this.isRightPressed = false;
-            } 
-            if (event.key === "ArrowLeft") {
-                this.isLeftPressed = false;
-            } 
-            if (event.key === "ArrowUp") {
-                this.isUpPressed = false;
-            } 
-            if (event.key === "ArrowDown") {
-                this.isDownPressed = false;
-            } 
+        window.addEventListener("keyup", event =>  {
+            this.removePressedKey(event.key);
+            this.isKeyDown = false;
+            this.onKeyUp$.next(event);
         });
     }
 
-    public onLeft(method: Function) {
-        this.leftFunctions.push(method);
-    }
-    
-    public onRight(method: Function) {
-        this.rightFunctions.push(method);
-    }
-    
-    public onUp(method: Function) {
-        this.upFunctions.push(method);
+    public isKeyPressed(keyName: string): boolean {
+        return this.isKeyDown && this.pressedKeys.indexOf(keyName) !== -1;
     }
 
-    public onDown(method: Function) {
-        this.downFunctions.push(method);
+    public onKeyDown(keyName: string): Observable<KeyboardEvent> {
+        return new Observable(observer => {
+            const subscription = this.onKeyDown$.subscribe(event => {
+                if (event.key === keyName) {
+                    observer.next(event);
+                }
+            })
+            return () => {
+                subscription.unsubscribe();
+            }
+        })
+    }
+    
+    public onKeyUp(keyName: string): Observable<KeyboardEvent> {
+        return new Observable(observer => {
+            const subscription = this.onKeyUp$.subscribe(event => {
+                if (event.key === keyName) {
+                    observer.next(event);
+                }
+            })
+            return () => {
+                subscription.unsubscribe();
+            }
+        })
+    }
+
+    private addPressedKey(keyName: string) {
+        if (!this.pressedKeys.find(key => key === keyName)) {
+            this.pressedKeys.push(keyName);
+        }
+    }
+
+    private removePressedKey(keyName: string) {
+        const idx = this.pressedKeys.indexOf(keyName);
+        if (idx !== -1) {
+            this.pressedKeys.splice(idx, 1);
+        }
     }
 
 }
