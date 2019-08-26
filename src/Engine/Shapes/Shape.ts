@@ -28,29 +28,42 @@ export abstract class Shape extends RenderObject {
         super(renderer, fillColor, strokeColor, lineWidth);
     }
 
+    public velocity = new Point(0, 0);
+    
+    public acceleration = 0;
     public abstract centerArountPoint(point: Point): void;
     public abstract updateShape(delta: number): void;
 
     public update(delta: number) {
         if (this.isControlled) {
             if (this.controls.isLeftPressed) {
-                this.move(new Point(-1, 0).multiply(this.speed));
+                this.velocity.x = -this.speed
+                this.acceleration = 0.98;
             }
             if (this.controls.isRightPressed) {
-                this.move(new Point(1, 0).multiply(this.speed));
+                this.velocity.x = this.speed;
+                this.acceleration = 0.98;
             }
             if (this.controls.isDownPressed) {
-                this.move(new Point(0, 1).multiply(this.speed));
+                this.velocity.y = this.speed;
+                this.acceleration = 0.98;
             }
             if (this.controls.isUpPressed) {
-                this.move(new Point(0, -1).multiply(this.speed));
+                this.velocity.y = -this.speed;
+                this.acceleration = 0.98;
             }
         }
 
+        this.move(this.velocity);
+        this.velocity.multiply(this.acceleration);
+        
         this.updateShape(delta);
     }
 
     public move(point: Point) {
+        if (point === Point.ORIGIN) {
+            return;
+        }
         const newPosition = Point.add(this.position, point)
         if (this.checkBoundary) {
             if (newPosition.x > this.renderer.context.canvas.width
