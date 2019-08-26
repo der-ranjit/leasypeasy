@@ -5,8 +5,6 @@ import { Color } from "../../Engine/Color";
 import { Collision } from "../../Engine/Collision";
 import { Rectangle } from "../../Engine/Shapes/Rectangle";
 import { Controls } from "../../Engine/Controls";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 
 export const LisiCollision = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
