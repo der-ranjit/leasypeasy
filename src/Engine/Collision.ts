@@ -35,11 +35,28 @@ export class Collision {
         return isColliding;
     }
 
-    private static decideRectangleCollision(rectA: Rectangle, rectB: Rectangle) {
-
+    private static decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
+        if ((rectA.position.y === rectB.position.y && 
+            rectA.position.x + rectA.width >= rectB.position.x &&
+            rectA.position.x <= rectB.position.x)
+            || rectA.position.x === rectB.position.x) {
+            return true;
+        }
+        const bx = rectB.position.x;
+        const by = rectB.position.y;
+        const ax = rectA.position.x;
+        const ay = rectA.position.y;
+        if ( (ax <= bx &&
+            ay <= by) ||
+            (ax >= bx &&
+            ay >= by) 
+        ) {
+            return true;
+        }
+        return false;
     }
     
-    private static decideCircleRectangleCollision(circle: Circle, rect: Rectangle) {
-
+    private static decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
+        return false;
     }
 }
