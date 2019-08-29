@@ -53,7 +53,7 @@ export abstract class Shape extends RenderObject {
             }
         }
 
-        this.move(this.velocity);
+        this.move(this.velocity.multiply(this.speed));
         this.velocity.multiply(this.acceleration);
         if (this.gravityEnabled) {
             if (this.gravitationSource) {

@@ -7,7 +7,7 @@ export const GravityDemo = (renderer: Renderer) => {
     canvas.width = 1024;
     canvas.height = 600;
 
-    const gravityRadius = 60;
+    const gravityRadius = 30;
     const offset = gravityRadius / 2;
     const gravitySource = new Circle(
         new Point(
@@ -22,10 +22,11 @@ export const GravityDemo = (renderer: Renderer) => {
     window.addEventListener("click", (event) => {
         const circle = new Circle(
             new Point(event.clientX, event.clientY),
-            30,
+            15,
             renderer,
             Color.CYAN
         );
+        circle.checkBoundary = false,
         circle.gravityEnabled = true;
         circle.gravitationSource = gravitySource;
         circles.push(circle);
@@ -33,14 +34,16 @@ export const GravityDemo = (renderer: Renderer) => {
 
     const controls = Controls.getInstance();
     controls.onKeyDown(" ").subscribe(_ => {
-        const minVel = -30;
-        const maxVel = 30;
-        for (const cirlce of circles) {
+        const minVel = -15;
+        const maxVel = 15;
+        for (const circle of circles) {
             const velocity = new Point(
                 MathUtils.randomInt(minVel, maxVel),
                 MathUtils.randomInt(minVel, maxVel)
             );
-            cirlce.velocity = velocity;
+            circle.velocity = velocity;
+            circle.acceleration = 0.99;
+            circle.speed = MathUtils.randomInt(1, 1.1);
         }
     });
 }
