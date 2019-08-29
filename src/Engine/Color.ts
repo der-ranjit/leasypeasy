@@ -18,7 +18,10 @@ export class Color {
     ];
 
     public static get RANDOM_COLOR(): Color {
-        return Color.COLORS[MathUtils.randomInt(0, Color.COLORS.length - 1)];
+        const r = MathUtils.randomInt(0, 255);
+        const g = MathUtils.randomInt(0, 255);
+        const b = MathUtils.randomInt(0, 255);
+        return new Color(r, g, b);
     }
     
     public static mix(color1: Color, color2: Color, mixAmount = 0.5): Color {
@@ -41,7 +44,6 @@ export class Color {
         public g: number,
         public b: number
     ) {
-
     }
 
     public toString() {

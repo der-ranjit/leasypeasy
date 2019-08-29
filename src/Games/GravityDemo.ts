@@ -24,7 +24,7 @@ export const GravityDemo = (renderer: Renderer) => {
             new Point(event.clientX, event.clientY),
             15,
             renderer,
-            Color.CYAN
+            Color.RANDOM_COLOR
         );
         circle.checkBoundary = false,
         circle.gravityEnabled = true;
@@ -37,11 +37,13 @@ export const GravityDemo = (renderer: Renderer) => {
         const minVel = -15;
         const maxVel = 15;
         for (const circle of circles) {
-            const velocity = new Point(
-                MathUtils.randomInt(minVel, maxVel),
-                MathUtils.randomInt(minVel, maxVel)
-            );
-            circle.velocity = velocity;
+            // const velocity = new Point(
+            //     MathUtils.randomInt(minVel, maxVel),
+            //     MathUtils.randomInt(minVel, maxVel)
+            // );
+            // circle.velocity = velocity;
+            circle.velocity.x = -circle.velocity.x;
+            circle.velocity.y = -circle.velocity.y;
             circle.acceleration = 0.99;
             circle.speed = MathUtils.randomInt(1, 1.1);
         }
