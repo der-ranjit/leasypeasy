@@ -1,10 +1,6 @@
-import { Renderer } from "../../Engine/Renderer";
-import { Circle } from "../../Engine/Shapes/Circle";
-import { Point } from "../../Engine/Point";
-import { Color } from "../../Engine/Color";
-import { Collision } from "../../Engine/Collision";
-import { Rectangle } from "../../Engine/Shapes/Rectangle";
-import { Controls } from "../../Engine/Controls";
+import { Collision, Color, Controls, Point, Renderer } from "../../Engine";
+import { Circle, Rectangle } from "../../Engine/Shapes";
+
 
 export const LisiCollision = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
@@ -12,11 +8,14 @@ export const LisiCollision = (renderer: Renderer) => {
     canvas.width = 800;
     canvas.height = 650;
 
+    const midCircle = new Circle(new Point(370, 295), 60, renderer);
+
     const circlesColor = Color.YELLOW;
     const circle1 = new Circle(new Point(100, 100), 50, renderer, circlesColor);
     circle1.speed = 5
     circle1.isControlled = true;
     const circle2 = new Circle(new Point(300, 100), 50, renderer, circlesColor);
+    circle1.gravitationSource = midCircle;
 
     const rectsColor = Color.GREEN;
     const rect1 = new Rectangle(new Point(50, 300), 100, 50, renderer, rectsColor);
@@ -32,6 +31,11 @@ export const LisiCollision = (renderer: Renderer) => {
     const controllables = [circle1, rect1, circle3];
 
     const controls = Controls.getInstance();
+    controls.onKeyDown(" ").subscribe(() => {
+        controllables[controlledIndex].gravityEnabled = !controllables[controlledIndex].gravityEnabled;
+        // controllables[controlledIndex].velocity.multiply(5);
+    });
+
     controls.onKeyDown("Enter").subscribe(() => {
         controlledIndex = (controlledIndex + 1) % controllables.length;
         controllables.forEach(contrallable => contrallable.isControlled = false);

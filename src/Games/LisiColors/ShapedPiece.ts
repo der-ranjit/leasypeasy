@@ -1,11 +1,9 @@
-import { Square } from "../../Engine/Shapes/Square";
+import { Color, MathUtils, Point, Renderer } from "../../Engine";
+import { Circle, Square } from "../../Engine/Shapes";
+// TODO remove shapeType?
+import { Shape, ShapeType } from "../../Engine/Shapes/Shape.abstract";
+
 import { Board } from "./Board";
-import { Point } from "../../Engine/Point";
-import { Circle } from "../../Engine/Shapes/Circle";
-import { Color } from "../../Engine/Color";
-import { Renderer } from "../../Engine/Renderer";
-import { Shape, ShapeType } from "../../Engine/Shapes/Shape";
-import { randomInt } from "../../Utils";
 
 export class ShapedPiece {
     private shape!: Shape;
@@ -59,7 +57,7 @@ export class ShapedPiece {
     }
 
     public changeToRandomColor(colors: Color[]) {
-        const randomColor = colors[randomInt(0, colors.length)];
+        const randomColor = colors[MathUtils.randomInt(0, colors.length)];
         this.setColor(Color.WHITE, randomColor);
     }
 

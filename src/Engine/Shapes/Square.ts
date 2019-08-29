@@ -1,7 +1,7 @@
+import { Renderer } from "../Renderer";
+import { Color } from "../Color";
 import { Point } from "../Point";
 import { Rectangle } from "./Rectangle";
-import { Color } from "../Color";
-import { Renderer } from "../Renderer";
 
 export class Square extends Rectangle {
     constructor (

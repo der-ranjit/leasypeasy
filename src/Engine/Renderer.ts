@@ -1,5 +1,5 @@
-import { RenderObject } from "./RenderObject";
 import { Subject } from "rxjs";
+import { RenderObject } from "./RenderObject";
 
 export class Renderer {
     public static onLoopStart$ = new Subject<void>();

@@ -1,4 +1,4 @@
-import { Observable, fromEvent, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
 export class Controls {
     public static INSTANCE: Controls;

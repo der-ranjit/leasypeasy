@@ -1,6 +1,6 @@
-import { Shape } from "./Shapes/Shape";
-import { Circle } from "./Shapes/Circle";
 import { Point } from "./Point";
+import { Shape } from "./Shapes/Shape.abstract";
+import { Circle } from "./Shapes/Circle";
 import { Rectangle } from "./Shapes/Rectangle";
 
 export class Collision {

@@ -1,14 +1,10 @@
-import { randomInt} from "../../Utils";
-import { Square } from "../../Engine/Shapes/Square";
-import { ShapeType } from "../../Engine/Shapes/Shape";
+import { Circle, Rectangle, Square } from "../../Engine/Shapes";
+import { Color, Controls, Point, Renderer, MathUtils } from "../../Engine";
 import { ShapedPiece } from "./ShapedPiece";
-import { Controls } from "../../Engine/Controls";
+
+// TODO cleanup and remove classes
 import { RenderObject } from "../../Engine/RenderObject";
-import { Point } from "../../Engine/Point";
-import { Color } from "../../Engine/Color";
-import { Renderer } from "../../Engine/Renderer";
-import { Circle } from "../../Engine/Shapes/Circle";
-import { Rectangle } from "../../Engine/Shapes/Rectangle";
+import { ShapeType } from "../../Engine/Shapes/Shape.abstract";
 
 export class BoardField {
     private rectangle!: Rectangle;
@@ -141,11 +137,11 @@ export class Board extends RenderObject {
     }
 
     public addRandomPiece() {
-        const randomFillColor = this.colors[randomInt(0, this.colors.length)];
-        const randomColumn = randomInt(0, this.field.length - 1);
+        const randomFillColor = this.colors[MathUtils.randomInt(0, this.colors.length)];
+        const randomColumn = MathUtils.randomInt(0, this.field.length - 1);
         const exists = !!this.field[randomColumn];
         if (exists) {
-            const randomRow = randomInt(0, this.field[randomColumn].length - 1);
+            const randomRow = MathUtils.randomInt(0, this.field[randomColumn].length - 1);
             const width = this.fieldWidth / 2;
             const lineWidth = 4;
             const maxPieces = 6;

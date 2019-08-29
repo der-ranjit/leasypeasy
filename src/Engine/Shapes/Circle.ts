@@ -1,7 +1,7 @@
+import { Renderer } from "../Renderer";
 import { Point } from "../Point";
 import { Color } from "../Color";
-import { Renderer } from "../Renderer";
-import { Shape } from "./Shape";
+import { Shape } from "./Shape.abstract";
 
 export class Circle extends Shape {
     constructor (

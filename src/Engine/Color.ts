@@ -1,4 +1,4 @@
-import { clamp } from "../Utils";
+import { MathUtils } from "./MathUtils";
 
 export class Color {
     public static RED = new Color(255, 0, 0);
@@ -13,17 +13,17 @@ export class Color {
     public static BLACK = new Color(0, 0, 0);
     
     public static mix(color1: Color, color2: Color, mixAmount = 0.5): Color {
-        const r = clamp(0, 255, color1.r * mixAmount + color2.r * (1 - mixAmount));
-        const g = clamp(0, 255, color1.g * mixAmount + color2.g * (1 - mixAmount));
-        const b = clamp(0, 255, color1.b * mixAmount + color2.b * (1 - mixAmount));
+        const r = MathUtils.clamp(0, 255, color1.r * mixAmount + color2.r * (1 - mixAmount));
+        const g = MathUtils.clamp(0, 255, color1.g * mixAmount + color2.g * (1 - mixAmount));
+        const b = MathUtils.clamp(0, 255, color1.b * mixAmount + color2.b * (1 - mixAmount));
 
         return new Color(r, g, b);
     }
 
     public static add(color1: Color, color2: Color): Color {
-        const r = clamp(0, 255, color1.r + color2.r);
-        const g = clamp(0, 255, color1.g + color2.g);
-        const b = clamp(0, 255, color1.b + color2.b);
+        const r = MathUtils.clamp(0, 255, color1.r + color2.r);
+        const g = MathUtils.clamp(0, 255, color1.g + color2.g);
+        const b = MathUtils.clamp(0, 255, color1.b + color2.b);
         return new Color(r, g, b);
     }
 
