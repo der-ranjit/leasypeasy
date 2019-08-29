@@ -11,6 +11,15 @@ export class Color {
     public static GREY = new Color(127, 127, 127);
     public static WHITE = new Color(255, 255, 255);
     public static BLACK = new Color(0, 0, 0);
+
+    public static COLORS = [
+        Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW,
+        Color.GREY, Color.WHITE, Color.BLACK
+    ];
+
+    public static get RANDOM_COLOR(): Color {
+        return Color.COLORS[MathUtils.randomInt(0, Color.COLORS.length - 1)];
+    }
     
     public static mix(color1: Color, color2: Color, mixAmount = 0.5): Color {
         const r = MathUtils.clamp(0, 255, color1.r * mixAmount + color2.r * (1 - mixAmount));
