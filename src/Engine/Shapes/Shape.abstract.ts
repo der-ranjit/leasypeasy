@@ -67,12 +67,12 @@ export abstract class Shape extends RenderObject {
                 const length = Math.sqrt((vectorX * vectorX) + (vectorY * vectorY)); 
                 const gravity = new Point(vectorX, vectorY);
                 const distance = Point.distanceBetween(this.position, this.gravitationSource.position); 
-                const massA = (<Circle><unknown>this).radius;
-                const massB = this.gravitationSource.radius;
+                const massA = (<Circle><unknown>this).radius * 10;
+                const massB = this.gravitationSource.radius * 10;
                 const g = Math.pow(6.67430, -2);
                 const force = (g * massA * massB) / (distance * distance);
-                // this.gravity = gravity.multiply(1 / length).multiply(force);
-                this.gravity = gravity.multiply(1 / length);
+                // this.gravity = gravity.multiply(force / (length));
+                this.gravity = gravity.multiply(0.25 / (length));
             }
             this.velocity.add(this.gravity);
         }

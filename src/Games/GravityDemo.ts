@@ -1,11 +1,11 @@
-import { Color, Point, Renderer } from "./../Engine";
+import { Color, Point, Renderer, Controls, MathUtils } from "./../Engine";
 import { Circle, Rectangle } from "./../Engine/Shapes";
 
 export const GravityDemo = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
     
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = 1024;
+    canvas.height = 600;
 
     const gravityRadius = 60;
     const offset = gravityRadius / 2;
@@ -30,4 +30,17 @@ export const GravityDemo = (renderer: Renderer) => {
         circle.gravitationSource = gravitySource;
         circles.push(circle);
     }) 
+
+    const controls = Controls.getInstance();
+    controls.onKeyDown(" ").subscribe(_ => {
+        const minVel = -30;
+        const maxVel = 30;
+        for (const cirlce of circles) {
+            const velocity = new Point(
+                MathUtils.randomInt(minVel, maxVel),
+                MathUtils.randomInt(minVel, maxVel)
+            );
+            cirlce.velocity = velocity;
+        }
+    });
 }
