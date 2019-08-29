@@ -4,7 +4,7 @@ import { ShapedPiece } from "./ShapedPiece";
 
 // TODO cleanup and remove classes
 import { RenderObject } from "../../Engine/RenderObject";
-import { ShapeType } from "../../Engine/Shapes/Shape.abstract";
+import { ShapeType } from "../../Engine/Shapes/shapeType";
 
 export class BoardField {
     private rectangle!: Rectangle;

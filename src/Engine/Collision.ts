@@ -3,20 +3,20 @@ import { Shape } from "./Shapes/Shape.abstract";
 import { Circle } from "./Shapes/Circle";
 import { Rectangle } from "./Shapes/Rectangle";
 
-export class Collision {
-    public static isColliding(shapeA: Shape, shapeB: Shape) {
+export namespace Collision {
+    export function isColliding(shapeA: Shape, shapeB: Shape) {
         if (shapeA instanceof Circle && shapeB instanceof Circle) {
-            return Collision.decideCircleCollision(shapeA, shapeB);
+            return decideCircleCollision(shapeA, shapeB);
         }
 
         if (shapeA instanceof Rectangle && shapeB instanceof Rectangle) {
-            return Collision.decideRectangleCollision(shapeA, shapeB);
+            return decideRectangleCollision(shapeA, shapeB);
         }
 
         if (shapeA instanceof Rectangle && shapeB instanceof Circle ) {
-            return Collision.decideCircleRectangleCollision(shapeB, shapeA);
+            return decideCircleRectangleCollision(shapeB, shapeA);
         } else if (shapeA instanceof Circle && shapeB instanceof Rectangle ) {
-            return Collision.decideCircleRectangleCollision(shapeA, shapeB);
+            return decideCircleRectangleCollision(shapeA, shapeB);
         }
     }
 
@@ -27,7 +27,7 @@ export class Collision {
      *  dann kollidieren die Kreise, wenn gilt:
      *  d <= r
      */
-    private static decideCircleCollision(circleA: Circle, circleB: Circle): boolean {
+    function decideCircleCollision(circleA: Circle, circleB: Circle): boolean {
         const distance = Point.distanceBetween(circleA.position, circleB.position);
         const radii = circleA.radius + circleB.radius;
         const isColliding = distance <= radii;
@@ -35,7 +35,7 @@ export class Collision {
         return isColliding;
     }
 
-    private static decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
+    function decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
         if ((rectA.position.y === rectB.position.y && 
             rectA.position.x + rectA.width >= rectB.position.x &&
             rectA.position.x <= rectB.position.x)
@@ -56,7 +56,7 @@ export class Collision {
         return false;
     }
     
-    private static decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
+    function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
         return false;
     }
 }
