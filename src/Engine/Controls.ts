@@ -24,7 +24,9 @@ export class Controls {
 
         window.addEventListener("keyup", event =>  {
             this.removePressedKey(event.key);
-            this.isKeyDown = false;
+            if (this.pressedKeys.length === 0) {
+                this.isKeyDown = false;
+            }
             this.onKeyUp$.next(event);
         });
     }
@@ -71,5 +73,4 @@ export class Controls {
             this.pressedKeys.splice(idx, 1);
         }
     }
-
 }

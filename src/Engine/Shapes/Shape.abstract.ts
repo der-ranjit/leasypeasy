@@ -51,7 +51,6 @@ export abstract class Shape extends RenderObject {
                 this.speed -= 0.2;
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
-                console.log(true);
                 this.speed += 0.2;
             }
         }
