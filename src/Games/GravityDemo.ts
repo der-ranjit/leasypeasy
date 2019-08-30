@@ -30,14 +30,14 @@ export const GravityDemo = (renderer: Renderer) => {
         circle.gravityEnabled = true;
         circle.gravitationSource = gravitySource;
         circle.isControlled = true;
+        circle.showDirectionIndicator = circle.isControlled;
+        circle.showStats = circle.isControlled;
         circles.push(circle);
     }) 
 
     const controls = Controls.getInstance();
 
     controls.onKeyDown(" ").subscribe(_ => {
-        const minVel = -15;
-        const maxVel = 15;
         for (const circle of circles) {
             const direction = Vector2D.directional(gravitySource.position, circle.position).normalize();
             circle.direction = direction;

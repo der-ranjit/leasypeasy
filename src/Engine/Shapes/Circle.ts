@@ -4,6 +4,9 @@ import { Color } from "../Color";
 import { Shape } from "./Shape.abstract";
 
 export class Circle extends Shape {
+    public showDirectionIndicator = false; 
+    public showStats = false; 
+
     constructor (
         position: Point,
         public radius: number,
@@ -25,11 +28,50 @@ export class Circle extends Shape {
         this.context.fillStyle = this.fillColor.toString();
         this.context.strokeStyle = this.strokeColor.toString();
         this.context.lineWidth = this.lineWidth
-
+        
+        // main circle
         this.context.beginPath();
         this.context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
         this.context.stroke();
         this.context.fill();
+        this.context.closePath();
+        if (this.showDirectionIndicator) {
+            const indicatorRadius = this.radius / 5;
+            const indicatorCircleX = this.position.x + this.direction.x * (this.radius - indicatorRadius);
+            const indicatorCirlceY = this.position.y + this.direction.y * (this.radius - indicatorRadius);
+            // indicator line
+            this.context.beginPath();
+            this.context.moveTo(this.position.x, this.position.y);
+            this.context.lineTo(indicatorCircleX, indicatorCirlceY);
+            this.context.closePath();
+            this.context.stroke();
+            // indicator circle
+            this.context.fillStyle = this.strokeColor.toString();
+            this.context.beginPath();
+            this.context.arc(indicatorCircleX, indicatorCirlceY, indicatorRadius , 0, Math.PI * 2);
+            this.context.fill();
+            this.context.closePath();
+        }
+        if (this.showStats) {
+            const lineHeigt = 15;
+            const posX = this.position.x + this.radius + 2;
+            const posY = this.position.y - this.radius
+            this.context.strokeText(
+                `speed ${this.speed.toFixed(2)}`,
+                posX,
+                posY
+            );
+            this.context.strokeText(
+                `direction (${this.direction.x.toFixed(4)} | ${this.direction.y.toFixed(4)}) | ${this.direction.getLength().toFixed(2)}`,
+                posX,
+                posY + lineHeigt
+            );
+            this.context.strokeText(
+                `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})`,
+                posX,
+                posY + lineHeigt * 2
+            );
+        }
 
         this.context.restore();
     }
