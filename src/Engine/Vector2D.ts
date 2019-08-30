@@ -32,6 +32,10 @@ export class Vector2D {
     public static rotated(vector: Vector2D, degrees: number) {
         return Vector2D.from(vector).rotate(degrees);
     }
+    
+    public static added(vectorA: Vector2D, vectorB: Vector2D) {
+        return Vector2D.from(vectorA).add(vectorB);
+    }
  
     public get point(): Point {
         return new Point(this.x, this.y);
@@ -96,14 +100,13 @@ export class Vector2D {
      * Sets the length of this vector to the desired one, keeping its direction
      */
     public setLength(length: number) {
-        const currentLength = this.getLength();
-        if (currentLength !== 0) {
-            const normalizeScalar = length / currentLength;
-            this.scale(normalizeScalar);
-        } else {
-            this.x = 0;
+        if (this.x === 0 && this.y === 0) {
+            this.x = 1;
             this.y = 0;
         }
+        const currentLength = this.getLength();
+        const normalizeScalar = length / currentLength;
+        this.scale(normalizeScalar);
         return this;
     }
 
