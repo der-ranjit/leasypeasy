@@ -82,11 +82,9 @@ export abstract class Shape extends RenderObject {
     }
 
     public move(vector: Vector2D) {
-        if (vector.x === 0 && vector.y === 0) {
-            return;
-        }
         const newPosition = Point.add(this.position, vector.point)
         this.position = newPosition;
+
         if (this.checkBoundary) {
             const boundaryRect: BoundaryRect = {
                 left: 0,
@@ -95,7 +93,6 @@ export abstract class Shape extends RenderObject {
                 bottom: this.renderer.context.canvas.height
             }
             CollisionResolver.checkAndResolveBoundaries(
-                newPosition,
                 this,
                 boundaryRect
             );

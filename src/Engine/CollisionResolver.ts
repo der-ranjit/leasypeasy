@@ -14,23 +14,23 @@ export namespace CollisionResolver {
      * TODO if newPosition exceeds boundaries, calculate overlap and teleport shape to edge 
      */
     export function checkAndResolveBoundaries(
-        newPosition: Point,
         shape: Shape,
         boundaryRect: BoundaryRect
     ): void {
         // TODO figure out being unable to use tpye of Shapes here
         // Rectangle
         if ((<any>shape).width && (<any>shape).height) {
-            resolveRectangleBoundary(newPosition, shape, boundaryRect)
+            resolveRectangleBoundary(shape, boundaryRect)
         }
         // Circle
         if ((<any>shape).radius) {
-            resolveCircleBoundary(newPosition, shape, boundaryRect)
+            resolveCircleBoundary(shape, boundaryRect)
         }
     }
 
     // TODO figure out being unable to use tpye of Shapes here
-    function resolveCircleBoundary(position: Point, shape: any, boundaryRect: BoundaryRect) {
+    function resolveCircleBoundary(shape: any, boundaryRect: BoundaryRect) {
+        const position = shape.position;
         const rightCollision = position.x + shape.radius > boundaryRect.right;
         const leftCollision = position.x - shape.radius < boundaryRect.left;
         const bottomCollision = position.y + shape.radius > boundaryRect.bottom;
@@ -54,7 +54,8 @@ export namespace CollisionResolver {
     }
 
     // TODO figure out being unable to use tpye of Shapes here
-    function resolveRectangleBoundary(position: Point, shape: any, boundaryRect: BoundaryRect) {
+    function resolveRectangleBoundary(shape: any, boundaryRect: BoundaryRect) {
+        const position = shape.position;
         const rightCollision = position.x + shape.width > boundaryRect.right;
         const leftCollision = position.x < boundaryRect.left;
         const bottomCollision = position.y + shape.height > boundaryRect.bottom;
