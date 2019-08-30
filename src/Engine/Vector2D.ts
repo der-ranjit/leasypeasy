@@ -9,7 +9,26 @@ export class Vector2D {
         const y = Math.sin(radian);
         return new Vector2D(x, y);
     }
+    public static from(point: Point): Vector2D;
+    public static from(vector: Vector2D): Vector2D;
+    public static from(pointOrVector: any): Vector2D {
+        return new Vector2D(pointOrVector.x, pointOrVector.y);
+    }
+    
+    public static normalize(vector: Vector2D) {
+        return Vector2D.from(vector).normalize();
+    }
 
+    public static pointToPoint(pointA: Point, pointB: Point): Vector2D {
+        const directionalVector = Point.sub(pointB, pointA);
+        return Vector2D.from(directionalVector);
+    }
+
+
+    public static scale(vector: Vector2D, scalar: number) {
+        return Vector2D.from(vector).scale(scalar);
+    }
+ 
     public get point(): Point {
         return new Point(this.x, this.y);
     }
@@ -68,8 +87,10 @@ export class Vector2D {
      */
     public setLength(length: number) {
         const currentLength = this.getLength();
-        const normalizeScalar = length / currentLength;
-        this.scale(normalizeScalar);
+        if (currentLength !== 0) {
+            const normalizeScalar = length / currentLength;
+            this.scale(normalizeScalar);
+        }
         return this;
     }
 

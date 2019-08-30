@@ -2,8 +2,14 @@ export class Point {
     public static ORIGIN = new Point(0, 0);
 
     public static add(pointA: Point, pointB: Point): Point {
-        const newX = pointB.x + pointA.x;
-        const newY = pointB.y + pointA.y;
+        const newX = pointA.x + pointB.x;
+        const newY = pointA.y + pointB.y;
+        return new Point(newX, newY);
+    }
+    
+    public static sub(pointA: Point, pointB: Point): Point {
+        const newX = pointA.x - pointB.x;
+        const newY = pointA.y - pointB.y;
         return new Point(newX, newY);
     }
 
