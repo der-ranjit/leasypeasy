@@ -3,6 +3,8 @@ import { RenderObject } from "../RenderObject";
 import { Color } from "../Color";
 import { Controls } from "../Controls";
 import { Point } from "../Point";
+import { MathUtils } from "../MathUtils";
+import { Vector2D } from "../Vector2D";
 
 // careful - circular dependencie
 import { CollisionResolver, BoundaryRect } from "../CollisionResolver";
@@ -11,7 +13,7 @@ export abstract class Shape extends RenderObject {
     public checkBoundary = true;
 
     // TODO move into constructor
-    public speed = 1;
+    public speed = 0;
     public isControlled = false
     
     private controls = Controls.getInstance();
@@ -26,10 +28,10 @@ export abstract class Shape extends RenderObject {
         super(renderer, fillColor, strokeColor, lineWidth);
     }
 
-    public velocity = new Point(0, 0);
-    
+    public direction = new Vector2D(0, 0);
+
     public acceleration = 0.98;
-    public gravity = new Point(0, 1);
+    public gravity = new Vector2D(0, 1);
     public gravityEnabled = false;
 
     public gravitationSource: any | null = null;
@@ -40,49 +42,55 @@ export abstract class Shape extends RenderObject {
     public update(delta: number) {
         if (this.isControlled) {
             if (this.controls.isKeyPressed("ArrowLeft")) {
-                this.velocity.x = -this.speed
+                this.direction.x = -1;
+                this.speed = 1;
             }
             if (this.controls.isKeyPressed("ArrowRight")) {
-                this.velocity.x = this.speed;
+                this.direction.x = 1;
+                this.speed = 1;
             }
             if (this.controls.isKeyPressed("ArrowDown")) {
-                this.velocity.y = this.speed;
+                this.direction.y = 1;
+                this.speed = 1;
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
-                this.velocity.y = -this.speed;
+                this.direction.y = -1;
+                this.speed = 1;
             }
         }
-
-        this.move(this.velocity.multiply(this.speed));
-        this.velocity.multiply(this.acceleration);
+        
+        const movementVector = Vector2D.from(this.direction).setLength(this.speed);
+        
         if (this.gravityEnabled) {
             if (this.gravitationSource) {
-                const vectorX = -this.position.x + this.gravitationSource.position.x;
-                const vectorY = -this.position.y + this.gravitationSource.position.y;
-                const length = Math.sqrt((vectorX * vectorX) + (vectorY * vectorY)); 
-                const gravity = new Point(vectorX, vectorY);
-                const distance = Point.distanceBetween(this.position, this.gravitationSource.position); 
-                const massA = (<any><unknown>this).radius * 10;
+                const pullVector = Vector2D.pointToPoint(this.position, this.gravitationSource.position);
+                const distance = pullVector.getLength();
+
+                const massA = (<any>this).radius * 10;
                 const massB = this.gravitationSource.radius * 10;
                 const g = Math.pow(6.67430, -2);
-                const force = (g * massA * massB) / (distance * distance);
-                // this.gravity = gravity.multiply(force / (length));
-                this.gravity = gravity.multiply(0.25 / (length));
+                if (distance > 1) {
+                    const force = (g * massA * massB) / (distance * distance);
+                    this.gravity = pullVector.setLength(MathUtils.clamp(0, 100, force));
+                }
             }
-            this.velocity.add(this.gravity);
+            movementVector.add(this.gravity);
         }
-        if (Math.abs(this.velocity.x) < 0.1 && Math.abs(this.velocity.y) < 0.1) {
-            this.velocity = new Point(0, 0);
+
+        this.move(movementVector);
+        this.speed *= this.acceleration;
+        if (this.speed <= 0.01) {
+            this.speed = 0;
         }
         
         this.updateShape(delta);
     }
 
-    public move(point: Point) {
-        if (point.x === 0 && point.y === 0) {
+    public move(vector: Vector2D) {
+        if (vector.x === 0 && vector.y === 0) {
             return;
         }
-        const newPosition = Point.add(this.position, point)
+        const newPosition = Point.add(this.position, vector.point)
         if (this.checkBoundary) {
             const boundaryRect: BoundaryRect = {
                 left: 0,

@@ -1,5 +1,6 @@
 import { Color, Point, Renderer, Controls, MathUtils } from "./../Engine";
 import { Circle, Rectangle } from "./../Engine/Shapes";
+import { Vector2D } from "../Engine/Vector2D";
 
 export const GravityDemo = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
@@ -26,7 +27,6 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.checkBoundary = false,
         circle.gravityEnabled = true;
         circle.gravitationSource = gravitySource;
         circles.push(circle);
@@ -37,15 +37,10 @@ export const GravityDemo = (renderer: Renderer) => {
         const minVel = -15;
         const maxVel = 15;
         for (const circle of circles) {
-            // const velocity = new Point(
-            //     MathUtils.randomInt(minVel, maxVel),
-            //     MathUtils.randomInt(minVel, maxVel)
-            // );
-            // circle.velocity = velocity;
-            circle.velocity.x = -circle.velocity.x;
-            circle.velocity.y = -circle.velocity.y;
+            const direction = Vector2D.pointToPoint(gravitySource.position, circle.position).normalize();
+            circle.direction = direction;
+            circle.speed += 5;
             circle.acceleration = 0.99;
-            circle.speed = MathUtils.randomInt(1, 1.1);
         }
     });
 }
