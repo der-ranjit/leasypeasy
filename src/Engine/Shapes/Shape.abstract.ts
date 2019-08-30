@@ -63,7 +63,7 @@ export abstract class Shape extends RenderObject {
         
         if (this.gravityEnabled) {
             if (this.gravitationSource) {
-                const pullVector = Vector2D.pointToPoint(this.position, this.gravitationSource.position);
+                const pullVector = Vector2D.directional(this.position, this.gravitationSource.position);
                 const distance = pullVector.getLength();
 
                 const massA = (<any>this).radius * 10;

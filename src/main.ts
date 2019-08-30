@@ -14,8 +14,8 @@ const main = () => {
 
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            // GravityDemo(renderer);
-            mixinTest(renderer.context);
+            GravityDemo(renderer);
+            // mixinTest(renderer.context);
         }
     }
 }

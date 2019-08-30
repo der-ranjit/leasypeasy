@@ -15,18 +15,22 @@ export class Vector2D {
         return new Vector2D(pointOrVector.x, pointOrVector.y);
     }
     
-    public static normalize(vector: Vector2D) {
+    public static normalized(vector: Vector2D) {
         return Vector2D.from(vector).normalize();
     }
 
-    public static pointToPoint(pointA: Point, pointB: Point): Vector2D {
-        const directionalVector = Point.sub(pointB, pointA);
+    public static directional(fromPoint: Point, toPoint: Point): Vector2D {
+        const directionalVector = Point.sub(toPoint, fromPoint);
         return Vector2D.from(directionalVector);
     }
 
 
-    public static scale(vector: Vector2D, scalar: number) {
+    public static scaled(vector: Vector2D, scalar: number) {
         return Vector2D.from(vector).scale(scalar);
+    }
+
+    public static rotated(vector: Vector2D, degrees: number) {
+        return Vector2D.from(vector).rotate(degrees);
     }
  
     public get point(): Point {
@@ -69,6 +73,12 @@ export class Vector2D {
     public add(vector: Vector2D) {
         this.x += vector.x;
         this.y += vector.y;
+        return this;
+    }
+
+    /* Rotates the vector by the given angle in degrees */
+    public rotate(degrees: number) {
+        this.setAngle(this.getAngleInDegrees() + degrees);
         return this;
     }
 

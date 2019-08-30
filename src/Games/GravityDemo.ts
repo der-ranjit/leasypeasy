@@ -37,7 +37,7 @@ export const GravityDemo = (renderer: Renderer) => {
         const minVel = -15;
         const maxVel = 15;
         for (const circle of circles) {
-            const direction = Vector2D.pointToPoint(gravitySource.position, circle.position).normalize();
+            const direction = Vector2D.directional(gravitySource.position, circle.position).normalize();
             circle.direction = direction;
             circle.speed += 5;
             circle.acceleration = 0.99;
