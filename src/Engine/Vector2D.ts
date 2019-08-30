@@ -100,6 +100,9 @@ export class Vector2D {
         if (currentLength !== 0) {
             const normalizeScalar = length / currentLength;
             this.scale(normalizeScalar);
+        } else {
+            this.x = 0;
+            this.y = 0;
         }
         return this;
     }

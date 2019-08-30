@@ -38,8 +38,8 @@ export class Circle extends Shape {
         this.context.closePath();
         if (this.showDirectionIndicator) {
             const indicatorRadius = this.radius / 5;
-            const indicatorCircleX = this.position.x + this.direction.x * (this.radius - indicatorRadius);
-            const indicatorCirlceY = this.position.y + this.direction.y * (this.radius - indicatorRadius);
+            const indicatorCircleX = this.position.x + this.velocity.x * (this.radius - indicatorRadius);
+            const indicatorCirlceY = this.position.y + this.velocity.y * (this.radius - indicatorRadius);
             // indicator line
             this.context.beginPath();
             this.context.moveTo(this.position.x, this.position.y);
@@ -63,7 +63,7 @@ export class Circle extends Shape {
                 posY
             );
             this.context.strokeText(
-                `direction (${this.direction.x.toFixed(4)} | ${this.direction.y.toFixed(4)}) | ${this.direction.getLength().toFixed(2)}`,
+                `velocity (${this.velocity.x.toFixed(4)} | ${this.velocity.y.toFixed(4)}) | ${this.velocity.getLength().toFixed(2)}`,
                 posX,
                 posY + lineHeigt
             );

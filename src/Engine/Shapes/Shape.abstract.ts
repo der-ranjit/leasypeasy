@@ -17,8 +17,8 @@ export abstract class Shape extends RenderObject {
 
     // TODO move into constructor
     public speed = 0;
-    public acceleration = 0.98;
-    public direction = new Vector2D(1, 0);
+    public frictionFactor = 0.95;
+    public velocity = new Vector2D(0, 0);
 
     public mass = 1;
     public gravity = new Vector2D(0, 1);
@@ -43,38 +43,42 @@ export abstract class Shape extends RenderObject {
     public update(delta: number) {
         if (this.isControlled) {
             if (this.controls.isKeyPressed("ArrowLeft")) {
-                this.direction.rotate(-4);
+                this.velocity.rotate(-4);
             }
             if (this.controls.isKeyPressed("ArrowRight")) {
-                this.direction.rotate(4);
+                this.velocity.rotate(4);
             }
             if (this.controls.isKeyPressed("ArrowDown")) {
-                this.speed -= 0.2;
+                this.speed -= 0.3;
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
-                this.speed += 0.2;
+                this.speed += 0.15;
             }
         }
         
-        const movementVector = Vector2D.from(this.direction).setLength(this.speed);
-        
+        const accelerationVector = Vector2D.normalized(this.velocity).scale(this.speed / 60);
+        this.velocity.add(accelerationVector);
+
         if (this.gravityEnabled) {
             if (this.gravitationSource) {
                 const pullVector = Vector2D.directional(this.position, this.gravitationSource.position);
-                const distance = pullVector.getLength();
-
-                const g = Math.pow(6.67430, -2);
-                if (distance > 1) {
-                    const force = (g * this.mass * this.gravitationSource.mass) / (distance * distance);
-                    this.gravity = pullVector.setLength(MathUtils.clamp(0, 50, force));
+                let distance = pullVector.getLength();
+                if (distance < 6) {
+                    distance = 6;
                 }
+                this.gravity = new Vector2D(
+                    100 * pullVector.x / Math.pow(distance, 3),
+                    100 * pullVector.y / Math.pow(distance, 3)
+                )
+                this.velocity.add(this.gravity);
             }
-            movementVector.add(this.gravity);
-        }
+        } 
 
-        this.move(movementVector);
-        this.speed *= this.acceleration;
-        if (Math.abs(this.speed) <= 0.01) {
+        // this.velocity 
+        this.move(this.velocity);
+
+        this.speed *= this.frictionFactor;
+        if (Math.abs(this.speed) <= 0.1) {
             this.speed = 0;
         }
         

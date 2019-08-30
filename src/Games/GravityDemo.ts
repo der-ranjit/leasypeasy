@@ -39,10 +39,10 @@ export const GravityDemo = (renderer: Renderer) => {
 
     controls.onKeyDown(" ").subscribe(_ => {
         for (const circle of circles) {
-            const direction = Vector2D.directional(gravitySource.position, circle.position).normalize();
-            circle.direction = direction;
+            const velocity = Vector2D.directional(gravitySource.position, circle.position).normalize();
+            circle.velocity = velocity;
             circle.speed += 5;
-            circle.acceleration = 0.99;
+            circle.frictionFactor = 0.99;
         }
     });
 

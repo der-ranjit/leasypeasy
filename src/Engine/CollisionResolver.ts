@@ -79,10 +79,10 @@ export namespace CollisionResolver {
     }
 
     function invertXVelocity(shape: Shape) {
-        shape.direction.x = -shape.direction.x;
+        shape.velocity.x = -shape.velocity.x;
     }
 
     function invertYVelocity(shape: Shape) {
-        shape.direction.y = -shape.direction.y;
+        shape.velocity.y = -shape.velocity.y;
     }
 }
