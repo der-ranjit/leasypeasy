@@ -28,7 +28,7 @@ export abstract class Shape extends RenderObject {
         super(renderer, fillColor, strokeColor, lineWidth);
     }
 
-    public direction = new Vector2D(0, 0);
+    public direction = new Vector2D(1, 0);
 
     public acceleration = 0.98;
     public gravity = new Vector2D(0, 1);
@@ -42,20 +42,17 @@ export abstract class Shape extends RenderObject {
     public update(delta: number) {
         if (this.isControlled) {
             if (this.controls.isKeyPressed("ArrowLeft")) {
-                this.direction.x = -1;
-                this.speed = 1;
+                this.direction.rotate(-2);
             }
             if (this.controls.isKeyPressed("ArrowRight")) {
-                this.direction.x = 1;
-                this.speed = 1;
+                this.direction.rotate(2);
             }
             if (this.controls.isKeyPressed("ArrowDown")) {
-                this.direction.y = 1;
-                this.speed = 1;
+                this.speed -= 0.2;
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
-                this.direction.y = -1;
-                this.speed = 1;
+                console.log(true);
+                this.speed += 0.2;
             }
         }
         
@@ -79,7 +76,7 @@ export abstract class Shape extends RenderObject {
 
         this.move(movementVector);
         this.speed *= this.acceleration;
-        if (this.speed <= 0.01) {
+        if (Math.abs(this.speed) <= 0.01) {
             this.speed = 0;
         }
         

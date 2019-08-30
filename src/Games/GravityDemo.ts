@@ -29,10 +29,12 @@ export const GravityDemo = (renderer: Renderer) => {
         );
         circle.gravityEnabled = true;
         circle.gravitationSource = gravitySource;
+        circle.isControlled = true;
         circles.push(circle);
     }) 
 
     const controls = Controls.getInstance();
+
     controls.onKeyDown(" ").subscribe(_ => {
         const minVel = -15;
         const maxVel = 15;
