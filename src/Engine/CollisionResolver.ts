@@ -17,33 +17,64 @@ export namespace CollisionResolver {
         newPosition: Point,
         shape: Shape,
         boundaryRect: BoundaryRect
-    ): boolean {
+    ): void {
         // TODO figure out being unable to use tpye of Shapes here
-        const anyShape = <any>shape;
         // Rectangle
-        if (anyShape.width && anyShape.height) {
-            if (newPosition.x + anyShape.width > boundaryRect.right || newPosition.x < boundaryRect.left) {
-                invertXVelocity(shape);
-                return true;
-            }
-            if (newPosition.y + anyShape.height > boundaryRect.bottom || newPosition.y < boundaryRect.top) {
-                invertYVelocity(shape);
-                return true;
-            }
+        if ((<any>shape).width && (<any>shape).height) {
+            resolveRectangleBoundary(newPosition, shape, boundaryRect)
         }
         // Circle
-        if (anyShape.radius) {
-            if (newPosition.x + anyShape.radius > boundaryRect.right || newPosition.x - anyShape.radius < boundaryRect.left) {
-                invertXVelocity(shape);
-                return true;
-            }
-            if (newPosition.y + anyShape.radius > boundaryRect.bottom || newPosition.y - anyShape.radius < boundaryRect.top) {
-                invertYVelocity(shape);
-                return true;
-            }
+        if ((<any>shape).radius) {
+            resolveCircleBoundary(newPosition, shape, boundaryRect)
         }
+    }
 
-        return false;
+    // TODO figure out being unable to use tpye of Shapes here
+    function resolveCircleBoundary(position: Point, shape: any, boundaryRect: BoundaryRect) {
+        const rightCollision = position.x + shape.radius > boundaryRect.right;
+        const leftCollision = position.x - shape.radius < boundaryRect.left;
+        const bottomCollision = position.y + shape.radius > boundaryRect.bottom;
+        const topCollision = position.y - shape.radius < boundaryRect.top;
+        if (rightCollision || leftCollision) {
+            if (rightCollision) {
+                shape.position.x -= position.x + shape.radius - boundaryRect.right;
+            } else {
+                shape.position.x += boundaryRect.left - (position.x - shape.radius);
+            }
+            invertXVelocity(shape);
+        }
+        if (bottomCollision || topCollision) {
+            if (bottomCollision) {
+                shape.position.y -= position.y + shape.radius - boundaryRect.bottom;
+            } else {
+                shape.position.y += boundaryRect.top - (position.y - shape.radius);
+            }
+            invertYVelocity(shape);
+        }
+    }
+
+    // TODO figure out being unable to use tpye of Shapes here
+    function resolveRectangleBoundary(position: Point, shape: any, boundaryRect: BoundaryRect) {
+        const rightCollision = position.x + shape.width > boundaryRect.right;
+        const leftCollision = position.x < boundaryRect.left;
+        const bottomCollision = position.y + shape.height > boundaryRect.bottom;
+        const topCollision = position.y < boundaryRect.top;
+        if (rightCollision || leftCollision) {
+            if (rightCollision) {
+                shape.position.x -= position.x + shape.width - boundaryRect.right;
+            } else {
+                shape.position.x += boundaryRect.left - position.x ;
+            }
+            invertXVelocity(shape);
+        }
+        if (bottomCollision || topCollision) {
+            if (bottomCollision) {
+                shape.position.y -= position.y + shape.height - boundaryRect.bottom;
+            } else {
+                shape.position.y += boundaryRect.top - position.y; 
+            }
+            invertYVelocity(shape);
+        }
     }
 
     function invertXVelocity(shape: Shape) {

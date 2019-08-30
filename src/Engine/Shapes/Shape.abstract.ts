@@ -90,6 +90,7 @@ export abstract class Shape extends RenderObject {
             return;
         }
         const newPosition = Point.add(this.position, vector.point)
+        this.position = newPosition;
         if (this.checkBoundary) {
             const boundaryRect: BoundaryRect = {
                 left: 0,
@@ -97,16 +98,12 @@ export abstract class Shape extends RenderObject {
                 right: this.renderer.context.canvas.width,
                 bottom: this.renderer.context.canvas.height
             }
-            const resolved = CollisionResolver.checkAndResolveBoundaries(
+            CollisionResolver.checkAndResolveBoundaries(
                 newPosition,
                 this,
                 boundaryRect
             );
-            if (resolved) {
-                return;
-            }
         }
-        this.position = newPosition;
     }
     
 }
