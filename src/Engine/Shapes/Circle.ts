@@ -16,6 +16,7 @@ export class Circle extends Shape {
         lineWidth = 1,
     ) {
         super(position, renderer, fillColor, strokeColor, lineWidth);
+        this.mass = radius * radius * Math.PI;
     }
 
     public updateShape(delta: number) {
@@ -67,9 +68,21 @@ export class Circle extends Shape {
                 posY + lineHeigt
             );
             this.context.strokeText(
-                `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})`,
+                `mass (${this.mass})`,
                 posX,
                 posY + lineHeigt * 2
+            );
+            const gravityText = this.gravityEnabled ? `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})` :
+                `gravity disabled`
+            this.context.strokeText(
+                gravityText,
+                posX,
+                posY + lineHeigt * 3
+            );
+            this.context.strokeText(
+                this.isControlled ? 'controlled' : 'unctonrolled',
+                posX,
+                posY + lineHeigt * 4
             );
         }
 

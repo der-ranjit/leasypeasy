@@ -8,13 +8,21 @@ import { Vector2D } from "../Vector2D";
 
 // careful - circular dependencie
 import { CollisionResolver, BoundaryRect } from "../CollisionResolver";
+import { Circle } from "./Circle";
 
 export abstract class Shape extends RenderObject {
     public checkBoundary = true;
+    public isControlled = false
+    public gravityEnabled = false;
 
     // TODO move into constructor
     public speed = 0;
-    public isControlled = false
+    public acceleration = 0.98;
+    public direction = new Vector2D(1, 0);
+
+    public mass = 1;
+    public gravity = new Vector2D(0, 1);
+    public gravitationSource: Circle | null = null;
     
     private controls = Controls.getInstance();
 
@@ -28,13 +36,6 @@ export abstract class Shape extends RenderObject {
         super(renderer, fillColor, strokeColor, lineWidth);
     }
 
-    public direction = new Vector2D(1, 0);
-
-    public acceleration = 0.98;
-    public gravity = new Vector2D(0, 1);
-    public gravityEnabled = false;
-
-    public gravitationSource: any | null = null;
 
     public abstract centerArountPoint(point: Point): void;
     public abstract updateShape(delta: number): void;
@@ -53,9 +54,6 @@ export abstract class Shape extends RenderObject {
             if (this.controls.isKeyPressed("ArrowUp")) {
                 this.speed += 0.2;
             }
-            if (this.controls.isKeyPressed("x")) {
-                this.speed += 20;
-            }
         }
         
         const movementVector = Vector2D.from(this.direction).setLength(this.speed);
@@ -65,12 +63,10 @@ export abstract class Shape extends RenderObject {
                 const pullVector = Vector2D.directional(this.position, this.gravitationSource.position);
                 const distance = pullVector.getLength();
 
-                const massA = (<any>this).radius * 10;
-                const massB = this.gravitationSource.radius * 10;
                 const g = Math.pow(6.67430, -2);
                 if (distance > 1) {
-                    const force = (g * massA * massB) / (distance * distance);
-                    this.gravity = pullVector.setLength(MathUtils.clamp(0, 100, force));
+                    const force = (g * this.mass * this.gravitationSource.mass) / (distance * distance);
+                    this.gravity = pullVector.setLength(MathUtils.clamp(0, 50, force));
                 }
             }
             movementVector.add(this.gravity);

@@ -27,8 +27,8 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.gravityEnabled = true;
         circle.gravitationSource = gravitySource;
+        circle.gravityEnabled = true;
         circle.isControlled = true;
         circle.showDirectionIndicator = circle.isControlled;
         circle.showStats = circle.isControlled;
@@ -44,5 +44,25 @@ export const GravityDemo = (renderer: Renderer) => {
             circle.speed += 5;
             circle.acceleration = 0.99;
         }
+    });
+
+    controls.onKeyDown("p").subscribe(_ => {
+        renderer.isRunning ? renderer.pause() : renderer.unpause();
+    });
+
+    controls.onKeyDown("i").subscribe(_ => {
+        circles.forEach(circle => circle.showStats = !circle.showStats);
+    });
+
+    controls.onKeyDown("g").subscribe(_ => {
+        circles.forEach(circle => circle.gravityEnabled = !circle.gravityEnabled);
+    });
+    
+    controls.onKeyDown("c").subscribe(_ => {
+        circles.forEach(circle => circle.isControlled = !circle.isControlled);
+    });
+    
+    controls.onKeyDown("d").subscribe(_ => {
+        circles.forEach(circle => circle.showDirectionIndicator = !circle.showDirectionIndicator);
     });
 }
