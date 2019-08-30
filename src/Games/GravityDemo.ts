@@ -20,22 +20,32 @@ export const GravityDemo = (renderer: Renderer) => {
     );
 
     const circles: Circle[] = [];
-    window.addEventListener("click", (event) => {
+
+    let showStats = false;
+    let gravityEnabled = false;
+    let isControlled = true;
+    let showDirectionIndicator = true;
+
+    const addCircle = (position: Point) => {
         const circle = new Circle(
-            new Point(event.clientX, event.clientY),
+            position,
             15,
             renderer,
             Color.RANDOM_COLOR
         );
         circle.gravitationSource = gravitySource;
-        circle.gravityEnabled = true;
-        circle.isControlled = true;
-        circle.showDirectionIndicator = circle.isControlled;
-        circle.showStats = circle.isControlled;
+        circle.gravityEnabled = gravityEnabled;
+        circle.isControlled = isControlled;
+        circle.showDirectionIndicator = showDirectionIndicator;
+        circle.showStats = showStats;
         circles.push(circle);
-    }) 
+    }
 
     const controls = Controls.getInstance();
+    
+    window.addEventListener("click", (event) => {
+        addCircle(new Point(event.clientX, event.clientY));
+    }) 
 
     controls.onKeyDown(" ").subscribe(_ => {
         for (const circle of circles) {
@@ -50,19 +60,34 @@ export const GravityDemo = (renderer: Renderer) => {
         renderer.isRunning ? renderer.pause() : renderer.unpause();
     });
 
+    controls.onKeyDown("a").subscribe(_ => {
+        const randomX = MathUtils.randomInt(20, renderer.context.canvas.width - 20);
+        const randomY = MathUtils.randomInt(20, renderer.context.canvas.height - 20);
+        addCircle(new Point(randomX, randomY));
+    });
+
     controls.onKeyDown("i").subscribe(_ => {
-        circles.forEach(circle => circle.showStats = !circle.showStats);
+        showStats = !showStats;
+        circles.forEach(circle => circle.showStats = showStats);
     });
 
     controls.onKeyDown("g").subscribe(_ => {
-        circles.forEach(circle => circle.gravityEnabled = !circle.gravityEnabled);
+        gravityEnabled = !gravityEnabled;
+        circles.forEach(circle => circle.gravityEnabled = gravityEnabled);
     });
     
     controls.onKeyDown("c").subscribe(_ => {
-        circles.forEach(circle => circle.isControlled = !circle.isControlled);
+        isControlled = !isControlled
+        circles.forEach(circle => circle.isControlled = isControlled);
     });
     
     controls.onKeyDown("d").subscribe(_ => {
-        circles.forEach(circle => circle.showDirectionIndicator = !circle.showDirectionIndicator);
+        showDirectionIndicator = !showDirectionIndicator
+        circles.forEach(circle => circle.showDirectionIndicator = showDirectionIndicator);
+    });
+    
+    controls.onKeyDown("r").subscribe(_ => {
+        circles.forEach(circle => circle.destroy());
+        circles.splice(0, circles.length);
     });
 }
