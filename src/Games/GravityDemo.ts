@@ -22,7 +22,7 @@ export const GravityDemo = (renderer: Renderer) => {
     const circles: Circle[] = [];
 
     let showStats = false;
-    let gravityEnabled = false;
+    let gravityEnabled = true;
     let isControlled = true;
     let showDirectionIndicator = true;
 
@@ -49,8 +49,8 @@ export const GravityDemo = (renderer: Renderer) => {
 
     controls.onKeyDown(" ").subscribe(_ => {
         for (const circle of circles) {
-            const velocity = Vector2D.directional(gravitySource.position, circle.position).normalize();
-            circle.velocity = velocity;
+            const directionVector = Vector2D.directional(gravitySource.position, circle.position).normalize();
+            circle.directionVector = directionVector;
             circle.speed += 5;
             circle.frictionFactor = 0.99;
         }

@@ -21,10 +21,14 @@ export abstract class Shape extends RenderObject {
     public velocity = new Vector2D(0, 0);
 
     public mass = 1;
-    public gravity = new Vector2D(0, 1);
+    public gravity = new Vector2D(0, 0);
     public gravitationSource: Circle | null = null;
     
     private controls = Controls.getInstance();
+
+    public directionVector = new Vector2D(1, 0);
+
+    public indicationVector = new Vector2D(0, 0);
 
     constructor(
         public position: Point,
@@ -41,43 +45,53 @@ export abstract class Shape extends RenderObject {
     public abstract updateShape(delta: number): void;
 
     public update(delta: number) {
-        if (this.isControlled) {
-            if (this.controls.isKeyPressed("ArrowLeft")) {
-                this.velocity.rotate(-4);
-            }
-            if (this.controls.isKeyPressed("ArrowRight")) {
-                this.velocity.rotate(4);
-            }
-            if (this.controls.isKeyPressed("ArrowDown")) {
-                this.speed -= 0.3;
-            }
-            if (this.controls.isKeyPressed("ArrowUp")) {
-                this.speed += 0.15;
-            }
-        }
-        
-        const accelerationVector = Vector2D.normalized(this.velocity).scale(this.speed / 60);
-        this.velocity.add(accelerationVector);
-
+        // this.directionVector.setLength(this.speed);
         if (this.gravityEnabled) {
             if (this.gravitationSource) {
                 const pullVector = Vector2D.directional(this.position, this.gravitationSource.position);
                 let distance = pullVector.getLength();
-                if (distance < 6) {
-                    distance = 6;
+                if (distance < 10) {
+                    distance = 10;
                 }
-                this.gravity = new Vector2D(
+                const g = 0.1;
+                const gravity = new Vector2D(
                     100 * pullVector.x / Math.pow(distance, 3),
                     100 * pullVector.y / Math.pow(distance, 3)
-                )
-                this.velocity.add(this.gravity);
+                );
+                
+                const speedVector = Vector2D.from(this.velocity).setLength(this.speed);
+                this.velocity.add(gravity);
+                this.gravity = this.velocity;
+                
+                this.indicationVector = Vector2D.from(this.velocity).add(speedVector)
+                this.move(this.indicationVector);
+            } 
+        } else {
+            const direction = Vector2D.from(this.directionVector).setLength(this.speed);
+            this.velocity = direction;
+            this.indicationVector = this.velocity
+            this.move(this.indicationVector);
+        }
+
+        if (this.isControlled) {
+            if (this.controls.isKeyPressed("ArrowLeft")) {
+                this.velocity.rotate(-4);
+                this.directionVector.rotate(-4);
             }
-        } 
+            if (this.controls.isKeyPressed("ArrowRight")) {
+                this.velocity.rotate(4);
+                this.directionVector.rotate(4);
+            }
+            if (this.controls.isKeyPressed("ArrowDown")) {
+                this.speed -= 0.2;
+            }
+            if (this.controls.isKeyPressed("ArrowUp")) {
+                this.speed += 0.2;
+            }
+        }
 
-        // this.velocity 
-        this.move(this.velocity);
-
-        this.speed *= this.frictionFactor;
+        
+        this.speed = this.speed * this.frictionFactor;
         if (Math.abs(this.speed) <= 0.1) {
             this.speed = 0;
         }
