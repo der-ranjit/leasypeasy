@@ -12,19 +12,17 @@ export const LisiCollision = (renderer: Renderer) => {
 
     const circlesColor = Color.YELLOW;
     const circle1 = new Circle(new Point(100, 100), 50, renderer, circlesColor);
-    circle1.speed = 5
     circle1.isControlled = true;
+    circle1.showDirectionIndicator = true;
     const circle2 = new Circle(new Point(300, 100), 50, renderer, circlesColor);
     circle1.gravitationSource = midCircle;
 
     const rectsColor = Color.GREEN;
     const rect1 = new Rectangle(new Point(50, 300), 100, 50, renderer, rectsColor);
-    rect1.speed = 5;
     const rect2 = new Rectangle(new Point(200, 300), 100, 50, renderer, rectsColor);
 
     const circleRectColor = Color.MAGENTA;
     const circle3 = new Circle(new Point(100, 500), 50, renderer, circleRectColor);
-    circle3.speed = 5
     const rect3 = new Rectangle(new Point(250, 500), 100, 50, renderer, circleRectColor);
 
     let controlledIndex = 0;
