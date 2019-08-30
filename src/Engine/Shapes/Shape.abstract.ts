@@ -42,16 +42,19 @@ export abstract class Shape extends RenderObject {
     public update(delta: number) {
         if (this.isControlled) {
             if (this.controls.isKeyPressed("ArrowLeft")) {
-                this.direction.rotate(-2);
+                this.direction.rotate(-4);
             }
             if (this.controls.isKeyPressed("ArrowRight")) {
-                this.direction.rotate(2);
+                this.direction.rotate(4);
             }
             if (this.controls.isKeyPressed("ArrowDown")) {
                 this.speed -= 0.2;
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
                 this.speed += 0.2;
+            }
+            if (this.controls.isKeyPressed("x")) {
+                this.speed += 20;
             }
         }
         
