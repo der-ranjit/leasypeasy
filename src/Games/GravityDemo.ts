@@ -37,7 +37,7 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.mass = 200;
+        circle.mass = 150;
         circle.gravitationSources.push(...gravitationSources, ...circles);
         circles.forEach(_circle => _circle.gravitationSources.push(circle));
         circle.gravityEnabled = gravityEnabled;
