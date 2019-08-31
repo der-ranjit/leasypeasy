@@ -1,7 +1,5 @@
-import { Color, Point, Renderer, Controls, MathUtils } from "./../Engine";
-import { Square, Circle } from "../Engine/Shapes";
-import { Vector2D } from "../Engine/Vector2D";
-import { Shape } from "../Engine/Shapes/Shape.abstract";
+import { Color, Point, Renderer, Controls } from "./../Engine";
+import { Circle } from "../Engine/Shapes";
 
 export const Shooter = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
@@ -10,31 +8,34 @@ export const Shooter = (renderer: Renderer) => {
     canvas.width = 1200;
     canvas.height = 600;
 
-    const spawnerPosition = new Point(20, 20);
-    const spawner = new Square(spawnerPosition, 20, renderer);
+    const lisiPosition = new Point(20, canvas.height / 2);
+    const ranzPosition = new Point(canvas.width - 20, canvas.height / 2);
+    
+    const lisi = new Circle(lisiPosition, 15, renderer, Color.MAGENTA);
+    lisi.showVelocityIndicator = true;
+    lisi.isControlled = true;
+    lisi.gravityEnabled = true;
+    lisi.up = "w";
+    lisi.down = "s";
+    lisi.left = "a";
+    lisi.right = "d";
+    
+    const ranz = new Circle(ranzPosition, 15, renderer);
+    ranz.showVelocityIndicator = true;
+    ranz.isControlled = true;
+    ranz.gravityEnabled = true;
 
-    const bullets: Shape[] = [];
+    lisi.gravitationSources.push(ranz);
+    ranz.gravitationSources.push(lisi);
 
-    const addBullet = () => {
-        const speed = 5;
 
-        const bullet = new Circle(spawnerPosition, 2, renderer);
-        bullet.velocity = new Vector2D(1, 1).setLength(speed);
-        bullets.push(bullet);
-        bullet.onBoundaryCollision$.subscribe(_ => addBullet());
-    }
+
 
     controls.onKeyDown(" ").subscribe(_ => {
-        addBullet();
     });
 
     controls.onKeyDown("p").subscribe(_ => {
         renderer.isRunning ? renderer.pause() : renderer.unpause();
     });;
-    
-    controls.onKeyDown("r").subscribe(_ => {
-        bullets.forEach(bullet => bullet.destroy());
-        bullets.splice(0, bullets.length) ;
-    });
 
 }
