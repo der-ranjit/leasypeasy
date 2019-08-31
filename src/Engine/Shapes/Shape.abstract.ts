@@ -12,6 +12,11 @@ import { Circle } from "./Circle";
 import { Subject } from "rxjs";
 
 export abstract class Shape extends RenderObject {
+    public left = "ArrowLeft";
+    public up = "ArrowUp";
+    public right = "ArrowRight";
+    public down = "ArrowDown";
+
     public onBoundaryCollision$ = new Subject<void>();
 
     public checkBoundary = true;
@@ -61,19 +66,19 @@ export abstract class Shape extends RenderObject {
         
         if (this.isControlled) {
             const currentLength = this.velocity.getLength();
-            if (this.controls.isKeyPressed("ArrowLeft")) {
+            if (this.controls.isKeyPressed(this.left)) {
                 this.velocity.rotate(-4);;
             }
-            if (this.controls.isKeyPressed("ArrowRight")) {
+            if (this.controls.isKeyPressed(this.right)) {
                 this.velocity.rotate(4);
             }
-            if (this.controls.isKeyPressed("ArrowDown")) {
+            if (this.controls.isKeyPressed(this.down)) {
                 const deccelerate = 0.2;
                 let newLength = currentLength - deccelerate;
                 newLength = (newLength < 0) ? 0 : newLength;
                 this.velocity.setLength(newLength);
             }
-            if (this.controls.isKeyPressed("ArrowUp")) {
+            if (this.controls.isKeyPressed(this.up)) {
                 const accelerate = 0.1;
                 const maxSpeed = 5;
                 let newLength = currentLength + accelerate;
