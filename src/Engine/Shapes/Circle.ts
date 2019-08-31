@@ -77,33 +77,18 @@ export class Circle extends Shape {
             const lineHeigt = 15;
             const posX = this.position.x + this.radius + 2;
             const posY = this.position.y - this.radius
-            this.context.strokeText(
-                `speed ${this.speed.toFixed(2)}`,
-                posX,
-                posY
-            );
-            this.context.strokeText(
+            const stats = [
+                this.gravityEnabled ? `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})` : `gravity disabled`,
                 `velocity (${this.velocity.x.toFixed(4)} | ${this.velocity.y.toFixed(4)}) | ${this.velocity.getLength().toFixed(2)}`,
-                posX,
-                posY + lineHeigt * 2
-            );
-            this.context.strokeText(
+                `speed ${this.speed.toFixed(2)}`,
                 `mass (${this.mass})`,
-                posX,
-                posY + lineHeigt * 3
-            );
-            const gravityText = this.gravityEnabled ? `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})` :
-                `gravity disabled`
-            this.context.strokeText(
-                gravityText,
-                posX,
-                posY + lineHeigt * 4
-            );
-            this.context.strokeText(
                 this.isControlled ? 'controlled' : 'unctonrolled',
-                posX,
-                posY + lineHeigt * 5
-            );
+            ]
+            
+            stats.forEach((stat, index) => {
+                this.context.strokeText(stat, posX, posY + lineHeigt * index)
+            });
+
         }
 
         this.context.restore();

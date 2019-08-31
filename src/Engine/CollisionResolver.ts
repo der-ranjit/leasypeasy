@@ -43,6 +43,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.x = -shape.velocity.x;
+            shape.velocity.scale(0.7);
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -52,6 +53,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.y = -shape.velocity.y;
+            shape.velocity.scale(0.7);
         }
     }
 
@@ -70,6 +72,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.x = -shape.velocity.x;
+            shape.velocity.scale(0.7);
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -79,6 +82,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.y = -shape.velocity.y;
+            shape.velocity.scale(0.7);
         }
     }
 }

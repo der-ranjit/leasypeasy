@@ -54,11 +54,9 @@ export const GravityDemo = (renderer: Renderer) => {
     }) 
 
     controls.onKeyDown(" ").subscribe(_ => {
-        // for (const circle of circles) {
-        //     const directionVector = Vector2D.directional(gravitySourceA.position, circle.position).normalize();
-        //     circle.speed += 5;
-        //     circle.frictionFactor = 0.99;
-        // }
+        for (const circle of circles) {
+            circle.velocity.add(new Vector2D(0, -10));
+        }
     });
 
     controls.onKeyDown("p").subscribe(_ => {
