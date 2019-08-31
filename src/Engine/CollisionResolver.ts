@@ -43,7 +43,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.x = -shape.velocity.x;
-            shape.velocity.scale(0.7);
+            shape.onBoundaryCollision$.next();
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -53,7 +53,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.y = -shape.velocity.y;
-            shape.velocity.scale(0.7);
+            shape.onBoundaryCollision$.next();
         }
     }
 
@@ -72,7 +72,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.x = -shape.velocity.x;
-            shape.velocity.scale(0.7);
+            shape.onBoundaryCollision$.next();
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -82,7 +82,7 @@ export namespace CollisionResolver {
             }
             // invert velocity
             shape.velocity.y = -shape.velocity.y;
-            shape.velocity.scale(0.7);
+            shape.onBoundaryCollision$.next();
         }
     }
 }

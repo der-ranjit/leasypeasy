@@ -38,6 +38,7 @@ export const GravityDemo = (renderer: Renderer) => {
             Color.RANDOM_COLOR
         );
         circle.mass = 150;
+        circle.onBoundaryCollision$.subscribe(_ =>  circle.velocity.scale(0.7));
         circle.gravitationSources.push(...gravitationSources, ...circles);
         circles.forEach(_circle => _circle.gravitationSources.push(circle));
         circle.gravityEnabled = gravityEnabled;

@@ -9,8 +9,11 @@ import { Vector2D } from "../Vector2D";
 // careful - circular dependencie
 import { CollisionResolver, BoundaryRect } from "../CollisionResolver";
 import { Circle } from "./Circle";
+import { Subject } from "rxjs";
 
 export abstract class Shape extends RenderObject {
+    public onBoundaryCollision$ = new Subject<void>();
+
     public checkBoundary = true;
     public isControlled = false
     public gravityEnabled = false;
