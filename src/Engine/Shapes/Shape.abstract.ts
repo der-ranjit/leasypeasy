@@ -22,7 +22,7 @@ export abstract class Shape extends RenderObject {
 
     public mass = 1;
     public gravity = new Vector2D(0, 0);
-    public gravitationSource: Circle | null = null;
+    public gravitationSources: Circle[] = [];
     private defaultGravity = new Vector2D(0, 0.1);
 
     private controls = Controls.getInstance();
@@ -43,8 +43,12 @@ export abstract class Shape extends RenderObject {
 
     public update(delta: number) {
         if (this.gravityEnabled) {
-            if (this.gravitationSource) {
-                this.gravity = this.gravitateTo(this.gravitationSource);
+            if (this.gravitationSources.length > 0) {
+                const gravity = new Vector2D(0, 0);
+                for (const gravitationSource of this.gravitationSources) {
+                    gravity.add(this.gravitateTo(gravitationSource));
+                }
+                this.gravity = gravity;
             } else {
                 const mass = this.mass / 50;
                 this.gravity = Vector2D.scaled(this.defaultGravity, mass);

@@ -8,14 +8,11 @@ export const LisiCollision = (renderer: Renderer) => {
     canvas.width = 800;
     canvas.height = 650;
 
-    const midCircle = new Circle(new Point(370, 295), 60, renderer);
-
     const circlesColor = Color.YELLOW;
     const circle1 = new Circle(new Point(100, 100), 50, renderer, circlesColor);
     circle1.isControlled = true;
     circle1.showVelocityIndicator = true;
     const circle2 = new Circle(new Point(300, 100), 50, renderer, circlesColor);
-    circle1.gravitationSource = midCircle;
 
     const rectsColor = Color.GREEN;
     const rect1 = new Rectangle(new Point(50, 300), 100, 50, renderer, rectsColor);
@@ -29,10 +26,6 @@ export const LisiCollision = (renderer: Renderer) => {
     const controllables = [circle1, rect1, circle3];
 
     const controls = Controls.getInstance();
-    controls.onKeyDown(" ").subscribe(() => {
-        controllables[controlledIndex].gravityEnabled = !controllables[controlledIndex].gravityEnabled;
-        // controllables[controlledIndex].velocity.multiply(5);
-    });
 
     controls.onKeyDown("Enter").subscribe(() => {
         controlledIndex = (controlledIndex + 1) % controllables.length;

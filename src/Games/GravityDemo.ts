@@ -10,14 +10,23 @@ export const GravityDemo = (renderer: Renderer) => {
 
     const gravityRadius = 30;
     const offset = gravityRadius / 2;
-    const gravitySource = new Circle(
+    const gravitySourceA = new Circle(
         new Point(
-            canvas.width / 2 - offset,
+            350,
             canvas.height / 2 - offset
         ),
         gravityRadius,
         renderer
     );
+    const gravitySourceB = new Circle(
+        new Point(
+            800,
+            canvas.height / 2 - offset
+        ),
+        gravityRadius,
+        renderer
+    );
+    const gravitationSources = [gravitySourceA, gravitySourceB];
 
     const circles: Circle[] = [];
 
@@ -34,7 +43,7 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.gravitationSource = gravitySource;
+        circle.gravitationSources.push(...gravitationSources);
         circle.gravityEnabled = gravityEnabled;
         circle.isControlled = isControlled;
         circle.showVelocityIndicator = showVelocityIndicator;
@@ -50,7 +59,7 @@ export const GravityDemo = (renderer: Renderer) => {
 
     controls.onKeyDown(" ").subscribe(_ => {
         for (const circle of circles) {
-            const directionVector = Vector2D.directional(gravitySource.position, circle.position).normalize();
+            const directionVector = Vector2D.directional(gravitySourceA.position, circle.position).normalize();
             circle.speed += 5;
             circle.frictionFactor = 0.99;
         }
@@ -70,9 +79,9 @@ export const GravityDemo = (renderer: Renderer) => {
         useGravitationSource = !useGravitationSource
         circles.forEach(circle => {
             if (useGravitationSource) {
-                circle.gravitationSource = gravitySource;
+                circle.gravitationSources.push(...gravitationSources);
             } else {
-                circle.gravitationSource = null;
+                circle.gravitationSources = [];
             }
         });
     });
