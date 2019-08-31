@@ -104,8 +104,9 @@ export abstract class Shape extends RenderObject {
     private gravitateTo(circle: Circle): Vector2D {
         const gravity = new Vector2D(0, 0);
 		let distance = Point.distanceBetween(this.position, circle.position);
-        if (distance < 15) {
-            distance = 15;
+        const radii = (<Circle><unknown>this).radius + circle.radius;
+        if (distance < radii) {
+            distance = radii;
         }
         const mass = circle.mass / 2;
 		gravity.setLength(mass / (distance * distance));

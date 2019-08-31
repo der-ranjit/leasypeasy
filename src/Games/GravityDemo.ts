@@ -18,15 +18,9 @@ export const GravityDemo = (renderer: Renderer) => {
         gravityRadius,
         renderer
     );
-    const gravitySourceB = new Circle(
-        new Point(
-            800,
-            canvas.height / 2 - offset
-        ),
-        gravityRadius,
-        renderer
-    );
-    const gravitationSources = [gravitySourceA, gravitySourceB];
+    gravitySourceA.mass = 1000;
+    const gravitationSources: Circle[] = [];
+    gravitationSources.push(gravitySourceA)
 
     const circles: Circle[] = [];
 
@@ -43,7 +37,9 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.gravitationSources.push(...gravitationSources);
+        circle.mass = 100;
+        circle.gravitationSources.push(...gravitationSources, ...circles);
+        circles.forEach(_circle => _circle.gravitationSources.push(circle));
         circle.gravityEnabled = gravityEnabled;
         circle.isControlled = isControlled;
         circle.showVelocityIndicator = showVelocityIndicator;
@@ -58,11 +54,11 @@ export const GravityDemo = (renderer: Renderer) => {
     }) 
 
     controls.onKeyDown(" ").subscribe(_ => {
-        for (const circle of circles) {
-            const directionVector = Vector2D.directional(gravitySourceA.position, circle.position).normalize();
-            circle.speed += 5;
-            circle.frictionFactor = 0.99;
-        }
+        // for (const circle of circles) {
+        //     const directionVector = Vector2D.directional(gravitySourceA.position, circle.position).normalize();
+        //     circle.speed += 5;
+        //     circle.frictionFactor = 0.99;
+        // }
     });
 
     controls.onKeyDown("p").subscribe(_ => {
