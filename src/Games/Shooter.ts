@@ -27,6 +27,12 @@ export const Shooter = (renderer: Renderer) => {
     controls.onKeyDown(" ").subscribe(_ => {
         addBullet();
     });
+
+    renderer.onLoopEnd$.subscribe(_ => console.log("loopEnd"));
+
+    controls.onKeyDown("p").subscribe(_ => {
+        renderer.isRunning ? renderer.pause() : renderer.unpause();
+    });;
     
     controls.onKeyDown("r").subscribe(_ => {
         bullets.forEach(bullet => bullet.destroy());

@@ -2,8 +2,9 @@ import { Subject } from "rxjs";
 import { RenderObject } from "./RenderObject";
 
 export class Renderer {
-    public static onLoopStart$ = new Subject<void>();
-    public static onLoopEnd$ = new Subject<void>();
+    public onLoopStart$ = new Subject<void>(); 
+    public onBeforeUpdate$ = new Subject<void>(); 
+    public onLoopEnd$ = new Subject<void>();
     
     public get isRunning(): boolean {
         return this.started;
@@ -45,23 +46,26 @@ export class Renderer {
 
     private loop() {
         requestAnimationFrame(() => {
-            Renderer.onLoopStart$.next();
+            this.onLoopStart$.next();
 
             const delta = Date.now() - this.lastRenderTimestamp;
             this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
             const zIndexSortedRenderObjects = this.renderObjects.sort((a, b) => {
                 return a.zIndex - b.zIndex;
             });
-            for (const object of zIndexSortedRenderObjects) {
-                if (this.started) {
+            if (this.started) {
+                this.onBeforeUpdate$.next();
+                for (const object of zIndexSortedRenderObjects) {
                     object.update(delta);
-                } else {
-                    this.context.strokeText("PAUSED", 10, 10);
                 }
+            } else {
+                this.context.strokeText("PAUSED", 10, 10);
+            }
+            for (const object of zIndexSortedRenderObjects) {
                 object.draw(delta);
             }
             
-            Renderer.onLoopEnd$.next();
+            this.onLoopEnd$.next();
             this.lastRenderTimestamp = Date.now();
             this.loop();
         });

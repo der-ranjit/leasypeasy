@@ -34,7 +34,7 @@ export const LisiCollision = (renderer: Renderer) => {
     });
 
     const collisionColor = Color.RED;
-    Renderer.onLoopEnd$.subscribe(() => {
+    renderer.onLoopEnd$.subscribe(() => {
         const isCollidingCircles = Collision.isColliding(circle1, circle2);
         let color = isCollidingCircles ? collisionColor : circlesColor;
         circle1.setColor(color, Color.BLACK);
