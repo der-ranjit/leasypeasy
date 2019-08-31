@@ -35,6 +35,10 @@ export class Vector2D {
     public static added(vectorA: Vector2D, vectorB: Vector2D) {
         return Vector2D.from(vectorA).add(vectorB);
     }
+
+    public static subbed(vectorA: Vector2D, vectorB: Vector2D) {
+        return Vector2D.from(vectorA).sub(vectorB);
+    }
  
     public get point(): Point {
         return new Point(this.x, this.y);
@@ -79,6 +83,12 @@ export class Vector2D {
     public add(vector: Vector2D) {
         this.x += vector.x;
         this.y += vector.y;
+        return this;
+    }
+
+    public sub(vector: Vector2D) {
+        this.x -= vector.x;
+        this.y -= vector.y;
         return this;
     }
 
