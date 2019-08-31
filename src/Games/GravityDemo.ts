@@ -5,14 +5,14 @@ import { Vector2D } from "../Engine/Vector2D";
 export const GravityDemo = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
     
-    canvas.width = 1024;
-    canvas.height = 600;
+    canvas.width = 1200;
+    canvas.height = 800;
 
     const gravityRadius = 30;
     const offset = gravityRadius / 2;
     const gravitySourceA = new Circle(
         new Point(
-            350,
+            600,
             canvas.height / 2 - offset
         ),
         gravityRadius,
@@ -37,7 +37,7 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
-        circle.mass = 100;
+        circle.mass = 200;
         circle.gravitationSources.push(...gravitationSources, ...circles);
         circles.forEach(_circle => _circle.gravitationSources.push(circle));
         circle.gravityEnabled = gravityEnabled;

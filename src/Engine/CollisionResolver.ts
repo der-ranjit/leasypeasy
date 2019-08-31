@@ -41,7 +41,8 @@ export namespace CollisionResolver {
             } else {
                 shape.position.x += boundaryRect.left - (position.x - shape.radius);
             }
-            invertXVelocity(shape);
+            // invert velocity
+            shape.velocity.x = -shape.velocity.x;
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -49,7 +50,8 @@ export namespace CollisionResolver {
             } else {
                 shape.position.y += boundaryRect.top - (position.y - shape.radius);
             }
-            invertYVelocity(shape);
+            // invert velocity
+            shape.velocity.y = -shape.velocity.y;
         }
     }
 
@@ -66,7 +68,8 @@ export namespace CollisionResolver {
             } else {
                 shape.position.x += boundaryRect.left - position.x ;
             }
-            invertXVelocity(shape);
+            // invert velocity
+            shape.velocity.x = -shape.velocity.x;
         }
         if (bottomCollision || topCollision) {
             if (bottomCollision) {
@@ -74,15 +77,8 @@ export namespace CollisionResolver {
             } else {
                 shape.position.y += boundaryRect.top - position.y; 
             }
-            invertYVelocity(shape);
+            // invert velocity
+            shape.velocity.y = -shape.velocity.y;
         }
-    }
-
-    function invertXVelocity(shape: Shape) {
-        shape.velocity.x = -shape.velocity.x;
-    }
-
-    function invertYVelocity(shape: Shape) {
-        shape.velocity.y = -shape.velocity.y;
     }
 }
