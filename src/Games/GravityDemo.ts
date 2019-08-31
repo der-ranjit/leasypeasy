@@ -24,7 +24,7 @@ export const GravityDemo = (renderer: Renderer) => {
     let showStats = false;
     let gravityEnabled = true;
     let isControlled = true;
-    let showDirectionIndicator = true;
+    let showVelocityIndicator = true;
 
     const addCircle = (position: Point) => {
         const circle = new Circle(
@@ -36,7 +36,7 @@ export const GravityDemo = (renderer: Renderer) => {
         circle.gravitationSource = gravitySource;
         circle.gravityEnabled = gravityEnabled;
         circle.isControlled = isControlled;
-        circle.showDirectionIndicator = showDirectionIndicator;
+        circle.showVelocityIndicator = showVelocityIndicator;
         circle.showStats = showStats;
         circles.push(circle);
     }
@@ -50,7 +50,6 @@ export const GravityDemo = (renderer: Renderer) => {
     controls.onKeyDown(" ").subscribe(_ => {
         for (const circle of circles) {
             const directionVector = Vector2D.directional(gravitySource.position, circle.position).normalize();
-            circle.directionVector = directionVector;
             circle.speed += 5;
             circle.frictionFactor = 0.99;
         }
@@ -82,8 +81,8 @@ export const GravityDemo = (renderer: Renderer) => {
     });
     
     controls.onKeyDown("d").subscribe(_ => {
-        showDirectionIndicator = !showDirectionIndicator
-        circles.forEach(circle => circle.showDirectionIndicator = showDirectionIndicator);
+        showVelocityIndicator = !showVelocityIndicator
+        circles.forEach(circle => circle.showVelocityIndicator = showVelocityIndicator);
     });
     
     controls.onKeyDown("r").subscribe(_ => {

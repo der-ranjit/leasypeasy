@@ -13,7 +13,7 @@ export const LisiCollision = (renderer: Renderer) => {
     const circlesColor = Color.YELLOW;
     const circle1 = new Circle(new Point(100, 100), 50, renderer, circlesColor);
     circle1.isControlled = true;
-    circle1.showDirectionIndicator = true;
+    circle1.showVelocityIndicator = true;
     const circle2 = new Circle(new Point(300, 100), 50, renderer, circlesColor);
     circle1.gravitationSource = midCircle;
 

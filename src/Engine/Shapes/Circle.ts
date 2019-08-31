@@ -4,7 +4,7 @@ import { Color } from "../Color";
 import { Shape } from "./Shape.abstract";
 
 export class Circle extends Shape {
-    public showDirectionIndicator = false; 
+    public showVelocityIndicator = false; 
     public showStats = false; 
 
     constructor (
@@ -36,24 +36,10 @@ export class Circle extends Shape {
         this.context.stroke();
         this.context.fill();
         this.context.closePath();
-        if (this.showDirectionIndicator) {
+        if (this.showVelocityIndicator) {
             const indicatorRadius = this.radius / 5;
-            const velocityIndicatorCircleX = this.position.x + this.indicationVector.x * (this.radius - indicatorRadius);
-            const velocityIndicatorCirlceY = this.position.y + this.indicationVector.y * (this.radius - indicatorRadius);
-            const directionVectorIndicatorCircleX = this.position.x + this.directionVector.x * (this.radius - indicatorRadius);
-            const directionVectorIndicatorCirlceY = this.position.y + this.directionVector.y * (this.radius - indicatorRadius);
-            // direction indicator line
-            this.context.beginPath();
-            this.context.moveTo(this.position.x, this.position.y);
-            this.context.lineTo(directionVectorIndicatorCircleX, directionVectorIndicatorCirlceY);
-            this.context.closePath();
-            this.context.stroke();
-            // direction indicator circle
-            this.context.fillStyle = this.strokeColor.toString();
-            this.context.beginPath();
-            this.context.arc(directionVectorIndicatorCircleX, directionVectorIndicatorCirlceY, indicatorRadius , 0, Math.PI * 2);
-            this.context.fill();
-            this.context.closePath();
+            const velocityIndicatorCircleX = this.position.x + this.velocity.x * (this.radius - indicatorRadius);
+            const velocityIndicatorCirlceY = this.position.y + this.velocity.y * (this.radius - indicatorRadius);
             // velocity indicator line
             this.context.strokeStyle = Color.RED.toString();
             this.context.fillStyle = Color.RED.toString();
@@ -67,6 +53,24 @@ export class Circle extends Shape {
             this.context.arc(velocityIndicatorCircleX, velocityIndicatorCirlceY, indicatorRadius , 0, Math.PI * 2);
             this.context.fill();
             this.context.closePath();
+            if (this.gravityEnabled) {
+                this.context.strokeStyle = this.strokeColor.toString();
+                const gravityIndicatorScale = 20;
+                const gravityIndicatorCircleX = this.position.x + this.gravity.x * gravityIndicatorScale * (this.radius - indicatorRadius);
+                const gravityIndicatorCirlceY = this.position.y + this.gravity.y * gravityIndicatorScale * (this.radius - indicatorRadius);
+                // gravity indicator line
+                this.context.beginPath();
+                this.context.moveTo(this.position.x, this.position.y);
+                this.context.lineTo(gravityIndicatorCircleX, gravityIndicatorCirlceY);
+                this.context.closePath();
+                this.context.stroke();
+                // gravity indicator circle
+                this.context.fillStyle = this.strokeColor.toString();
+                this.context.beginPath();
+                this.context.arc(gravityIndicatorCircleX, gravityIndicatorCirlceY, indicatorRadius , 0, Math.PI * 2);
+                this.context.fill();
+                this.context.closePath();
+            }
         }
         if (this.showStats) {
             this.context.strokeStyle = this.strokeColor.toString();
@@ -77,11 +81,6 @@ export class Circle extends Shape {
                 `speed ${this.speed.toFixed(2)}`,
                 posX,
                 posY
-            );
-            this.context.strokeText(
-                `direction (${this.directionVector.x.toFixed(4)} | ${this.directionVector.y.toFixed(4)}) | ${this.directionVector.getLength().toFixed(2)}`,
-                posX,
-                posY + lineHeigt
             );
             this.context.strokeText(
                 `velocity (${this.velocity.x.toFixed(4)} | ${this.velocity.y.toFixed(4)}) | ${this.velocity.getLength().toFixed(2)}`,
@@ -112,5 +111,5 @@ export class Circle extends Shape {
 
     public centerArountPoint(point: Point) {
         this.position = point;
-    } 
+    }
 }
