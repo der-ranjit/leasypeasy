@@ -57,6 +57,7 @@ export abstract class Shape extends RenderObject {
         } 
         
         if (this.isControlled) {
+            const currentLength = this.velocity.getLength();
             if (this.controls.isKeyPressed("ArrowLeft")) {
                 this.velocity.rotate(-4);;
             }
@@ -64,12 +65,17 @@ export abstract class Shape extends RenderObject {
                 this.velocity.rotate(4);
             }
             if (this.controls.isKeyPressed("ArrowDown")) {
-                const currentLength = this.velocity.getLength();
-                this.velocity.setLength(currentLength - 0.1);
+                const deccelerate = 0.2;
+                let newLength = currentLength - deccelerate;
+                newLength = (newLength < 0) ? 0 : newLength;
+                this.velocity.setLength(newLength);
             }
             if (this.controls.isKeyPressed("ArrowUp")) {
-                const currentLength = this.velocity.getLength();
-                this.velocity.setLength(currentLength + 0.1);
+                const accelerate = 0.1;
+                const maxSpeed = 5;
+                let newLength = currentLength + accelerate;
+                newLength = (newLength > maxSpeed) ? maxSpeed : newLength;
+                this.velocity.setLength(newLength);
             }
         }
         
