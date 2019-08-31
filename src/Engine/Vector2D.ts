@@ -2,13 +2,12 @@ import { Point } from "./Point";
 import { MathUtils } from "./MathUtils";
 
 export class Vector2D {
-    public static VectorFromAngle(angleInDegrees: number): Vector2D {
-        const radian = MathUtils.degreesToRadian(angleInDegrees);
-        // pythagoras
+    public static fromAngle(radian: number): Vector2D {
         const x = Math.cos(radian);
         const y = Math.sin(radian);
         return new Vector2D(x, y);
     }
+
     public static from(point: Point): Vector2D;
     public static from(vector: Vector2D): Vector2D;
     public static from(pointOrVector: any): Vector2D {
@@ -49,20 +48,23 @@ export class Vector2D {
 
     /** Return the angle between the vector and the x axis */
     public getAngleInDegrees() {
-        const radian = Math.atan2(this.y, this.x);
-        return MathUtils.radianToDegrees(radian);
+        return MathUtils.radianToDegrees(this.getAngle());
+    }
+    
+    public getAngle() {
+        return Math.atan2(this.y, this.x);
     }
 
-    public setAngle(angleInDegrees: number): Vector2D;
+    public setAngle(radian: number): Vector2D;
     public setAngle(vector: Vector2D): Vector2D;
-    public setAngle(angleOrVector: any): Vector2D {
+    public setAngle(vectorOrRadian: any): Vector2D {
         const length = this.getLength();
-        if (typeof angleOrVector === "number") {
-            const angledVector = Vector2D.VectorFromAngle(angleOrVector);
+        if (typeof vectorOrRadian === "number") {
+            const angledVector = Vector2D.fromAngle(vectorOrRadian);
             angledVector.setLength(length);
             this.copy(angledVector);
-        } else if (angleOrVector instanceof Vector2D) {
-            this.copy(angleOrVector);
+        } else if (vectorOrRadian instanceof Vector2D) {
+            this.copy(vectorOrRadian);
             this.setLength(length)
         }
         return this;
@@ -82,7 +84,7 @@ export class Vector2D {
 
     /* Rotates the vector by the given angle in degrees */
     public rotate(degrees: number) {
-        this.setAngle(this.getAngleInDegrees() + degrees);
+        this.setAngle(this.getAngle() + MathUtils.degreesToRadian(degrees));
         return this;
     }
 
@@ -100,13 +102,9 @@ export class Vector2D {
      * Sets the length of this vector to the desired one, keeping its direction
      */
     public setLength(length: number) {
-        if (this.x === 0 && this.y === 0) {
-            this.x = 1;
-            this.y = 0;
-        }
-        const currentLength = this.getLength();
-        const normalizeScalar = length / currentLength;
-        this.scale(normalizeScalar);
+        var radian = this.getAngle();
+		this.x = Math.cos(radian) * length;
+		this.y = Math.sin(radian) * length;
         return this;
     }
 
