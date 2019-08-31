@@ -23,7 +23,8 @@ export abstract class Shape extends RenderObject {
     public mass = 1;
     public gravity = new Vector2D(0, 0);
     public gravitationSource: Circle | null = null;
-    
+    private defaultGravity = new Vector2D(0, 0.1);
+
     private controls = Controls.getInstance();
 
     constructor(
@@ -44,8 +45,11 @@ export abstract class Shape extends RenderObject {
         if (this.gravityEnabled) {
             if (this.gravitationSource) {
                 this.gravity = this.gravitateTo(this.gravitationSource);
-                this.velocity.add(this.gravity);
-            } 
+            } else {
+                const mass = this.mass / 50;
+                this.gravity = Vector2D.scaled(this.defaultGravity, mass);
+            }
+            this.velocity.add(this.gravity);
         } 
         
         if (this.isControlled) {

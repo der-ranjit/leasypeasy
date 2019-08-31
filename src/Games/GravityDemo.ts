@@ -23,6 +23,7 @@ export const GravityDemo = (renderer: Renderer) => {
 
     let showStats = false;
     let gravityEnabled = true;
+    let useGravitationSource = true;
     let isControlled = true;
     let showVelocityIndicator = true;
 
@@ -63,6 +64,17 @@ export const GravityDemo = (renderer: Renderer) => {
         const randomX = MathUtils.randomInt(20, renderer.context.canvas.width - 20);
         const randomY = MathUtils.randomInt(20, renderer.context.canvas.height - 20);
         addCircle(new Point(randomX, randomY));
+    });
+    
+    controls.onKeyDown("b").subscribe(_ => {
+        useGravitationSource = !useGravitationSource
+        circles.forEach(circle => {
+            if (useGravitationSource) {
+                circle.gravitationSource = gravitySource;
+            } else {
+                circle.gravitationSource = null;
+            }
+        });
     });
 
     controls.onKeyDown("i").subscribe(_ => {
