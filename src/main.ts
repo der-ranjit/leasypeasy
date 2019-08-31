@@ -4,6 +4,7 @@ import { LisiColors } from "./Games/LisiColors/LisiColors";
 import { LisiCollision } from "./Games/LisiCollision/LisiCollision";
 import { GravityDemo } from "./Games/GravityDemo";
 import { mixinTest } from "./Games/mixinTest";
+import { Shooter } from "./Games/Shooter";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -14,8 +15,9 @@ const main = () => {
 
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            GravityDemo(renderer);
+            // GravityDemo(renderer);
             // mixinTest(renderer.context);
+            Shooter(renderer);
         }
     }
 }
