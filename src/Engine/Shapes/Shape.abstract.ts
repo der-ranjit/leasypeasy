@@ -78,14 +78,12 @@ export abstract class Shape extends RenderObject {
                 this.velocity.setLength(newLength);
             }
         }
-        
-        this.move(this.velocity);
-        
         this.speed = this.speed * this.frictionFactor;
         if (Math.abs(this.speed) <= 0.1) {
             this.speed = 0;
         }
         
+        this.move(this.velocity);
         this.updateShape(delta);
     }
 

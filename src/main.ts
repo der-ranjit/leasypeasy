@@ -5,6 +5,7 @@ import { LisiCollision } from "./Games/LisiCollision/LisiCollision";
 import { GravityDemo } from "./Games/GravityDemo";
 import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter";
+import { Controls } from "./Engine";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -12,7 +13,11 @@ const main = () => {
         const context = canvas.getContext("2d");
         if (context) {
             const renderer = new Renderer(context);
-
+            const controls = Controls.getInstance();
+            controls.onKeyDown("p").subscribe(_ => {
+                renderer.isRunning ? renderer.pause() : renderer.unpause();
+            });
+            
             // LisiColors(renderer);
             // LisiCollision(renderer);
             GravityDemo(renderer);

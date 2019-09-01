@@ -140,8 +140,4 @@ export const Shooter = (renderer: Renderer) => {
             }
         })
     });
-
-    controls.onKeyDown("p").subscribe(_ => {
-        renderer.isRunning ? renderer.pause() : renderer.unpause();
-    });
 }

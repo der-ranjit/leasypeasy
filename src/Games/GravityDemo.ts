@@ -60,10 +60,6 @@ export const GravityDemo = (renderer: Renderer) => {
         }
     });
 
-    controls.onKeyDown("p").subscribe(_ => {
-        renderer.isRunning ? renderer.pause() : renderer.unpause();
-    });
-
     controls.onKeyDown("a").subscribe(_ => {
         const randomX = MathUtils.randomInt(20, renderer.context.canvas.width - 20);
         const randomY = MathUtils.randomInt(20, renderer.context.canvas.height - 20);
