@@ -7,7 +7,7 @@ export const GravitySimulation = (renderer: Renderer) => {
     const controls = Controls.getInstance();
 
     canvas.width = 1200;
-    canvas.height = 800;
+    canvas.height = 600;
 
     const gravityRadius = 30;
     const offset = gravityRadius / 2;
@@ -26,39 +26,45 @@ export const GravitySimulation = (renderer: Renderer) => {
     const circles: Circle[] = [];
 
     let showStats = false;
-    let gravityEnabled = true;
+    let gravityEnabled = false;
     let useGravitationSource = true;
     let showVelocityIndicator = true;
 
+    const speedVector = new Vector2D(0,0);
+    let speed = 0;
     const circleControls = (circle: Circle) => {
-        const left = "ArrowLeft",
-            up = "ArrowUp",
-            right = "ArrowRight",
-            down = "ArrowDown";
-        const currentLength = circle.velocity.getLength();
+        const left = "ArrowLeft";
+        const up = "ArrowUp";
+        const right = "ArrowRight";
+        const down = "ArrowDown";
+        
+        renderer.context.strokeText(`(${speedVector.x}, ${speedVector.y})`, 100, 100);
+        renderer.context.strokeText(`${speed}`, 100, 150);
+    
         if (controls.isKeyPressed(left)) {
             circle.velocity.rotate(-4);;
         }
         if (controls.isKeyPressed(right)) {
             circle.velocity.rotate(4);
         }
+
+        speedVector.copy(circle.velocity).setLength(Math.abs(speed / 15));
+        const currentLength = circle.velocity.getLength();
         if (controls.isKeyPressed(down)) {
             const deccelerate = 0.2;
-            let newLength = currentLength - deccelerate;
-            newLength = (newLength < 0) ? 0 : newLength;
-            circle.velocity.setLength(newLength);
+            speed -= deccelerate;
+            circle.velocity.add(speedVector.scale(-2));
         }
         if (controls.isKeyPressed(up)) {
-            const accelerate = 0.1;
-            const maxSpeed = 5;
-            let newLength = currentLength + accelerate;
-            newLength = (newLength > maxSpeed) ? maxSpeed : newLength;
-            circle.velocity.setLength(newLength);
+            const accelerate = 0.2;
+            speed += accelerate;
+            circle.velocity.add(speedVector);
         }
-        // circle.speed = circle.speed * circle.frictionFactor;
-        // if (Math.abs(circle.speed) <= 0.1) {
-        //     circle.speed = 0;
-        // }
+        const frictionFactor = 0.9;
+        speed = speed * frictionFactor;
+        if (Math.abs(speed) <= 0.1) {
+            speed = 0;
+        }
     }
 
     const addCircle = (position: Point) => {
