@@ -43,6 +43,21 @@ export class Circle extends Shape {
         this.position = point;
     }
 
+    public gravitateTo(circle: Circle): Vector2D {
+        const gravity = new Vector2D(0, 0);
+        
+        let distance = Point.distanceBetween(this.position, circle.position);
+        const radii = this.radius + circle.radius;
+        if (distance < radii) {
+            distance = radii;
+        }
+        
+        const mass = circle.mass / 2;
+		gravity.setLength(mass / (distance * distance));
+		gravity.setAngle(this.position.angleTo(circle.position));
+		return gravity;
+    }
+
     private drawCircle() {
         this.context.save();
 

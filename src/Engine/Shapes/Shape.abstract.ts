@@ -48,19 +48,11 @@ export abstract class Shape extends RenderObject {
 
     public abstract centerArountPoint(point: Point): void;
     public abstract updateShape(delta: number): void;
+    protected abstract gravitateTo(circle: Circle): Vector2D;
 
     public update(delta: number) {
         if (this.gravityEnabled) {
-            if (this.gravitationSources.length > 0) {
-                const gravity = new Vector2D(0, 0);
-                for (const gravitationSource of this.gravitationSources) {
-                    gravity.add(this.gravitateTo(gravitationSource));
-                }
-                this.gravity = gravity;
-            } else {
-                const mass = this.mass / 50;
-                this.gravity = Vector2D.scaled(this.defaultGravity, mass);
-            }
+            this.gravity = this.computeGravity();
             this.velocity.add(this.gravity);
         } 
         
@@ -115,20 +107,17 @@ export abstract class Shape extends RenderObject {
         }
     }
 
-    private gravitateTo(circle: Circle): Vector2D {
-        const gravity = new Vector2D(0, 0);
-		let distance = Point.distanceBetween(this.position, circle.position);
-        const radii = (<Circle><unknown>this).radius + circle.radius;
-        if (distance < radii) {
-            distance = radii;
+    private computeGravity(): Vector2D {
+        let gravity = new Vector2D(0, 0);
+        if (this.gravitationSources.length > 0) {
+            for (const gravitationSource of this.gravitationSources) {
+                gravity.add(this.gravitateTo(gravitationSource));
+            }
+        } else {
+            const mass = this.mass / 50;
+            gravity = Vector2D.scaled(this.defaultGravity, mass);
         }
-        const mass = circle.mass / 2;
-		gravity.setLength(mass / (distance * distance));
-		gravity.setAngle(this.angleTo(circle));
-		return gravity;
-    }
 
-    private angleTo(circle: Circle) {
-        return Math.atan2(circle.position.y - this.position.y, circle.position.x - this.position.x);
+        return gravity;
     }
 }

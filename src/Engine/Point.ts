@@ -44,4 +44,8 @@ export class Point {
     public distanceTo(otherPoint: Point): number {
         return Point.distanceBetween(this, otherPoint);
     }
+
+    public angleTo(otherPoint: Point) {
+        return Math.atan2(otherPoint.y - this.y, otherPoint.x - this.x);
+    }
 }
