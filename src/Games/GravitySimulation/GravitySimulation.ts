@@ -1,8 +1,8 @@
-import { Color, Point, Renderer, Controls, MathUtils } from "./../Engine";
-import { Circle, Rectangle } from "./../Engine/Shapes";
-import { Vector2D } from "../Engine/Vector2D";
+import { Color, Point, Renderer, Controls, MathUtils } from "../../Engine";
+import { Circle, Rectangle } from "../../Engine/Shapes";
+import { Vector2D } from "../../Engine/Vector2D";
 
-export const GravityDemo = (renderer: Renderer) => {
+export const GravitySimulation = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
     const controls = Controls.getInstance();
 

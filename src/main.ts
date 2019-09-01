@@ -2,7 +2,7 @@ import { Renderer } from "./Engine/Renderer";
 
 import { LisiColors } from "./Games/LisiColors/LisiColors";
 import { LisiCollision } from "./Games/LisiCollision/LisiCollision";
-import { GravityDemo } from "./Games/GravityDemo";
+import { GravitySimulation } from "./Games/GravitySimulation/GravitySimulation";
 import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter/Shooter";
 import { Controls } from "./Engine";
@@ -20,9 +20,9 @@ const main = () => {
             
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            // GravityDemo(renderer);
+            GravitySimulation(renderer);
             // mixinTest(renderer.context);
-            Shooter(renderer);
+            // Shooter(renderer);
         }
     }
 }
