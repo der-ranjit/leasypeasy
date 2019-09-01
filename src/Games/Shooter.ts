@@ -43,7 +43,6 @@ class Player {
     ) {
         this.circle = new Circle(startPosition, this.playerRadius, this.renderer, this.playerColor)
         this.circle.showVelocityIndicator = true;
-        this.circle.isControlled = true; 
 
         this.setControlScheme(playerControls);
 
@@ -89,13 +88,33 @@ class Player {
     }
 
     private setControlScheme(controls: PlayerControls) {
-        this.circle.up = controls.up;
-        this.circle.down = controls.down;
-        this.circle.left = controls.left;
-        this.circle.right = controls.right;
+        this.circle.controls = () => this.executeControls(controls)
         this.controls.onKeyDown(controls.shoot).subscribe(_ => {
             this.shoot();
         });
+    }
+
+    private executeControls(controls: PlayerControls) {
+        const currentLength = this.circle.velocity.getLength();
+        if (this.controls.isKeyPressed(controls.left)) {
+            this.circle.velocity.rotate(-4);;
+        }
+        if (this.controls.isKeyPressed(controls.right)) {
+            this.circle.velocity.rotate(4);
+        }
+        if (this.controls.isKeyPressed(controls.down)) {
+            const deccelerate = 0.2;
+            let newLength = currentLength - deccelerate;
+            newLength = (newLength < 0) ? 0 : newLength;
+            this.circle.velocity.setLength(newLength);
+        }
+        if (this.controls.isKeyPressed(controls.up)) {
+            const accelerate = 0.1;
+            const maxSpeed = 5;
+            let newLength = currentLength + accelerate;
+            newLength = (newLength > maxSpeed) ? maxSpeed : newLength;
+            this.circle.velocity.setLength(newLength);
+        }
     }
 }
 

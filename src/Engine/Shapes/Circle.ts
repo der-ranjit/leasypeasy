@@ -30,7 +30,7 @@ export class Circle extends Shape {
         if (this.showVelocityIndicator) {
            this.drawVectorIndicator(this.velocity, Color.RED);
             if (this.gravityEnabled) {
-                this.drawVectorIndicator(this.gravity, Color.BLACK, 20);
+                this.drawVectorIndicator(this.gravityVector, Color.BLACK, 20);
             }
         }
 
@@ -52,7 +52,7 @@ export class Circle extends Shape {
             distance = radii;
         }
         
-        const mass = circle.mass / 2;
+        const mass = (this.mass + circle.mass) / 2;
 		gravity.setLength(mass / (distance * distance));
 		gravity.setAngle(this.position.angleTo(circle.position));
 		return gravity;
@@ -109,11 +109,9 @@ export class Circle extends Shape {
         const posX = this.position.x + this.radius + 2;
         const posY = this.position.y - this.radius
         const stats = [
-            this.gravityEnabled ? `gravity (${this.gravity.x.toFixed(4)} | ${this.gravity.y.toFixed(4)})` : `gravity disabled`,
+            this.gravityEnabled ? `gravity (${this.gravityVector.x.toFixed(4)} | ${this.gravityVector.y.toFixed(4)})` : `gravity disabled`,
             `velocity (${this.velocity.x.toFixed(4)} | ${this.velocity.y.toFixed(4)}) | ${this.velocity.getLength().toFixed(2)}`,
-            `speed ${this.speed.toFixed(2)}`,
-            `mass (${this.mass})`,
-            this.isControlled ? 'controlled' : 'unctonrolled',
+            `mass (${this.mass})`
         ]
         
         stats.forEach((stat, index) => {

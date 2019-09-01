@@ -4,7 +4,8 @@ import { Vector2D } from "../Engine/Vector2D";
 
 export const GravityDemo = (renderer: Renderer) => {
     const canvas = renderer.context.canvas;
-    
+    const controls = Controls.getInstance();
+
     canvas.width = 1200;
     canvas.height = 800;
 
@@ -27,8 +28,38 @@ export const GravityDemo = (renderer: Renderer) => {
     let showStats = false;
     let gravityEnabled = true;
     let useGravitationSource = true;
-    let isControlled = true;
     let showVelocityIndicator = true;
+
+    const circleControls = (circle: Circle) => {
+        const left = "ArrowLeft",
+            up = "ArrowUp",
+            right = "ArrowRight",
+            down = "ArrowDown";
+        const currentLength = circle.velocity.getLength();
+        if (controls.isKeyPressed(left)) {
+            circle.velocity.rotate(-4);;
+        }
+        if (controls.isKeyPressed(right)) {
+            circle.velocity.rotate(4);
+        }
+        if (controls.isKeyPressed(down)) {
+            const deccelerate = 0.2;
+            let newLength = currentLength - deccelerate;
+            newLength = (newLength < 0) ? 0 : newLength;
+            circle.velocity.setLength(newLength);
+        }
+        if (controls.isKeyPressed(up)) {
+            const accelerate = 0.1;
+            const maxSpeed = 5;
+            let newLength = currentLength + accelerate;
+            newLength = (newLength > maxSpeed) ? maxSpeed : newLength;
+            circle.velocity.setLength(newLength);
+        }
+        // circle.speed = circle.speed * circle.frictionFactor;
+        // if (Math.abs(circle.speed) <= 0.1) {
+        //     circle.speed = 0;
+        // }
+    }
 
     const addCircle = (position: Point) => {
         const circle = new Circle(
@@ -37,18 +68,16 @@ export const GravityDemo = (renderer: Renderer) => {
             renderer,
             Color.RANDOM_COLOR
         );
+        circle.controls = () => circleControls(circle);
         circle.mass = 150;
         circle.onBoundaryCollision$.subscribe(_ =>  circle.velocity.scale(0.7));
         circle.gravitationSources.push(...gravitationSources, ...circles);
         circles.forEach(_circle => _circle.gravitationSources.push(circle));
         circle.gravityEnabled = gravityEnabled;
-        circle.isControlled = isControlled;
         circle.showVelocityIndicator = showVelocityIndicator;
         circle.showStats = showStats;
         circles.push(circle);
     }
-
-    const controls = Controls.getInstance();
     
     window.addEventListener("click", (event) => {
         addCircle(new Point(event.clientX, event.clientY));
@@ -85,11 +114,6 @@ export const GravityDemo = (renderer: Renderer) => {
     controls.onKeyDown("g").subscribe(_ => {
         gravityEnabled = !gravityEnabled;
         circles.forEach(circle => circle.gravityEnabled = gravityEnabled);
-    });
-    
-    controls.onKeyDown("c").subscribe(_ => {
-        isControlled = !isControlled
-        circles.forEach(circle => circle.isControlled = isControlled);
     });
     
     controls.onKeyDown("d").subscribe(_ => {
