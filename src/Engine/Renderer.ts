@@ -46,6 +46,13 @@ export class Renderer {
 
     private loop() {
         requestAnimationFrame(() => {
+            // TODO: refactor:
+            // delta_t = ...
+            // let z = physics.calculate(delta_t);
+            // z = collision.correct(z);
+            // z.updatePositions();
+            // renderer.draw();
+            // 
             this.onLoopStart$.next();
 
             const delta = Date.now() - this.lastRenderTimestamp;

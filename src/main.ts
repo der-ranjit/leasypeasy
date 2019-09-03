@@ -6,6 +6,7 @@ import { GravitySimulation } from "./Games/GravitySimulation/GravitySimulation";
 import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter/Shooter";
 import { Controls } from "./Engine";
+import { Platformer } from "./Games/Platformer/Platformer";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -20,9 +21,10 @@ const main = () => {
             
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            GravitySimulation(renderer);
+            // GravitySimulation(renderer);
             // mixinTest(renderer.context);
             // Shooter(renderer);
+            Platformer(renderer);
         }
     }
 }
