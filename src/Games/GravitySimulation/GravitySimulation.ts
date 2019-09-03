@@ -6,6 +6,9 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 export class GravitySimulation extends Game {
+    public name = "Gravity bitches";
+    public started = false;
+
     private destroyed$ = new Subject<void>();
 
     private circles: Circle[] = [];
@@ -17,15 +20,17 @@ export class GravitySimulation extends Game {
 
     public start() {
         this.mainScript();
+        this.started = true;
     }
 
     public destroy() {
+        this.destroyed$.next();
         for (const item of [...this.circles, ...this.gravitationSources]) {
             item.destroy();
         }
         this.circles = [];
         this.gravitationSources = [];
-        this.destroyed$.next();
+        this.started = false;
     }
 
     private mainScript() {

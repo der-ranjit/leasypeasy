@@ -41,6 +41,13 @@ export class Renderer {
             this.renderObjects.splice(index, 1);
         }
     }
+
+    public removeAllRenderObjects() {
+        this.renderObjects.forEach(renderObject => {
+            renderObject.destroy();
+        })
+        this.renderObjects = [];
+    }
     
     private start() {
         this.started = true;
