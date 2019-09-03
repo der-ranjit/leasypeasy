@@ -2,6 +2,7 @@ import { Point, Color, Renderer, Controls, Collision } from "../../Engine";
 import { Circle } from "../../Engine/Shapes";
 import { Vector2D } from "../../Engine/Vector2D";
 import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 export interface PlayerControls {
     up: string;
@@ -21,7 +22,7 @@ const defaultControls: PlayerControls = {
 
 export class Player {
     public readonly onHit$ = new Subject<Player>();
-    public readonly opponents: Player[] = [];
+    public opponents: Player[] = [];
     public score = 0;
     public circle: Circle;
     
@@ -30,6 +31,8 @@ export class Player {
     private bullets: Circle[] = [];
     private bulletRadius = 5;
     private bulletSpeed = 4;
+
+    private destroyed$ = new Subject<void>();
 
     private controls = Controls.getInstance();
 
@@ -46,7 +49,7 @@ export class Player {
 
         this.setControlScheme(playerControls);
 
-        this.renderer.onUpdate$.subscribe(_ => {
+        this.renderer.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.checkOppenentsHit();
         })
     }
@@ -56,10 +59,20 @@ export class Player {
         this.bullets.push(bullet);
     }
 
+    public destroy() {
+        for (const bullet of this.bullets) {
+            bullet.destroy();
+        }
+        this.bullets = [];
+        this.opponents = [];
+        this.circle.destroy();
+        this.destroyed$.next();
+    }
+
     private createBullet() {
         let bullet = new Circle(this.circle.position, this.bulletRadius, this.renderer, this.bulletColor);
         bullet.velocity = Vector2D.from(this.circle.velocity).setLength(this.bulletSpeed);
-        bullet.onBoundaryCollision$.subscribe(_ => {
+        bullet.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.destroyBullet(bullet);
         })
         return bullet;
@@ -88,7 +101,7 @@ export class Player {
 
     private setControlScheme(controls: PlayerControls) {
         this.circle.controls = () => this.executeControls(controls)
-        this.controls.onKeyDown(controls.shoot).subscribe(_ => {
+        this.controls.onKeyDown(controls.shoot).pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.shoot();
         });
     }

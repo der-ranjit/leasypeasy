@@ -7,6 +7,7 @@ import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter/Shooter";
 import { Controls } from "./Engine";
 import { Platformer } from "./Games/Platformer/Platformer";
+import { Game } from "./Games/Game.abstract";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -15,16 +16,35 @@ const main = () => {
         if (context) {
             const renderer = new Renderer(context);
             const controls = Controls.getInstance();
-            controls.onKeyDown("p").subscribe(_ => {
-                renderer.isRunning ? renderer.pause() : renderer.unpause();
-            });
             
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            GravitySimulation(renderer);
+            // GravitySimulation(renderer);
             // mixinTest(renderer.context);
             // Shooter(renderer);
-            // Platformer(renderer);
+            const games = [
+                new Platformer(renderer)
+            ];
+            
+            let activeGame: Game | null = games[0];
+            
+            // start selected game
+            controls.onKeyDown("Enter").subscribe(_ => {
+                if (activeGame) {
+                    activeGame.start();
+                }
+            })
+            // stop active game
+            controls.onKeyDown("Escape").subscribe(_ => {
+                if (activeGame) {
+                    activeGame.destroy();
+                    activeGame = null;
+                }
+            })
+            // pause
+            controls.onKeyDown("p").subscribe(_ => {
+                renderer.isRunning ? renderer.pause() : renderer.unpause();
+            });
         }
     }
 }
