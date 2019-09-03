@@ -23,11 +23,13 @@ const main = () => {
             // mixinTest(renderer.context);
             // Shooter(renderer);
             const games = [
-                new Platformer(renderer)
+                new Platformer(renderer),
+                new GravitySimulation(renderer)
             ];
             
-            let activeGame: Game | null = games[0];
-            
+            let activeGameIndex = 0;
+            let activeGame: Game | null = games[activeGameIndex];
+
             // start selected game
             controls.onKeyDown("Enter").subscribe(_ => {
                 if (activeGame) {
@@ -38,7 +40,8 @@ const main = () => {
             controls.onKeyDown("Escape").subscribe(_ => {
                 if (activeGame) {
                     activeGame.destroy();
-                    activeGame = null;
+                    activeGameIndex = (activeGameIndex + 1) % games.length;
+                    activeGame = games[activeGameIndex];
                 }
             })
             // pause

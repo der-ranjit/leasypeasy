@@ -1,134 +1,156 @@
-import { Color, Point, Renderer, Controls, MathUtils } from "../../Engine";
-import { Circle, Rectangle } from "../../Engine/Shapes";
+import { Color, Point, Renderer, MathUtils } from "../../Engine";
+import { Circle } from "../../Engine/Shapes";
 import { Vector2D } from "../../Engine/Vector2D";
+import { Game } from "../Game.abstract";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
-export const GravitySimulation = (renderer: Renderer) => {
-    const canvas = renderer.context.canvas;
-    const controls = Controls.getInstance();
+export class GravitySimulation extends Game {
+    private destroyed$ = new Subject<void>();
 
-    canvas.width = 1200;
-    canvas.height = 600;
+    private circles: Circle[] = [];
+    private gravitationSources: Circle[] = [];
 
-    const gravityRadius = 30;
-    const offset = gravityRadius / 2;
-    const gravitySourceA = new Circle(
-        new Point(
-            600,
-            canvas.height / 2 - offset
-        ),
-        gravityRadius,
-        renderer
-    );
-    gravitySourceA.mass = 1000;
-    const gravitationSources: Circle[] = [];
-    gravitationSources.push(gravitySourceA)
-
-    const circles: Circle[] = [];
-
-    let showStats = false;
-    let gravityEnabled = true;
-    let useGravitationSource = true;
-    let showVelocityIndicator = true;
-
-    const speedVector = new Vector2D(0,0);
-    let speed = 0;
-    const circleControls = (circle: Circle) => {
-        const left = "ArrowLeft";
-        const up = "ArrowUp";
-        const right = "ArrowRight";
-        const down = "ArrowDown";
-        
-        // renderer.context.strokeText(`(${speedVector.x}, ${speedVector.y})`, 100, 100);
-        // renderer.context.strokeText(`${speed}`, 100, 150);
-    
-        if (controls.isKeyPressed(left)) {
-            circle.velocity.rotate(-4);;
-        }
-        if (controls.isKeyPressed(right)) {
-            circle.velocity.rotate(4);
-        }
-
-        speedVector.copy(circle.velocity).setLength(Math.abs(speed / 15));
-        const currentLength = circle.velocity.getLength();
-        if (controls.isKeyPressed(down)) {
-            const deccelerate = 0.2;
-            speed -= deccelerate;
-            circle.velocity.add(speedVector.scale(-2));
-        }
-        if (controls.isKeyPressed(up)) {
-            const accelerate = 0.2;
-            speed += accelerate;
-            circle.velocity.add(speedVector);
-        }
-        const frictionFactor = 0.9;
-        speed = speed * frictionFactor;
-        if (Math.abs(speed) <= 0.1) {
-            speed = 0;
-        }
+    constructor(renderer: Renderer) {
+        super(renderer);
     }
 
-    const addCircle = (position: Point) => {
-        const circle = new Circle(
-            position,
-            15,
-            renderer,
-            Color.RANDOM_COLOR
+    public start() {
+        this.mainScript();
+    }
+
+    public destroy() {
+        for (const item of [...this.circles, ...this.gravitationSources]) {
+            item.destroy();
+        }
+        this.circles = [];
+        this.gravitationSources = [];
+        this.destroyed$.next();
+    }
+
+    private mainScript() {
+        this.canvas.width = 1200;
+        this.canvas.height = 600;
+
+        const gravityRadius = 30;
+        const offset = gravityRadius / 2;
+        const gravitySourceA = new Circle(
+            new Point(
+                600,
+                this.canvas.height / 2 - offset
+            ),
+            gravityRadius,
+            this.renderer
         );
-        circle.controls = () => circleControls(circle);
-        circle.mass = 150;
-        circle.onBoundaryCollision$.subscribe(_ =>  circle.velocity.scale(0.7));
-        circle.gravitationSources.push(...gravitationSources, ...circles);
-        circles.forEach(_circle => _circle.gravitationSources.push(circle));
-        circle.gravityEnabled = gravityEnabled;
-        circle.showVelocityIndicator = showVelocityIndicator;
-        circle.showStats = showStats;
-        circles.push(circle);
-    }
-    
-    window.addEventListener("click", (event) => {
-        addCircle(new Point(event.clientX, event.clientY));
-    }) 
+        gravitySourceA.mass = 1000;
+        this.gravitationSources.push(gravitySourceA)
 
-    controls.onKeyDown(" ").subscribe(_ => {
-        for (const circle of circles) {
-            circle.velocity.add(new Vector2D(0, -10));
+
+        let showStats = false;
+        let gravityEnabled = true;
+        let useGravitationSource = true;
+        let showVelocityIndicator = true;
+
+        const speedVector = new Vector2D(0,0);
+        let speed = 0;
+        const circleControls = (circle: Circle) => {
+            const left = "ArrowLeft";
+            const up = "ArrowUp";
+            const right = "ArrowRight";
+            const down = "ArrowDown";
+            
+            // renderer.context.strokeText(`(${speedVector.x}, ${speedVector.y})`, 100, 100);
+            // renderer.context.strokeText(`${speed}`, 100, 150);
+        
+            if (this.controls.isKeyPressed(left)) {
+                circle.velocity.rotate(-4);;
+            }
+            if (this.controls.isKeyPressed(right)) {
+                circle.velocity.rotate(4);
+            }
+
+            speedVector.copy(circle.velocity).setLength(Math.abs(speed / 15));
+            const currentLength = circle.velocity.getLength();
+            if (this.controls.isKeyPressed(down)) {
+                const deccelerate = 0.2;
+                speed -= deccelerate;
+                circle.velocity.add(speedVector.scale(-2));
+            }
+            if (this.controls.isKeyPressed(up)) {
+                const accelerate = 0.2;
+                speed += accelerate;
+                circle.velocity.add(speedVector);
+            }
+            const frictionFactor = 0.9;
+            speed = speed * frictionFactor;
+            if (Math.abs(speed) <= 0.1) {
+                speed = 0;
+            }
         }
-    });
 
-    controls.onKeyDown("a").subscribe(_ => {
-        const randomX = MathUtils.randomInt(20, renderer.context.canvas.width - 20);
-        const randomY = MathUtils.randomInt(20, renderer.context.canvas.height - 20);
-        addCircle(new Point(randomX, randomY));
-    });
-    
-    controls.onKeyDown("b").subscribe(_ => {
-        useGravitationSource = !useGravitationSource
-        circles.forEach(circle => {
-            if (useGravitationSource) {
-                circle.gravitationSources.push(...gravitationSources);
-            } else {
-                circle.gravitationSources = [];
+        const addCircle = (position: Point) => {
+            const circle = new Circle(
+                position,
+                15,
+                this.renderer,
+                Color.RANDOM_COLOR
+            );
+            circle.controls = () => circleControls(circle);
+            circle.mass = 150;
+            circle.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ =>  circle.velocity.scale(0.7));
+            circle.gravitationSources.push(...this.gravitationSources, ...this.circles);
+            this.circles.forEach(_circle => _circle.gravitationSources.push(circle));
+            circle.gravityEnabled = gravityEnabled;
+            circle.showVelocityIndicator = showVelocityIndicator;
+            circle.showStats = showStats;
+            this.circles.push(circle);
+        }
+        
+        window.addEventListener("click", (event) => {
+            addCircle(new Point(event.clientX, event.clientY));
+        }) 
+
+        this.controls.onKeyDown(" ").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            for (const circle of this.circles) {
+                circle.velocity.add(new Vector2D(0, -10));
             }
         });
-    });
 
-    controls.onKeyDown("i").subscribe(_ => {
-        showStats = !showStats;
-        circles.forEach(circle => circle.showStats = showStats);
-    });
+        this.controls.onKeyDown("a").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            const randomX = MathUtils.randomInt(20, this.renderer.context.canvas.width - 20);
+            const randomY = MathUtils.randomInt(20, this.renderer.context.canvas.height - 20);
+            addCircle(new Point(randomX, randomY));
+        });
+        
+        this.controls.onKeyDown("b").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            useGravitationSource = !useGravitationSource
+            this.circles.forEach(circle => {
+                if (useGravitationSource) {
+                    circle.gravitationSources.push(...this.gravitationSources);
+                } else {
+                    circle.gravitationSources = [];
+                }
+            });
+        });
 
-    controls.onKeyDown("g").subscribe(_ => {
-        gravityEnabled = !gravityEnabled;
-        circles.forEach(circle => circle.gravityEnabled = gravityEnabled);
-    });
-    
-    controls.onKeyDown("d").subscribe(_ => {
-        showVelocityIndicator = !showVelocityIndicator
-        circles.forEach(circle => circle.showVelocityIndicator = showVelocityIndicator);
-    });
-    
-    controls.onKeyDown("r").subscribe(_ => {
-        circles.forEach(circle => circle.destroy());
-        circles.splice(0, circles.length);
-    });
+        this.controls.onKeyDown("i").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            showStats = !showStats;
+            this.circles.forEach(circle => circle.showStats = showStats);
+        });
+
+        this.controls.onKeyDown("g").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            gravityEnabled = !gravityEnabled;
+            this.circles.forEach(circle => circle.gravityEnabled = gravityEnabled);
+        });
+        
+        this.controls.onKeyDown("d").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            showVelocityIndicator = !showVelocityIndicator
+            this.circles.forEach(circle => circle.showVelocityIndicator = showVelocityIndicator);
+        });
+        
+        this.controls.onKeyDown("r").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            this.circles.forEach(circle => circle.destroy());
+            this.circles.splice(0, this.circles.length);
+        });
+    }
 }
