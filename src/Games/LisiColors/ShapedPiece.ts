@@ -1,6 +1,5 @@
 import { Color, MathUtils, Point, Renderer } from "../../Engine";
 import { Circle, Square } from "../../Engine/Shapes";
-// TODO remove shapeType?
 import { Shape } from "../../Engine/Shapes/Shape.abstract";
 import { ShapeType } from "../../Engine/Shapes/shapeType";
 

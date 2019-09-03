@@ -11,7 +11,6 @@ export interface BoundaryRect {
 export namespace CollisionResolver {
     /**
      * Returns false when there was no collision at the newPosition
-     * TODO if newPosition exceeds boundaries, calculate overlap and teleport shape to edge 
      */
     export function checkAndResolveBoundaries(
         shape: Shape,
@@ -27,7 +26,7 @@ export namespace CollisionResolver {
         }
     }
 
-    function resolveCircleBoundary(shape: any, boundaryRect: BoundaryRect) {
+    function resolveCircleBoundary(shape: Circle, boundaryRect: BoundaryRect) {
         const position = shape.position;
         const rightCollision = position.x + shape.radius > boundaryRect.right;
         const leftCollision = position.x - shape.radius < boundaryRect.left;
@@ -55,7 +54,7 @@ export namespace CollisionResolver {
         }
     }
 
-    function resolveRectangleBoundary(shape: any, boundaryRect: BoundaryRect) {
+    function resolveRectangleBoundary(shape: Rectangle, boundaryRect: BoundaryRect) {
         const position = shape.position;
         const rightCollision = position.x + shape.width > boundaryRect.right;
         const leftCollision = position.x < boundaryRect.left;

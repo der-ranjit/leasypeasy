@@ -21,10 +21,10 @@ const main = () => {
             
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            // GravitySimulation(renderer);
+            GravitySimulation(renderer);
             // mixinTest(renderer.context);
             // Shooter(renderer);
-            Platformer(renderer);
+            // Platformer(renderer);
         }
     }
 }

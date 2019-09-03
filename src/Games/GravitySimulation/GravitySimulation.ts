@@ -26,7 +26,7 @@ export const GravitySimulation = (renderer: Renderer) => {
     const circles: Circle[] = [];
 
     let showStats = false;
-    let gravityEnabled = false;
+    let gravityEnabled = true;
     let useGravitationSource = true;
     let showVelocityIndicator = true;
 
@@ -38,8 +38,8 @@ export const GravitySimulation = (renderer: Renderer) => {
         const right = "ArrowRight";
         const down = "ArrowDown";
         
-        renderer.context.strokeText(`(${speedVector.x}, ${speedVector.y})`, 100, 100);
-        renderer.context.strokeText(`${speed}`, 100, 150);
+        // renderer.context.strokeText(`(${speedVector.x}, ${speedVector.y})`, 100, 100);
+        // renderer.context.strokeText(`${speed}`, 100, 150);
     
         if (controls.isKeyPressed(left)) {
             circle.velocity.rotate(-4);;
