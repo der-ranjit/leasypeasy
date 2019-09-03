@@ -16,6 +16,7 @@ export abstract class Shape extends RenderObject {
     public mass = 1;
     public gravitationSources: Circle[] = [];
     public velocity = new Vector2D(0, 0);
+    public acceleration = new Vector2D(0,0);
 
     protected gravityVector = new Vector2D(0, 0);
     
@@ -46,6 +47,7 @@ export abstract class Shape extends RenderObject {
             this.controls();
         }
 
+        this.velocity.add(this.acceleration);
         this.move(this.velocity);
         this.updateShape(delta);
     }
