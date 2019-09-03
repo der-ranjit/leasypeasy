@@ -2,7 +2,7 @@ import { Color, Point, Renderer, MathUtils } from "../../Engine";
 import { Circle } from "../../Engine/Shapes";
 import { Vector2D } from "../../Engine/Vector2D";
 import { Game } from "../Game.abstract";
-import { Subject } from "rxjs";
+import { Subject, fromEvent } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 export class GravitySimulation extends Game {
@@ -111,7 +111,7 @@ export class GravitySimulation extends Game {
             this.circles.push(circle);
         }
         
-        window.addEventListener("click", (event) => {
+        fromEvent<MouseEvent>(window, "click").pipe(takeUntil(this.destroyed$)).subscribe(event => {
             addCircle(new Point(event.clientX, event.clientY));
         }) 
 
