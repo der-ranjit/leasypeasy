@@ -20,6 +20,7 @@ export class Controls {
             this.addPressedKey(event.key);
             this.isKeyDown = true;
             this.onKeyDown$.next(event);
+            console.log(`[Key '${event.key}' pressed]`);
         });
 
         window.addEventListener("keyup", event =>  {
