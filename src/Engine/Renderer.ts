@@ -4,8 +4,10 @@ import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
 import { Shape } from "./Shapes/Shape.abstract";
 
 export class Renderer {
-    public onLoopStart$ = new Subject<void>(); 
-    public onBeforeUpdate$ = new Subject<void>(); 
+    public onLoopStart$ = new Subject<RenderObject[]>(); 
+    public onUpdate$ = new Subject<RenderObject[]>();
+    public onCollisionDetection$ = new Subject<RenderObject[]>();
+    public onDraw$ = new Subject<RenderObject[]>();
     public onLoopEnd$ = new Subject<void>();
     
     public get isRunning(): boolean {
@@ -55,20 +57,22 @@ export class Renderer {
             // z.updatePositions();
             // renderer.draw();
             // 
-            this.onLoopStart$.next();
-
-            const delta = Date.now() - this.lastRenderTimestamp;
-            this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
             const zIndexSortedRenderObjects = this.renderObjects.sort((a, b) => {
                 return a.zIndex - b.zIndex;
             });
+            this.onLoopStart$.next(zIndexSortedRenderObjects);
+            
+            const delta = Date.now() - this.lastRenderTimestamp;
+            this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
+
             if (this.started) {
-                this.onBeforeUpdate$.next();
+                this.onUpdate$.next(zIndexSortedRenderObjects);
                 for (const object of zIndexSortedRenderObjects) {
                     object.update(delta);
                 }
 
                 // collision detection
+                this.onCollisionDetection$.next(zIndexSortedRenderObjects);
                 for (const object of zIndexSortedRenderObjects) {
                     CollisionResolver.checkAndResolveBoundaries(
                         object as Shape,
@@ -80,11 +84,10 @@ export class Renderer {
                         }
                     );
                 }
-
-
             } else {
                 this.context.strokeText("PAUSED", 10, 10);
             }
+            this.onDraw$.next(zIndexSortedRenderObjects);
             for (const object of zIndexSortedRenderObjects) {
                 object.draw(delta);
             }

@@ -46,10 +46,9 @@ export class Player {
 
         this.setControlScheme(playerControls);
 
-        this.renderer.onBeforeUpdate$.subscribe(_ => {
+        this.renderer.onUpdate$.subscribe(_ => {
             this.checkOppenentsHit();
         })
-
     }
 
     public shoot() {
