@@ -74,15 +74,17 @@ export class Renderer {
                 // collision detection
                 this.onCollisionDetection$.next(zIndexSortedRenderObjects);
                 for (const object of zIndexSortedRenderObjects) {
-                    CollisionResolver.checkAndResolveBoundaries(
-                        object as Shape,
-                        {
-                            left: 0,
-                            top: 0,
-                            right: this.context.canvas.width,
-                            bottom: this.context.canvas.height
-                        }
-                    );
+                    if ((<Shape>object).checkBoundaries) {
+                        CollisionResolver.checkAndResolveBoundaries(
+                            object as Shape,
+                            {
+                                left: 0,
+                                top: 0,
+                                right: this.context.canvas.width,
+                                bottom: this.context.canvas.height
+                            }
+                        );
+                    }
                 }
             } else {
                 this.context.strokeText("PAUSED", 10, 10);
