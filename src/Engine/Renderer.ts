@@ -1,5 +1,7 @@
 import { Subject } from "rxjs";
 import { RenderObject } from "./RenderObject";
+import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
+import { Shape } from "./Shapes/Shape.abstract";
 
 export class Renderer {
     public onLoopStart$ = new Subject<void>(); 
@@ -65,6 +67,21 @@ export class Renderer {
                 for (const object of zIndexSortedRenderObjects) {
                     object.update(delta);
                 }
+
+                // collision detection
+                for (const object of zIndexSortedRenderObjects) {
+                    CollisionResolver.checkAndResolveBoundaries(
+                        object as Shape,
+                        {
+                            left: 0,
+                            top: 0,
+                            right: this.context.canvas.width,
+                            bottom: this.context.canvas.height
+                        }
+                    );
+                }
+
+
             } else {
                 this.context.strokeText("PAUSED", 10, 10);
             }

@@ -1,13 +1,10 @@
+import { Subject } from "rxjs";
 import { Renderer } from "../Renderer";
 import { RenderObject } from "../RenderObject";
 import { Color } from "../Color";
 import { Point } from "../Point";
 import { Vector2D } from "../Vector2D";
-
-// careful - circular dependencie
-import { CollisionResolver, BoundaryRect } from "../CollisionResolver";
 import { Circle } from "./Circle";
-import { Subject } from "rxjs";
 
 export abstract class Shape extends RenderObject {
     public onBoundaryCollision$ = new Subject<void>();
@@ -56,19 +53,6 @@ export abstract class Shape extends RenderObject {
     public move(vector: Vector2D) {
         const newPosition = Point.add(this.position, vector.point)
         this.position = newPosition;
-
-        if (this.checkBoundaries) {
-            const boundaryRect: BoundaryRect = {
-                left: 0,
-                top: 0,
-                right: this.renderer.context.canvas.width,
-                bottom: this.renderer.context.canvas.height
-            }
-            CollisionResolver.checkAndResolveBoundaries(
-                this,
-                boundaryRect
-            );
-        }
     }
 
     private computeGravity(): Vector2D {

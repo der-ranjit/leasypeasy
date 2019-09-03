@@ -1,5 +1,5 @@
 import { Shape } from "./Shapes/Shape.abstract";
-import { Point } from "./Point";
+import { Rectangle, Circle } from "./Shapes";
 
 export interface BoundaryRect {
      left: number;
@@ -17,18 +17,16 @@ export namespace CollisionResolver {
         shape: Shape,
         boundaryRect: BoundaryRect
     ): void {
-        // TODO figure out being unable to use tpye of Shapes here
         // Rectangle
-        if ((<any>shape).width && (<any>shape).height) {
+        if (shape instanceof Rectangle) {
             resolveRectangleBoundary(shape, boundaryRect)
         }
         // Circle
-        if ((<any>shape).radius) {
+        if (shape instanceof Circle) {
             resolveCircleBoundary(shape, boundaryRect)
         }
     }
 
-    // TODO figure out being unable to use tpye of Shapes here
     function resolveCircleBoundary(shape: any, boundaryRect: BoundaryRect) {
         const position = shape.position;
         const rightCollision = position.x + shape.radius > boundaryRect.right;
@@ -57,7 +55,6 @@ export namespace CollisionResolver {
         }
     }
 
-    // TODO figure out being unable to use tpye of Shapes here
     function resolveRectangleBoundary(shape: any, boundaryRect: BoundaryRect) {
         const position = shape.position;
         const rightCollision = position.x + shape.width > boundaryRect.right;

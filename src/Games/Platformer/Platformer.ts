@@ -19,5 +19,5 @@ export const Platformer = (renderer: Renderer) => {
     const ranzPosition = new Point(canvas.width - 20, canvas.height / 2);
 
     const ranz = new Player("Ranz", ranzPosition, Color.BLACK, Color.RED, renderer);
-    ranz.circle.gravityEnabled = true;
+    // ranz.circle.gravityEnabled = true;
 }
