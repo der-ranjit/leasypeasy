@@ -25,17 +25,17 @@ export class Color {
     }
     
     public static mix(color1: Color, color2: Color, mixAmount = 0.5): Color {
-        const r = MathUtils.clamp(0, 255, color1.r * mixAmount + color2.r * (1 - mixAmount));
-        const g = MathUtils.clamp(0, 255, color1.g * mixAmount + color2.g * (1 - mixAmount));
-        const b = MathUtils.clamp(0, 255, color1.b * mixAmount + color2.b * (1 - mixAmount));
+        const r = MathUtils.clamp(color1.r * mixAmount + color2.r * (1 - mixAmount), 0, 255);
+        const g = MathUtils.clamp(color1.g * mixAmount + color2.g * (1 - mixAmount), 0, 255);
+        const b = MathUtils.clamp(color1.b * mixAmount + color2.b * (1 - mixAmount), 0, 255);
 
         return new Color(r, g, b);
     }
 
     public static add(color1: Color, color2: Color): Color {
-        const r = MathUtils.clamp(0, 255, color1.r + color2.r);
-        const g = MathUtils.clamp(0, 255, color1.g + color2.g);
-        const b = MathUtils.clamp(0, 255, color1.b + color2.b);
+        const r = MathUtils.clamp(color1.r + color2.r, 0, 255);
+        const g = MathUtils.clamp(color1.g + color2.g, 0, 255);
+        const b = MathUtils.clamp(color1.b + color2.b, 0, 255);
         return new Color(r, g, b);
     }
 

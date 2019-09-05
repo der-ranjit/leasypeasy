@@ -57,8 +57,16 @@ export namespace Collision {
     }
     
     function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
+        // Find the closest point to the circle within the rectangle
+        const closestX = MathUtils.clamp(circle.position.x, rect.position.x, rect.position.x + rect.width);
+        const closestY = MathUtils.clamp(circle.position.y, rect.position.y, rect.position.y + rect.width);
 
+        // Calculate the distance between the circle's center and this closest point
+        const distanceX = circle.position.x - closestX;
+        const distanceY = circle.position.y - closestY;
 
-        return false;
+        // If the distance is less than the circle's radius, an intersection occurs
+        const distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+        return distanceSquared < (circle.radius * circle.radius);
     }
 }

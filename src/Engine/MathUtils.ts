@@ -7,7 +7,7 @@ export namespace MathUtils {
         return Math.floor(Math.random() * (max - min) + min);
     } 
     
-    export function clamp(min: number, max: number, value: number): number {
+    export function clamp(value: number, min: number, max: number): number {
         if (value < min) {
             return min;
         }
