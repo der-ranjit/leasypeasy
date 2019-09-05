@@ -36,20 +36,21 @@ export namespace Collision {
     }
 
     function decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
-        if ((rectA.position.y === rectB.position.y && 
-            rectA.position.x + rectA.width >= rectB.position.x &&
-            rectA.position.x <= rectB.position.x)
-            || rectA.position.x === rectB.position.x) {
-            return true;
-        }
-        const bx = rectB.position.x;
-        const by = rectB.position.y;
-        const ax = rectA.position.x;
-        const ay = rectA.position.y;
-        if ( (ax <= bx &&
-            ay <= by) ||
-            (ax >= bx &&
-            ay >= by) 
+        //x
+        let rectAminX = rectA.position.x
+        let rectAmaxX = rectA.position.x + rectA.width;
+        let rectBminX = rectB.position.x;
+        let rectBmaxX = rectB.position.x + rectB.width;
+        //y
+        let rectAminY = rectA.position.y
+        let rectAmaxY = rectA.position.y + rectA.height;
+        let rectBminY = rectB.position.y;
+        let rectBmaxY = rectB.position.y + rectB.height;
+
+        if ((rectAmaxX > rectBminX) 
+            && (rectAminX <= rectBmaxX)
+            && (rectAmaxY > rectBminY)
+            && (rectAminY <= rectBmaxY)
         ) {
             return true;
         }
