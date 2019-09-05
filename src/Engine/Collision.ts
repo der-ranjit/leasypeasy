@@ -2,6 +2,7 @@ import { Point } from "./Point";
 import { Shape } from "./Shapes/Shape.abstract";
 import { Circle } from "./Shapes/Circle";
 import { Rectangle } from "./Shapes/Rectangle";
+import { MathUtils } from "./MathUtils";
 
 export namespace Collision {
     export function isColliding(shapeA: Shape, shapeB: Shape) {
@@ -36,28 +37,28 @@ export namespace Collision {
     }
 
     function decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
-        //x
-        let rectAminX = rectA.position.x
-        let rectAmaxX = rectA.position.x + rectA.width;
-        let rectBminX = rectB.position.x;
-        let rectBmaxX = rectB.position.x + rectB.width;
-        //y
-        let rectAminY = rectA.position.y
-        let rectAmaxY = rectA.position.y + rectA.height;
-        let rectBminY = rectB.position.y;
-        let rectBmaxY = rectB.position.y + rectB.height;
-
-        if ((rectAmaxX > rectBminX) 
-            && (rectAminX <= rectBmaxX)
-            && (rectAmaxY > rectBminY)
-            && (rectAminY <= rectBmaxY)
-        ) {
+        const xRangesIntersecting = MathUtils.rangesIntersect(
+            rectA.position.x,
+            rectA.position.x + rectA.width,
+            rectB.position.x,
+            rectB.position.x + rectB.width,
+        );
+        const yRangesIntersecting = MathUtils.rangesIntersect(
+            rectA.position.y,
+            rectA.position.y + rectA.height,
+            rectB.position.y,
+            rectB.position.y + rectB.height,
+        );
+        if (xRangesIntersecting && yRangesIntersecting) {
             return true;
         }
+
         return false;
     }
     
     function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
+
+
         return false;
     }
 }
