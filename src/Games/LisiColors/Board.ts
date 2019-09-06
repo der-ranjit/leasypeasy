@@ -59,7 +59,7 @@ export class Board extends RenderObject {
         this.checkForSameField();
     }
 
-    public draw() {
+    public drawShape() {
 
     }
 

@@ -10,6 +10,9 @@ export abstract class Shape extends RenderObject {
     public onBoundaryCollision$ = new Subject<void>();
     public controls: null | (() => void) = null;
     
+    public isColliding = false;
+    public collisions: Shape[] = [];
+
     public checkBoundaries = true;
     public gravityEnabled = false;
 
@@ -21,6 +24,8 @@ export abstract class Shape extends RenderObject {
     protected gravityVector = new Vector2D(0, 0);
     
     private defaultGravity = new Vector2D(0, 0.1);
+    private creationFill: Color;
+    private creationStroke: Color;
 
     constructor(
         public position: Point,
@@ -30,11 +35,14 @@ export abstract class Shape extends RenderObject {
         lineWidth: number
     ) {
         super(renderer, fillColor, strokeColor, lineWidth);
+        this.creationFill = fillColor; 
+        this.creationStroke = strokeColor; 
     }
 
 
     public abstract centerArountPoint(point: Point): void;
-    public abstract updateShape(delta: number): void;
+    protected abstract drawShape(delta: number): void;
+    protected abstract updateShape(delta: number): void;
     protected abstract gravitateTo(circle: Circle): Vector2D;
 
     public update(delta: number) {
@@ -50,6 +58,15 @@ export abstract class Shape extends RenderObject {
         this.velocity.add(this.acceleration);
         this.move(this.velocity);
         this.updateShape(delta);
+    }
+
+    public draw(delta: number) {
+        if (this.collisions.length > 0) {
+            this.setColor(Color.RED);
+        } else {
+            this.setColor(this.creationFill, this.creationStroke);
+        }
+        this.drawShape(delta);
     }
 
     public move(vector: Vector2D) {

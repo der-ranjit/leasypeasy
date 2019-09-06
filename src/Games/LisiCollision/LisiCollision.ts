@@ -54,21 +54,4 @@ export const LisiCollision = (renderer: Renderer) => {
         controlledIndex = (controlledIndex + 1) % controllables.length;
     });
 
-    const collisionColor = Color.RED;
-    renderer.onLoopEnd$.subscribe(() => {
-        const isCollidingCircles = Collision.isColliding(circle1, circle2);
-        let color = isCollidingCircles ? collisionColor : circlesColor;
-        circle1.setColor(color, Color.BLACK);
-        circle2.setColor(color, Color.BLACK);
-        
-        const isCollidingRectangles = Collision.isColliding(rect1, rect2);
-        color = isCollidingRectangles ? collisionColor : rectsColor;
-        rect1.setColor(color, Color.BLACK);
-        rect2.setColor(color, Color.BLACK);
-        
-        const isCollidingCircleRectangle = Collision.isColliding(circle3, rect3);
-        color = isCollidingCircleRectangle ? collisionColor : circleRectColor;
-        circle3.setColor(color, Color.BLACK);
-        rect3.setColor(color, Color.BLACK);
-    });
 }

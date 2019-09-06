@@ -5,7 +5,7 @@ import { Rectangle } from "./Shapes/Rectangle";
 import { MathUtils } from "./MathUtils";
 
 export namespace Collision {
-    export function isColliding(shapeA: Shape, shapeB: Shape) {
+    export function isColliding(shapeA: Shape, shapeB: Shape): boolean {
         if (shapeA instanceof Circle && shapeB instanceof Circle) {
             return decideCircleCollision(shapeA, shapeB);
         }
@@ -19,6 +19,8 @@ export namespace Collision {
         } else if (shapeA instanceof Circle && shapeB instanceof Rectangle ) {
             return decideCircleRectangleCollision(shapeA, shapeB);
         }
+
+        return false;
     }
 
 

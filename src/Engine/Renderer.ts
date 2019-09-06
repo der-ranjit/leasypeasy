@@ -2,6 +2,8 @@ import { Subject } from "rxjs";
 import { RenderObject } from "./RenderObject";
 import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
 import { Shape } from "./Shapes/Shape.abstract";
+import { Collision } from "./Collision";
+import { Color } from "./Color";
 
 export class Renderer {
     public onLoopStart$ = new Subject<RenderObject[]>(); 
@@ -80,10 +82,12 @@ export class Renderer {
 
                 // collision detection
                 this.onCollisionDetection$.next(zIndexSortedRenderObjects);
-                for (const object of zIndexSortedRenderObjects) {
-                    if ((<Shape>object).checkBoundaries) {
+                const collisionObjects = zIndexSortedRenderObjects.filter(object => object instanceof Shape);
+                collisionObjects.forEach(object => (<Shape>object).collisions = []);
+                collisionObjects.forEach((object, index) => {
+                    if (object instanceof Shape && object.checkBoundaries) {
                         CollisionResolver.checkAndResolveBoundaries(
-                            object as Shape,
+                            object,
                             {
                                 left: 0,
                                 top: 0,
@@ -91,11 +95,25 @@ export class Renderer {
                                 bottom: this.context.canvas.height
                             }
                         );
+                        for (let j = index + 1; j < zIndexSortedRenderObjects.length; j++) {
+                            let objectA = object;
+                            let objectB = zIndexSortedRenderObjects[j];
+                            if (objectA && objectB instanceof Shape) {
+                                let isColliding = Collision.isColliding(objectA, objectB);
+                                // TODO create proper information object about collision participants
+                                if (isColliding) {
+                                    objectA.collisions.push(objectB);
+                                    objectB.collisions.push(objectA);
+                                }
+                            }
+                        }
                     }
-                }
+                });
             } else {
                 this.context.strokeText("PAUSED", 10, 10);
             }
+
+            // draw
             this.onDraw$.next(zIndexSortedRenderObjects);
             for (const object of zIndexSortedRenderObjects) {
                 object.draw(delta);

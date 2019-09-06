@@ -21,7 +21,7 @@ export class Rectangle extends Shape {
     public updateShape(delta: number) {
     }
 
-    public draw(delta: number) {
+    public drawShape(delta: number) {
         this.context.save();
 
         this.context.fillStyle = this.fillColor.toString();

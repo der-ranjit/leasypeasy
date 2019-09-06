@@ -24,7 +24,7 @@ export class Circle extends Shape {
 
     }
     
-    public draw(delta: number) {
+    public drawShape(delta: number) {
         this.drawCircle();
 
         if (this.showVelocityIndicator) {
