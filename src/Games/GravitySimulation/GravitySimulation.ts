@@ -108,6 +108,10 @@ export class GravitySimulation extends Game {
             circle.gravityEnabled = gravityEnabled;
             circle.showVelocityIndicator = showVelocityIndicator;
             circle.showStats = showStats;
+            const speed = MathUtils.randomInt(1, 5);
+            const angle = MathUtils.degreesToRadian(MathUtils.randomInt(1, 360));
+            circle.velocity.setLength(speed);
+            circle.velocity.setAngle(angle);
             this.circles.push(circle);
         }
         
