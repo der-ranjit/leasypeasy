@@ -7,13 +7,13 @@ import { Point } from "../../Engine/Geometry";
 import { Player } from "../Shooter/Player";
 import { Game } from "../Game.abstract";
 
-export class Platformer extends Game {
-    public name = "platformz aiiight";
+export class Fountains extends Game {
+    public name = "fountains ma bois";
     public started = false;
 
     private destroyed$ = new Subject<void>();
 
-    private players: Player[] = [];
+    private fountains: Player[] = [];
 
     constructor(renderer: Renderer) {
         super(renderer);
@@ -26,10 +26,10 @@ export class Platformer extends Game {
 
     public destroy() {
         this.destroyed$.next();
-        for (const player of this.players) {
+        for (const player of this.fountains) {
             player.destroy();
         }
-        this.players = [];
+        this.fountains = [];
         this.started = false;
     }
 
@@ -37,14 +37,19 @@ export class Platformer extends Game {
         this.canvas.width = 1200;
         this.canvas.height = 600;
 
+        const fountainCount = 5;
+        for (let i = 0; i < fountainCount; i++) {
+            this.createFountain(i);
+        }
 
         this.controls.onKeyDown("Enter").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            this.createFountain(this.fountains.length);
         });
     }
 
-    private createPlayer(i: number) {
-        const player = new Player(
-            "Player " + i,
+    private createFountain(i: number) {
+        const fountain = new Player(
+            "Fountain " + i,
             new Point(
                 MathUtils.randomInt(20, this.canvas.width - 20),
                 MathUtils.randomInt(20, this.canvas.height - 20),
@@ -52,11 +57,11 @@ export class Platformer extends Game {
             Color.RANDOM_COLOR, Color.RANDOM_COLOR,
             this.renderer
         );
-        player.circle.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
-        this.players.push(player);
+        fountain.circle.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
+        this.fountains.push(fountain);
         this.renderer.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
-            player.circle.velocity.rotate(i % 2 === 0 ? 3 : -3);
-            player.shoot();
+            fountain.circle.velocity.rotate(i % 2 === 0 ? 3 : -3);
+            fountain.shoot();
         });
     }
 }

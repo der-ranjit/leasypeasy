@@ -8,6 +8,7 @@ import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter/Shooter";
 import { Platformer } from "./Games/Platformer/Platformer";
 import { Game } from "./Games/Game.abstract";
+import { Fountains } from "./Games/Fountains/Fountains";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -24,6 +25,7 @@ const main = () => {
             // Shooter(renderer);
             
             const games = [
+                new Fountains(renderer),
                 new Platformer(renderer),
                 new GravitySimulation(renderer)
             ];
@@ -34,7 +36,7 @@ const main = () => {
             renderer.onLoopEnd$.subscribe(_ => {
                 if (!activeGame) {
                     games.forEach((game, i) => {
-                        renderer.context.strokeText((game === games[selectedGameIndex] ? '>' : '') + game.name, 100, 50 + 30 * i);
+                        renderer.context.strokeText((game === games[selectedGameIndex] ? '> ' : '') + game.name, 100, 50 + 30 * i);
                     });
                 }
             })

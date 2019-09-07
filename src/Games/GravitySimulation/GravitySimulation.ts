@@ -7,7 +7,7 @@ import { Circle, Vector2D, Point } from "../../Engine/Geometry";
 import { Game } from "../Game.abstract";
 
 export class GravitySimulation extends Game {
-    public name = "Gravity bitches";
+    public name = "gravity b1tches";
     public started = false;
 
     private destroyed$ = new Subject<void>();
