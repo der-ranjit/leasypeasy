@@ -1,4 +1,5 @@
-import { Renderer, Controls } from "../Engine";
+import { Renderer } from "../Engine";
+import { Controls } from "../Engine/utils";
 
 export abstract class Game {
     public abstract name: string;

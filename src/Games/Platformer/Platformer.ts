@@ -1,8 +1,11 @@
-import { Renderer, Controls, Point, Color, MathUtils } from "../../Engine";
-import { PlayerControls, Player } from "../Shooter/Player";
-import { Game } from "../Game.abstract";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { Renderer } from "../../Engine";
+import { Color, MathUtils } from "../../Engine/utils";
+import { Point } from "../../Engine/Geometry";
+import { Player } from "../Shooter/Player";
+import { Game } from "../Game.abstract";
 
 export class Platformer extends Game {
     public name = "fountains ma bois";

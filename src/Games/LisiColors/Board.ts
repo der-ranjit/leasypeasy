@@ -1,10 +1,7 @@
-import { Circle, Rectangle, Square } from "../../Engine/Shapes";
-import { Color, Controls, Point, Renderer, MathUtils } from "../../Engine";
+import { Renderer, RenderObject } from "../../Engine";
+import { Circle, Rectangle, Square, ShapeType,  Point } from "../../Engine/Geometry";
+import { Color, Controls, MathUtils } from "../../Engine/utils";
 import { ShapedPiece } from "./ShapedPiece";
-
-// TODO cleanup and remove classes
-import { RenderObject } from "../../Engine/RenderObject";
-import { ShapeType } from "../../Engine/Shapes/shapeType";
 
 export class BoardField {
     private rectangle!: Rectangle;

@@ -1,10 +1,7 @@
-import { Point } from "./Point";
-import { Shape } from "./Shapes/Shape.abstract";
-import { Circle } from "./Shapes/Circle";
-import { Rectangle } from "./Shapes/Rectangle";
-import { MathUtils } from "./MathUtils";
+import { Point, Shape, Circle, Rectangle } from "../Geometry";
+import { MathUtils } from "../utils";
 
-export namespace Collision {
+export namespace CollisionDetector {
     export function isColliding(shapeA: Shape, shapeB: Shape): boolean {
         if (shapeA instanceof Circle && shapeB instanceof Circle) {
             return decideCircleCollision(shapeA, shapeB);

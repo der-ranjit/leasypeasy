@@ -1,5 +1,7 @@
+import { Renderer } from "../../Engine";
+import { Color } from "../../Engine/utils";
+import { Point } from "../../Engine/Geometry";
 import { debounce } from "../../Utils";
-import { Color, Renderer, Point } from "../../Engine";
 import { Board } from "./Board";
 
 export const LisiColors = (renderer: Renderer) => {

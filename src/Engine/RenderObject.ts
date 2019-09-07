@@ -1,5 +1,5 @@
 import { Renderer } from "./Renderer";
-import { Color } from "./Color";
+import { Color } from "./utils";
 
 export abstract class RenderObject {
     public shouldBeDrawn = true;

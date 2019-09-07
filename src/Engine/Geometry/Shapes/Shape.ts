@@ -1,10 +1,14 @@
 import { Subject } from "rxjs";
-import { Renderer } from "../Renderer";
-import { RenderObject } from "../RenderObject";
-import { Color } from "../Color";
+import { Color } from "../../utils";
+import { Renderer } from "../../Renderer";
+import { RenderObject } from "../../RenderObject";
 import { Point } from "../Point";
 import { Vector2D } from "../Vector2D";
 import { Circle } from "./Circle";
+import { Square } from "./Square";
+import { Rectangle } from "./Rectangle";
+
+export type ShapeType = typeof Circle | typeof Square | typeof Rectangle;
 
 export abstract class Shape extends RenderObject {
     public onBoundaryCollision$ = new Subject<void>();

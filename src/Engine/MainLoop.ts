@@ -1,35 +1,44 @@
-export namespace MainLoop {
-    const gameObjects = [];
-}
-
-
 import { Subject } from "rxjs";
-import { RenderObject } from "./RenderObject";
-import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
-import { Shape } from "./Shapes/Shape.abstract";
-import { Collision } from "./Collision";
-import { Color } from "./Color";
+import { BoundaryRect, isCollidable, Collidable, Collision } from "./Collision";
+import { isDrawable, Drawable, Renderer } from "./Renderer";
+import { isPhysicObject, PhysicObject, Physics } from "./Physics";
+import { GameObject } from "./GameObject";
 
-export class Renderer {
-    public onLoopStart$ = new Subject<RenderObject[]>(); 
-    public onUpdate$ = new Subject<RenderObject[]>();
-    public onCollisionDetection$ = new Subject<RenderObject[]>();
-    public onDraw$ = new Subject<RenderObject[]>();
-    public onLoopEnd$ = new Subject<void>();
-    
+
+export class MainLoop {
+    public onLoopStart$ = new Subject<GameObject[]>(); 
+    public onUpdate$ = new Subject<GameObject[]>();
+    public onPhysics$ = new Subject<PhysicObject[]>();
+    public onCollisionDetection$ = new Subject<Collidable[]>();
+    public onRender$ = new Subject<Drawable[]>();
+    public onLoopEnd$ = new Subject<GameObject[]>();
+
+    public renderer: Renderer;
+
     public get isRunning(): boolean {
         return this.started;
     }
-
-    private renderObjects: RenderObject[] = [];
+    
     private started = false;
-    private lastRenderTimestamp = 0;
+    private lastLoopTimestamp = 0;
 
-    constructor(public context: CanvasRenderingContext2D) {
+    private gameObjects: GameObject[] = [];
+    private canvasBoundaries: BoundaryRect = {
+        left: 0,
+        top: 0,
+        right: this.renderer.context.canvas.width,
+        bottom: this.renderer.context.canvas.height
+    }
+
+    constructor(context: CanvasRenderingContext2D) {
+        this.renderer = new Renderer(context);
         this.start();
     }
 
-    
+    public togglePause() {
+        this.started = !this.started;
+    }
+
     public unpause() {
         this.started = true;
     }
@@ -38,95 +47,61 @@ export class Renderer {
         this.started = false;
     }
     
-    public addRenderObject(renderObject: RenderObject) {
-        this.renderObjects.push(renderObject);
+    public addGameObject(gameObject: GameObject) {
+        this.gameObjects.push(gameObject);
     }
     
-    public removeRenderObject(renderObject: RenderObject) {
-        const index = this.renderObjects.indexOf(renderObject);
+    public removeGameObject(gameObject: GameObject) {
+        const index = this.gameObjects.indexOf(gameObject);
         if (index !== -1) {
-            this.renderObjects.splice(index, 1);
+            this.gameObjects.splice(index, 1);
         }
     }
 
-    public removeAllRenderObjects() {
-        this.renderObjects.forEach(renderObject => {
-            renderObject.destroy();
+    public removeAllGameObjects() {
+        this.gameObjects.forEach(gameObject => {
+            gameObject.destroy();
         })
-        this.renderObjects = [];
+        this.gameObjects = [];
     }
     
     private start() {
         this.started = true;
-        this.lastRenderTimestamp = Date.now();
+        this.lastLoopTimestamp = Date.now();
         this.loop();
     }
 
     private loop() {
         requestAnimationFrame(() => {
-            // TODO: refactor:
-            // delta_t = ...
-            // let z = physics.calculate(delta_t);
-            // z = collision.correct(z);
-            // z.updatePositions();
-            // renderer.draw();
-            // 
-            const zIndexSortedRenderObjects = this.renderObjects.sort((a, b) => {
-                return a.zIndex - b.zIndex;
-            });
-            this.onLoopStart$.next(zIndexSortedRenderObjects);
+            this.onLoopStart$.next(this.gameObjects);
+            const delta = Date.now() - this.lastLoopTimestamp;
             
-            const delta = Date.now() - this.lastRenderTimestamp;
-            this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
-
             if (this.started) {
-                this.onUpdate$.next(zIndexSortedRenderObjects);
-                for (const object of zIndexSortedRenderObjects) {
+                this.onUpdate$.next();
+                for (const object of this.gameObjects) {
                     object.update(delta);
                 }
 
-                // collision detection
-                this.onCollisionDetection$.next(zIndexSortedRenderObjects);
-                const collisionObjects = zIndexSortedRenderObjects.filter(object => object instanceof Shape);
-                collisionObjects.forEach(object => (<Shape>object).collisions = []);
-                collisionObjects.forEach((object, index) => {
-                    if (object instanceof Shape && object.checkBoundaries) {
-                        CollisionResolver.checkAndResolveBoundaries(
-                            object,
-                            {
-                                left: 0,
-                                top: 0,
-                                right: this.context.canvas.width,
-                                bottom: this.context.canvas.height
-                            }
-                        );
-                        for (let j = index + 1; j < collisionObjects.length; j++) {
-                            let objectA = object;
-                            let objectB = collisionObjects[j];
-                            if (objectA && objectB instanceof Shape) {
-                                let isColliding = Collision.isColliding(objectA, objectB);
-                                // TODO create proper information object about collision participants
-                                if (isColliding) {
-                                    objectA.collisions.push(objectB);
-                                    objectB.collisions.push(objectA);
-                                }
-                            }
-                        }
-                    }
-                });
+                const physicObjects = this.gameObjects.filter(object => isPhysicObject(object)) as unknown as PhysicObject[];
+                this.onPhysics$.next(physicObjects);
+                Physics.applyPhysics(physicObjects, delta);
+
+                const collisionObjects = this.gameObjects.filter(object => isCollidable(object)) as unknown as Collidable[];
+                this.onCollisionDetection$.next(collisionObjects);
+                Collision.detectAndResolveCollisions(collisionObjects, this.canvasBoundaries);
             } else {
-                this.context.strokeText("PAUSED", 10, 10);
+                this.renderer.context.strokeText("PAUSED", 10, 10);
             }
 
-            // draw
-            this.onDraw$.next(zIndexSortedRenderObjects);
-            for (const object of zIndexSortedRenderObjects) {
-                object.draw(delta);
-            }
+            const drawableObjects = this.gameObjects.filter(object => isDrawable(object)) as unknown as Drawable[];
+            this.onRender$.next(drawableObjects);
+            this.renderer.draw(drawableObjects, delta);
             
-            this.onLoopEnd$.next();
-            this.lastRenderTimestamp = Date.now();
+            this.onLoopEnd$.next(this.gameObjects);
+            this.lastLoopTimestamp = Date.now();
             this.loop();
         });
     }
 }
+
+

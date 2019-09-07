@@ -1,7 +1,6 @@
-import { Color, MathUtils, Point, Renderer } from "../../Engine";
-import { Circle, Square } from "../../Engine/Shapes";
-import { Shape } from "../../Engine/Shapes/Shape.abstract";
-import { ShapeType } from "../../Engine/Shapes/shapeType";
+import { Renderer } from "../../Engine";
+import { Color, MathUtils } from "../../Engine/utils";
+import { Circle, Point, Square, Shape, ShapeType } from "../../Engine/Geometry";
 
 import { Board } from "./Board";
 

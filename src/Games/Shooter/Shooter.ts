@@ -1,4 +1,7 @@
-import { Color, Controls, Point, Renderer } from "../../Engine";
+import { Renderer } from "../../Engine";
+import { Color, Controls } from "../../Engine/utils";
+import { Point } from "../../Engine/Geometry";
+
 import { PlayerControls, Player } from "./Player";
 
 export const Shooter = (renderer: Renderer) => {

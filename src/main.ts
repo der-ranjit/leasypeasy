@@ -1,11 +1,11 @@
 import { Renderer } from "./Engine/Renderer";
+import { Controls } from "./Engine/utils";
 
 import { LisiColors } from "./Games/LisiColors/LisiColors";
 import { LisiCollision } from "./Games/LisiCollision/LisiCollision";
 import { GravitySimulation } from "./Games/GravitySimulation/GravitySimulation";
 import { mixinTest } from "./Games/mixinTest";
 import { Shooter } from "./Games/Shooter/Shooter";
-import { Controls } from "./Engine";
 import { Platformer } from "./Games/Platformer/Platformer";
 import { Game } from "./Games/Game.abstract";
 

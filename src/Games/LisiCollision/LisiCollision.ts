@@ -1,7 +1,6 @@
-import { Collision, Color, Controls, Point, Renderer } from "../../Engine";
-import { Circle, Rectangle } from "../../Engine/Shapes";
-import { Shape } from "../../Engine/Shapes/Shape.abstract";
-import { Vector2D } from "../../Engine/Vector2D";
+import { Renderer } from "../../Engine";
+import { Color, Controls } from "../../Engine/utils";
+import { Circle, Rectangle, Point, Shape, Vector2D } from "../../Engine/Geometry";
 
 
 export const LisiCollision = (renderer: Renderer) => {

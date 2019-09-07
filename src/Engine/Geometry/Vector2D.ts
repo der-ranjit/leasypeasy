@@ -1,5 +1,5 @@
 import { Point } from "./Point";
-import { MathUtils } from "./MathUtils";
+import { MathUtils } from "../utils";
 
 export class Vector2D {
     public static fromAngle(radian: number): Vector2D {

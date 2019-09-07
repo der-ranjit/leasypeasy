@@ -1,5 +1,5 @@
-import { Shape } from "./Shapes/Shape.abstract";
-import { Rectangle, Circle } from "./Shapes";
+import { Shape } from "../Geometry/Shapes";
+import { Rectangle, Circle } from "../Geometry/Shapes";
 
 export interface BoundaryRect {
      left: number;

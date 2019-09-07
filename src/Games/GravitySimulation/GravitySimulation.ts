@@ -1,9 +1,10 @@
-import { Color, Point, Renderer, MathUtils } from "../../Engine";
-import { Circle } from "../../Engine/Shapes";
-import { Vector2D } from "../../Engine/Vector2D";
-import { Game } from "../Game.abstract";
 import { Subject, fromEvent } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { Renderer } from "../../Engine";
+import { Color, MathUtils } from "../../Engine/utils";
+import { Circle, Vector2D, Point } from "../../Engine/Geometry";
+import { Game } from "../Game.abstract";
 
 export class GravitySimulation extends Game {
     public name = "Gravity bitches";

@@ -1,4 +1,4 @@
-import { MathUtils } from "./Engine/MathUtils";
+import { MathUtils } from "./Engine/utils/MathUtils";
 
 export function executeRandomly(functionsArray: Function[]) {
     const length = functionsArray.length;

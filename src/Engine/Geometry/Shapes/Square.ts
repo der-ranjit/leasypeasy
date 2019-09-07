@@ -1,5 +1,5 @@
-import { Renderer } from "../Renderer";
-import { Color } from "../Color";
+import { Color } from "../../utils";
+import { Renderer } from "../../Renderer";
 import { Point } from "../Point";
 import { Rectangle } from "./Rectangle";
 

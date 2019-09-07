@@ -1,9 +1,17 @@
 import { Subject } from "rxjs";
 import { RenderObject } from "./RenderObject";
-import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
-import { Shape } from "./Shapes/Shape.abstract";
-import { Collision } from "./Collision";
-import { Color } from "./Color";
+import { Shape, Point } from "./Geometry";
+import { CollisionDetector, CollisionResolver } from "./Collision";
+
+export interface Drawable {
+    zIndex: number;
+    position: Point;
+    draw(delta: number): void;
+}
+
+export function isDrawable(object: any): object is Drawable {
+    return (object as Drawable).draw !== undefined && typeof (object as Drawable).draw === "function";
+}
 
 export class Renderer {
     public onLoopStart$ = new Subject<RenderObject[]>(); 
@@ -24,7 +32,17 @@ export class Renderer {
         this.start();
     }
 
-    
+    public draw(drawables: Drawable[], delta: number) {
+        this.context.clearRect(0 , 0, this.context.canvas.width, this.context.canvas.height);
+        const zIndexSortedRenderObjects =drawables.sort((a, b) => {
+            return a.zIndex - b.zIndex;
+        });
+        for (const object of zIndexSortedRenderObjects) {
+            object.draw(delta);
+        }
+    }
+
+
     public unpause() {
         this.started = true;
     }
@@ -99,7 +117,7 @@ export class Renderer {
                             let objectA = object;
                             let objectB = collisionObjects[j];
                             if (objectA && objectB instanceof Shape) {
-                                let isColliding = Collision.isColliding(objectA, objectB);
+                                let isColliding = CollisionDetector.isColliding(objectA, objectB);
                                 // TODO create proper information object about collision participants
                                 if (isColliding) {
                                     objectA.collisions.push(objectB);

@@ -1,8 +1,8 @@
-import { Renderer } from "../Renderer";
+import { Color } from "../../utils";
+import { Renderer } from "../../Renderer";
 import { Point } from "../Point";
-import { Color } from "../Color";
-import { Shape } from "./Shape.abstract";
 import { Vector2D } from "../Vector2D";
+import { Shape } from "./Shape";
 
 export class Circle extends Shape {
     public showVelocityIndicator = false; 

@@ -1,8 +1,10 @@
-import { Point, Color, Renderer, Controls, Collision } from "../../Engine";
-import { Circle } from "../../Engine/Shapes";
-import { Vector2D } from "../../Engine/Vector2D";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { Renderer } from "../../Engine";
+import { CollisionDetector } from "../../Engine/Collision";
+import { Color, Controls } from "../../Engine/utils";
+import { Point, Circle, Vector2D } from "../../Engine/Geometry";
 
 export interface PlayerControls {
     up: string;
@@ -92,7 +94,7 @@ export class Player {
 
     private checkBulletHit(player: Player) {
         this.bullets.forEach(bullet => {
-            if (Collision.isColliding(bullet, player.circle)) {
+            if (CollisionDetector.isColliding(bullet, player.circle)) {
                 this.onHit$.next(player);
                 this.destroyBullet(bullet);
             }
