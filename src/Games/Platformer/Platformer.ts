@@ -1,9 +1,9 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { Renderer } from "../../Engine";
+import { Renderer, RenderObject } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
-import { Point } from "../../Engine/Geometry";
+import { Point, Square, Circle, Vector2D } from "../../Engine/Geometry";
 import { Player } from "../Shooter/Player";
 import { Game } from "../Game.abstract";
 
@@ -13,7 +13,9 @@ export class Platformer extends Game {
 
     private destroyed$ = new Subject<void>();
 
-    private players: Player[] = [];
+    private objects: RenderObject[] = [];
+
+    private player: Circle | null = null;
 
     constructor(renderer: Renderer) {
         super(renderer);
@@ -25,38 +27,52 @@ export class Platformer extends Game {
     }
 
     public destroy() {
-        this.destroyed$.next();
-        for (const player of this.players) {
-            player.destroy();
+        for (const renderObject of this.objects) {
+            renderObject.destroy();
         }
-        this.players = [];
+        this.objects = [];
         this.started = false;
+        this.destroyed$.next();
     }
 
     private mainScript() {
         this.canvas.width = 1200;
         this.canvas.height = 600;
 
-
-        this.controls.onKeyDown("Enter").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+        this.player = this.createPlayer();
+        const player = this.player;
+        const movementVector = new Vector2D(5, 0);
+        const jumpVector = new Vector2D(0, 20);
+        this.renderer.onLoopStart$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            if (this.controls.isKeyPressed("ArrowRight")) {
+                // player.velocity.setAngle(MathUtils.degreesToRadian(0));
+                // player.velocity.setLength(10);
+                player.velocity.add(movementVector);
+            }
+            if (this.controls.isKeyPressed("ArrowLeft")) {
+                // player.velocity.setAngle(MathUtils.degreesToRadian(180));
+                // player.velocity.setLength(10);
+                player.velocity.add(Vector2D.from(movementVector).scale(-1));
+            }
+        });
+        
+        this.controls.onKeyDown(" ").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+            player.velocity.setAngle(MathUtils.degreesToRadian(270));
+            player.velocity.setLength(25);
+            // player.velocity.add(jumpVector);
+            // player.velocity.setLength(50);
         });
     }
 
-    private createPlayer(i: number) {
-        const player = new Player(
-            "Player " + i,
-            new Point(
-                MathUtils.randomInt(20, this.canvas.width - 20),
-                MathUtils.randomInt(20, this.canvas.height - 20),
-            ),
-            Color.RANDOM_COLOR, Color.RANDOM_COLOR,
-            this.renderer
-        );
-        player.circle.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
-        this.players.push(player);
-        this.renderer.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
-            player.circle.velocity.rotate(i % 2 === 0 ? 3 : -3);
-            player.shoot();
+    private createPlayer() {
+        const player = new Circle(new Point(200, 200), 20, this.renderer, Color.RED, Color.BLACK);
+        player.velocity = new Vector2D(0, 0);
+        player.gravityEnabled = true;
+        // player.showStats = true;
+        player.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            player.velocity.scale(0.5);
         });
+        this.objects.push(player);
+        return player;
     }
 }
