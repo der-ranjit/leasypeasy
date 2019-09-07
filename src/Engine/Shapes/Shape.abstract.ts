@@ -12,6 +12,7 @@ export abstract class Shape extends RenderObject {
     
     public isColliding = false;
     public collisions: Shape[] = [];
+    public indicateCollision = true;
 
     public checkBoundaries = true;
     public gravityEnabled = false;
@@ -61,10 +62,12 @@ export abstract class Shape extends RenderObject {
     }
 
     public draw(delta: number) {
-        if (this.collisions.length > 0) {
-            this.setColor(Color.RED);
-        } else {
-            this.setColor(this.creationFill, this.creationStroke);
+        if (this.indicateCollision) {
+            if (this.collisions.length > 0) {
+                this.setColor(Color.RED);
+            } else {
+                this.setColor(this.creationFill, this.creationStroke);
+            }
         }
         this.drawShape(delta);
     }

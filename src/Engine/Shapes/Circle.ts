@@ -47,7 +47,7 @@ export class Circle extends Shape {
         const gravity = new Vector2D(0, 0);
         
         let distance = Point.distanceBetween(this.position, circle.position);
-        const radii = this.radius + circle.radius;
+        const radii = circle.radius;
         if (distance < radii) {
             distance = radii;
         }

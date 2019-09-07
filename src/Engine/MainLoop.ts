@@ -1,3 +1,8 @@
+export namespace MainLoop {
+    const gameObjects = [];
+}
+
+
 import { Subject } from "rxjs";
 import { RenderObject } from "./RenderObject";
 import { CollisionResolver, BoundaryRect } from "./CollisionResolver";
