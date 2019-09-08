@@ -1,7 +1,7 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { CollisionDetector } from "../../Engine/Collision";
 import { Color, Controls } from "../../Engine/utils";
 import { Point, Circle, Vector2D } from "../../Engine/Geometry";
@@ -43,15 +43,19 @@ export class Player {
         public startPosition: Point,
         public playerColor: Color,
         public bulletColor: Color,
-        private renderer: Renderer,
+        private mainLoop: MainLoop,
         playerControls = defaultControls
     ) {
-        this.circle = new Circle(startPosition, this.playerRadius, this.renderer, this.playerColor)
+        this.circle = new Circle(startPosition, this.playerRadius, this.mainLoop, {
+            fillColor: this.playerColor,
+            strokeColor: Color.BLACK,
+            lineWidth: 1
+        });
         this.circle.showVelocityIndicator = true;
 
         this.setControlScheme(playerControls);
 
-        this.renderer.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+        this.mainLoop.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.checkOppenentsHit();
         })
     }
@@ -72,7 +76,11 @@ export class Player {
     }
 
     private createBullet() {
-        let bullet = new Circle(this.circle.position, this.bulletRadius, this.renderer, this.bulletColor);
+        let bullet = new Circle(this.circle.position, this.bulletRadius, this.mainLoop, {
+            fillColor: this.playerColor,
+            strokeColor: Color.BLACK,
+            lineWidth: 1
+        });
         bullet.velocity = Vector2D.from(this.circle.velocity).setLength(this.bulletSpeed);
         bullet.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.destroyBullet(bullet);

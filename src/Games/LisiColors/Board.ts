@@ -1,4 +1,4 @@
-import { Renderer, RenderObject } from "../../Engine";
+import { MainLoop, GameObject } from "../../Engine";
 import { Circle, Rectangle, Square, ShapeType,  Point } from "../../Engine/Geometry";
 import { Color, Controls, MathUtils } from "../../Engine/utils";
 import { ShapedPiece } from "./ShapedPiece";
@@ -16,7 +16,7 @@ export class BoardField {
     ) {}
 }
 
-export class Board extends RenderObject {
+export class Board extends GameObject {
     public field: Array<Square[]>;
     public get totalWidth(): number {
         return this.columns * this.fieldWidth;
@@ -44,9 +44,13 @@ export class Board extends RenderObject {
         public position: Point,
         public fieldColor: Color,
         public fieldOutlineColor: Color,
-        renderer: Renderer
+        mainLoop: MainLoop
     ) {
-        super(renderer, Color.BLACK, Color.BLACK, 1);
+        super(mainLoop, {
+            fillColor: Color.BLACK,
+            strokeColor: Color.BLACK,
+            lineWidth: 1
+        });
         this.field = this.createBoard(columns, rows);
 
         this.initControls();
@@ -71,7 +75,11 @@ export class Board extends RenderObject {
                     this.position.x + x * this.fieldWidth,
                     this.position.y + y * this.fieldHeight
                 );
-                field[x][y] = new Square(position, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor); 
+                field[x][y] = new Square(position, this.fieldWidth, this.mainLoop, {
+                    fillColor: this.fieldColor,
+                    strokeColor: this.fieldOutlineColor,
+                    lineWidth: 1
+                }); 
             }   
         }
         return field;
@@ -102,7 +110,11 @@ export class Board extends RenderObject {
                 0 + column * this.fieldWidth,
                 0 + row * this.fieldHeight,
             )
-            this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor)
+            this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.mainLoop, {
+                fillColor: this.fieldColor,
+                strokeColor: this.fieldOutlineColor,
+                lineWidth: 1
+            });
         } else {
             this.field[column][row].destroy();
             this.field[column][row] = <any>null;
@@ -114,7 +126,11 @@ export class Board extends RenderObject {
             const lastSquareIndex = this.field[x].length - 1;
             const lastSquare = this.field[x][lastSquareIndex];
             const position = new Point(lastSquare.position.x, lastSquare.position.y + this.fieldHeight);
-            this.field[x].push(new Square(position, this.fieldWidth, this.renderer, this.fieldColor, this.fieldOutlineColor));
+            this.field[x].push(new Square(position, this.fieldWidth, this.mainLoop, {
+                fillColor: this.fieldColor,
+                strokeColor: this.fieldOutlineColor,
+                lineWidth: 1
+            }));
         }
         this.rows++;
     }
@@ -179,7 +195,7 @@ export class Board extends RenderObject {
         zIndex = 1
     ): ShapedPiece {
         const position = this.getCenterOfField(column, row);
-        const piece = new ShapedPiece(this.renderer, this, position, width, fillColor, strokeColor, lineWidth, shapeType, zIndex);
+        const piece = new ShapedPiece(this.mainLoop, this, position, width, fillColor, strokeColor, lineWidth, shapeType, zIndex);
         return piece;
     }
 

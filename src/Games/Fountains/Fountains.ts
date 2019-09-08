@@ -1,7 +1,7 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Point } from "../../Engine/Geometry";
 import { Player } from "../Shooter/Player";
@@ -15,8 +15,8 @@ export class Fountains extends Game {
 
     private fountains: Player[] = [];
 
-    constructor(renderer: Renderer) {
-        super(renderer);
+    constructor(mainLoop: MainLoop) {
+        super(mainLoop);
     }
 
     public start() {
@@ -55,11 +55,11 @@ export class Fountains extends Game {
                 MathUtils.randomInt(20, this.canvas.height - 20),
             ),
             Color.RANDOM_COLOR, Color.RANDOM_COLOR,
-            this.renderer
+            this.mainLoop
         );
         fountain.circle.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
         this.fountains.push(fountain);
-        this.renderer.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+        this.mainLoop.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             fountain.circle.velocity.rotate(i % 2 === 0 ? 3 : -3);
             fountain.shoot();
         });

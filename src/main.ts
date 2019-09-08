@@ -1,4 +1,3 @@
-import { Renderer } from "./Engine/Renderer";
 import { Controls } from "./Engine/utils";
 
 import { LisiColors } from "./Games/LisiColors/LisiColors";
@@ -9,13 +8,14 @@ import { Shooter } from "./Games/Shooter/Shooter";
 import { Platformer } from "./Games/Platformer/Platformer";
 import { Game } from "./Games/Game.abstract";
 import { Fountains } from "./Games/Fountains/Fountains";
+import { MainLoop } from "./Engine";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
     if (canvas) {
         const context = canvas.getContext("2d");
         if (context) {
-            const renderer = new Renderer(context);
+            const mainLoop = new MainLoop(context);
             const controls = Controls.getInstance();
             
             // LisiColors(renderer);
@@ -25,18 +25,18 @@ const main = () => {
             // Shooter(renderer);
             
             const games = [
-                new Fountains(renderer),
-                new Platformer(renderer),
-                new GravitySimulation(renderer)
+                new Fountains(mainLoop),
+                new Platformer(mainLoop),
+                new GravitySimulation(mainLoop)
             ];
             
             let selectedGameIndex = 0;
             let activeGame: Game | null = null;
 
-            renderer.onLoopEnd$.subscribe(_ => {
+            mainLoop.onLoopEnd$.subscribe(_ => {
                 if (!activeGame) {
                     games.forEach((game, i) => {
-                        renderer.context.strokeText((game === games[selectedGameIndex] ? '> ' : '') + game.name, 100, 50 + 30 * i);
+                        mainLoop.context.strokeText((game === games[selectedGameIndex] ? '> ' : '') + game.name, 100, 50 + 30 * i);
                     });
                 }
             })
@@ -75,12 +75,12 @@ const main = () => {
                 if (activeGame) {
                     activeGame.destroy();
                     activeGame = null;
-                    renderer.removeAllRenderObjects();
+                    mainLoop.removeAllGameObjects();
                 }
             })
             // pause
             controls.onKeyDown("p").subscribe(_ => {
-                renderer.isRunning ? renderer.pause() : renderer.unpause();
+                mainLoop.isRunning ? mainLoop.pause() : mainLoop.unpause();
             });
         }
     }

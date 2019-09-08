@@ -1,21 +1,24 @@
 import { Color } from "../../utils";
-import { Renderer } from "../../Renderer";
 import { Point } from "../Point";
 import { Vector2D } from "../Vector2D";
 import { Shape } from "./Shape";
 import { Circle } from "./Circle";
+import { MainLoop } from "../../MainLoop";
+import { DrawConfiguration } from "../../GameObject";
 
 export class Rectangle extends Shape {
     constructor (
         position: Point,
         public width: number,
         public height: number,
-        renderer: Renderer,
-        fillColor = Color.BLACK,
-        strokeColor = Color.BLACK,
-        lineWidth = 1,
+        mainLoop: MainLoop,
+        drawConfiguration: DrawConfiguration,
     ) {
-        super(position, renderer, fillColor, strokeColor, lineWidth);
+        super(position, mainLoop, {
+            fillColor: drawConfiguration.fillColor || Color.BLACK,
+            strokeColor: drawConfiguration.strokeColor || Color.BLACK,
+            lineWidth: drawConfiguration.lineWidth || 1
+        });
     }
 
     public updateShape(delta: number) {
@@ -24,9 +27,9 @@ export class Rectangle extends Shape {
     public drawShape(delta: number) {
         this.context.save();
 
-        this.context.fillStyle = this.fillColor.toString();
-        this.context.strokeStyle = this.strokeColor.toString();
-        this.context.lineWidth = this.lineWidth;
+        this.context.fillStyle = this.drawConfiguration.fillColor.toString();
+        this.context.strokeStyle = this.drawConfiguration.strokeColor.toString();
+        this.context.lineWidth = this.drawConfiguration.lineWidth;
 
         this.context.beginPath();
         this.context.fillRect(this.position.x, this.position.y, this.width, this.height);

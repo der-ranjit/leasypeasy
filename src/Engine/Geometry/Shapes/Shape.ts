@@ -1,21 +1,20 @@
 import { Subject } from "rxjs";
 import { Color } from "../../utils";
-import { Renderer } from "../../Renderer";
-import { RenderObject } from "../../RenderObject";
 import { Point } from "../Point";
 import { Vector2D } from "../Vector2D";
 import { Circle } from "./Circle";
 import { Square } from "./Square";
 import { Rectangle } from "./Rectangle";
+import { MainLoop } from "../../MainLoop";
+import { GameObject, DrawConfiguration } from "../../GameObject";
 
 export type ShapeType = typeof Circle | typeof Square | typeof Rectangle;
 
-export abstract class Shape extends RenderObject {
+export abstract class Shape extends GameObject {
     public onBoundaryCollision$ = new Subject<void>();
     public controls: null | (() => void) = null;
     
     public isColliding = false;
-    public collisions: Shape[] = [];
     public indicateCollision = true;
 
     public checkBoundaries = true;
@@ -34,14 +33,12 @@ export abstract class Shape extends RenderObject {
 
     constructor(
         public position: Point,
-        renderer: Renderer,
-        fillColor: Color,
-        strokeColor: Color,
-        lineWidth: number
+        mainLoop: MainLoop,
+        drawConfiguration: DrawConfiguration
     ) {
-        super(renderer, fillColor, strokeColor, lineWidth);
-        this.creationFill = fillColor; 
-        this.creationStroke = strokeColor; 
+        super(mainLoop, drawConfiguration);
+        this.creationFill = drawConfiguration.fillColor; 
+        this.creationStroke = drawConfiguration.strokeColor; 
     }
 
 
@@ -67,7 +64,7 @@ export abstract class Shape extends RenderObject {
 
     public draw(delta: number) {
         if (this.indicateCollision) {
-            if (this.collisions.length > 0) {
+            if (this.collisionObjects.length > 0) {
                 this.setColor(Color.RED);
             } else {
                 this.setColor(this.creationFill, this.creationStroke);

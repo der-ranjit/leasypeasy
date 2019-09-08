@@ -1,8 +1,9 @@
 import { Color } from "../../utils";
-import { Renderer } from "../../Renderer";
 import { Point } from "../Point";
 import { Vector2D } from "../Vector2D";
 import { Shape } from "./Shape";
+import { MainLoop } from "../../MainLoop";
+import { DrawConfiguration } from "../../GameObject";
 
 export class Circle extends Shape {
     public showVelocityIndicator = false; 
@@ -11,12 +12,14 @@ export class Circle extends Shape {
     constructor (
         position: Point,
         public radius: number,
-        renderer: Renderer,
-        fillColor = Color.BLACK,
-        strokeColor = Color.BLACK,
-        lineWidth = 1,
+        mainLoop: MainLoop,
+        drawConfiguration: DrawConfiguration
     ) {
-        super(position, renderer, fillColor, strokeColor, lineWidth);
+        super(position, mainLoop, {
+            fillColor: drawConfiguration.fillColor || Color.BLACK,
+            strokeColor: drawConfiguration.strokeColor || Color.BLACK,
+            lineWidth: drawConfiguration.lineWidth || 1
+        });
         this.mass = radius * radius * Math.PI;
     }
 
@@ -61,9 +64,9 @@ export class Circle extends Shape {
     private drawCircle() {
         this.context.save();
 
-        this.context.fillStyle = this.fillColor.toString();
-        this.context.strokeStyle = this.strokeColor.toString();
-        this.context.lineWidth = this.lineWidth
+        this.context.fillStyle = this.drawConfiguration.fillColor.toString();
+        this.context.strokeStyle = this.drawConfiguration.strokeColor.toString();
+        this.context.lineWidth = this.drawConfiguration.lineWidth
         
         // main circle
         this.context.beginPath();
@@ -104,7 +107,7 @@ export class Circle extends Shape {
     private drawStats() {
         this.context.save();
 
-        this.context.strokeStyle = this.strokeColor.toString();
+        this.context.strokeStyle = this.drawConfiguration.strokeColor.toString();
         const lineHeigt = 15;
         const posX = this.position.x + this.radius + 2;
         const posY = this.position.y - this.radius

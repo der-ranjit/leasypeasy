@@ -1,5 +1,5 @@
-import { Shape } from "../Geometry/Shapes";
 import { Rectangle, Circle } from "../Geometry/Shapes";
+import { GameObject } from "../GameObject";
 
 export interface BoundaryRect {
      left: number;
@@ -13,16 +13,16 @@ export namespace CollisionResolver {
      * Returns false when there was no collision at the newPosition
      */
     export function checkAndResolveBoundaries(
-        shape: Shape,
+        gameObject: GameObject,
         boundaryRect: BoundaryRect
     ): void {
         // Rectangle
-        if (shape instanceof Rectangle) {
-            resolveRectangleBoundary(shape, boundaryRect)
+        if (gameObject instanceof Rectangle) {
+            resolveRectangleBoundary(gameObject, boundaryRect)
         }
         // Circle
-        if (shape instanceof Circle) {
-            resolveCircleBoundary(shape, boundaryRect)
+        if (gameObject instanceof Circle) {
+            resolveCircleBoundary(gameObject, boundaryRect)
         }
     }
 

@@ -1,7 +1,7 @@
 import { Subject, fromEvent } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Circle, Vector2D, Point } from "../../Engine/Geometry";
 import { Game } from "../Game.abstract";
@@ -15,8 +15,8 @@ export class GravitySimulation extends Game {
     private circles: Circle[] = [];
     private gravitationSources: Circle[] = [];
 
-    constructor(renderer: Renderer) {
-        super(renderer);
+    constructor(mainLoop: MainLoop) {
+        super(mainLoop);
     }
 
     public start() {
@@ -46,7 +46,11 @@ export class GravitySimulation extends Game {
                 this.canvas.height / 2 - offset
             ),
             gravityRadius,
-            this.renderer
+            this.mainLoop, {
+                fillColor: Color.BLACK,
+                strokeColor: Color.BLACK,
+                lineWidth: 1
+            }
         );
         gravitySourceA.mass = 1000;
         this.gravitationSources.push(gravitySourceA)
@@ -98,8 +102,11 @@ export class GravitySimulation extends Game {
             const circle = new Circle(
                 position,
                 15,
-                this.renderer,
-                Color.RANDOM_COLOR
+                this.mainLoop, {
+                    fillColor: Color.RANDOM_COLOR,
+                    strokeColor: Color.RANDOM_COLOR,
+                    lineWidth: 1
+                }
             );
             circle.controls = () => circleControls(circle);
             circle.mass = 150;
@@ -127,8 +134,8 @@ export class GravitySimulation extends Game {
         });
 
         this.controls.onKeyDown("a").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
-            const randomX = MathUtils.randomInt(20, this.renderer.context.canvas.width - 20);
-            const randomY = MathUtils.randomInt(20, this.renderer.context.canvas.height - 20);
+            const randomX = MathUtils.randomInt(20, this.mainLoop.context.canvas.width - 20);
+            const randomY = MathUtils.randomInt(20, this.mainLoop.context.canvas.height - 20);
             addCircle(new Point(randomX, randomY));
         });
         

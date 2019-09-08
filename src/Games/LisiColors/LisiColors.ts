@@ -1,11 +1,11 @@
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { Color } from "../../Engine/utils";
 import { Point } from "../../Engine/Geometry";
 import { debounce } from "../../Utils";
 import { Board } from "./Board";
 
-export const LisiColors = (renderer: Renderer) => {
-    const canvas = renderer.context.canvas;
+export const LisiColors = (mainLoop: MainLoop) => {
+    const canvas = mainLoop.context.canvas;
 
     const boardRows = 10;
     const boardColumns = 10;
@@ -34,7 +34,7 @@ export const LisiColors = (renderer: Renderer) => {
         boardPosition,
         boardFieldFillColor,
         boardFieldStrokeColor,
-        renderer);
+        mainLoop);
 
     const pieceWidth = board.fieldWidth / 2;
     const playerStartColumn = 2;

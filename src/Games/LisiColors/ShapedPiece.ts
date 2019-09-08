@@ -1,4 +1,4 @@
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Circle, Point, Square, Shape, ShapeType } from "../../Engine/Geometry";
 
@@ -13,7 +13,7 @@ export class ShapedPiece {
     } 
 
     constructor(
-        renderer: Renderer,
+        mainLoop: MainLoop,
         private ownerBoard: Board,
         private boardField: Point,
         public width: number,
@@ -25,10 +25,10 @@ export class ShapedPiece {
     ) {
         if (shapeType === Circle) {
             const radius = this.width / 2;
-            this.shape = new Circle(boardField, radius, renderer, fillColor, strokeColor, lineWidth);
+            this.shape = new Circle(boardField, radius, mainLoop, {fillColor, strokeColor, lineWidth});
         }
         if (shapeType === Square) {
-            this.shape = new Square(boardField, width, renderer, fillColor, strokeColor, lineWidth)
+            this.shape = new Square(boardField, width, mainLoop, {fillColor, strokeColor, lineWidth})
         }
         
         if (this.shape) {

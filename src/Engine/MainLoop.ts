@@ -1,19 +1,17 @@
 import { Subject } from "rxjs";
-import { BoundaryRect, isCollidable, Collidable, Collision } from "./Collision";
-import { isDrawable, Drawable, Renderer } from "./Renderer";
-import { isPhysicObject, PhysicObject, Physics } from "./Physics";
+import { BoundaryRect, Collision } from "./Collision";
+import { Renderer } from "./Renderer";
+import { Physics } from "./Physics";
 import { GameObject } from "./GameObject";
 
 
 export class MainLoop {
     public onLoopStart$ = new Subject<GameObject[]>(); 
     public onUpdate$ = new Subject<GameObject[]>();
-    public onPhysics$ = new Subject<PhysicObject[]>();
-    public onCollisionDetection$ = new Subject<Collidable[]>();
-    public onRender$ = new Subject<Drawable[]>();
+    public onPhysics$ = new Subject<GameObject[]>();
+    public onCollisionDetection$ = new Subject<GameObject[]>();
+    public onRender$ = new Subject<GameObject[]>();
     public onLoopEnd$ = new Subject<GameObject[]>();
-
-    public renderer: Renderer;
 
     public get isRunning(): boolean {
         return this.started;
@@ -23,15 +21,16 @@ export class MainLoop {
     private lastLoopTimestamp = 0;
 
     private gameObjects: GameObject[] = [];
-    private canvasBoundaries: BoundaryRect = {
-        left: 0,
-        top: 0,
-        right: this.renderer.context.canvas.width,
-        bottom: this.renderer.context.canvas.height
+    private get contextBoundaries(): BoundaryRect {
+        return {
+            left: 0,
+            top: 0,
+            right: this.context.canvas.width,
+            bottom: this.context.canvas.height
+        }
     }
 
-    constructor(context: CanvasRenderingContext2D) {
-        this.renderer = new Renderer(context);
+    constructor(public readonly context: CanvasRenderingContext2D) {
         this.start();
     }
 
@@ -48,11 +47,14 @@ export class MainLoop {
     }
     
     public addGameObject(gameObject: GameObject) {
-        this.gameObjects.push(gameObject);
+        const index = this.getIndex(gameObject);
+        if (index === -1) {
+            this.gameObjects.push(gameObject);
+        } 
     }
     
     public removeGameObject(gameObject: GameObject) {
-        const index = this.gameObjects.indexOf(gameObject);
+        const index = this.getIndex(gameObject);
         if (index !== -1) {
             this.gameObjects.splice(index, 1);
         }
@@ -82,25 +84,26 @@ export class MainLoop {
                     object.update(delta);
                 }
 
-                const physicObjects = this.gameObjects.filter(object => isPhysicObject(object)) as unknown as PhysicObject[];
-                this.onPhysics$.next(physicObjects);
-                Physics.applyPhysics(physicObjects, delta);
+                this.onPhysics$.next(this.gameObjects);
+                Physics.applyPhysics(this.gameObjects, delta);
 
-                const collisionObjects = this.gameObjects.filter(object => isCollidable(object)) as unknown as Collidable[];
-                this.onCollisionDetection$.next(collisionObjects);
-                Collision.detectAndResolveCollisions(collisionObjects, this.canvasBoundaries);
+                this.onCollisionDetection$.next(this.gameObjects);
+                Collision.detectAndResolveCollisions(this.gameObjects, this.contextBoundaries);
             } else {
-                this.renderer.context.strokeText("PAUSED", 10, 10);
+                this.context.strokeText("PAUSED", 10, 10);
             }
 
-            const drawableObjects = this.gameObjects.filter(object => isDrawable(object)) as unknown as Drawable[];
-            this.onRender$.next(drawableObjects);
-            this.renderer.draw(drawableObjects, delta);
+            this.onRender$.next(this.gameObjects);
+            Renderer.draw(this.context, this.gameObjects, delta);
             
             this.onLoopEnd$.next(this.gameObjects);
             this.lastLoopTimestamp = Date.now();
             this.loop();
         });
+    }
+
+    private getIndex(gameObject: GameObject): number {
+        return this.gameObjects.findIndex(gObject => gObject.id === gameObject.id);
     }
 }
 

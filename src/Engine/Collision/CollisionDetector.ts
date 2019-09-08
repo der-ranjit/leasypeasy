@@ -1,20 +1,21 @@
-import { Point, Shape, Circle, Rectangle } from "../Geometry";
+import { Point, Circle, Rectangle } from "../Geometry";
 import { MathUtils } from "../utils";
+import { GameObject } from "../GameObject";
 
 export namespace CollisionDetector {
-    export function isColliding(shapeA: Shape, shapeB: Shape): boolean {
-        if (shapeA instanceof Circle && shapeB instanceof Circle) {
-            return decideCircleCollision(shapeA, shapeB);
+    export function isColliding(gameObjectA: GameObject, gameObjectB: GameObject): boolean {
+        if (gameObjectA instanceof Circle && gameObjectB instanceof Circle) {
+            return decideCircleCollision(gameObjectA, gameObjectB);
         }
 
-        if (shapeA instanceof Rectangle && shapeB instanceof Rectangle) {
-            return decideRectangleCollision(shapeA, shapeB);
+        if (gameObjectA instanceof Rectangle && gameObjectB instanceof Rectangle) {
+            return decideRectangleCollision(gameObjectA, gameObjectB);
         }
 
-        if (shapeA instanceof Rectangle && shapeB instanceof Circle ) {
-            return decideCircleRectangleCollision(shapeB, shapeA);
-        } else if (shapeA instanceof Circle && shapeB instanceof Rectangle ) {
-            return decideCircleRectangleCollision(shapeA, shapeB);
+        if (gameObjectA instanceof Rectangle && gameObjectB instanceof Circle ) {
+            return decideCircleRectangleCollision(gameObjectB, gameObjectA);
+        } else if (gameObjectA instanceof Circle && gameObjectB instanceof Rectangle ) {
+            return decideCircleRectangleCollision(gameObjectA, gameObjectB);
         }
 
         return false;

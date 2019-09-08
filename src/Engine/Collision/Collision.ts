@@ -1,19 +1,9 @@
-import { Shape } from "../Geometry";
 import { BoundaryRect, CollisionResolver } from "./CollisionResolver";
 import { CollisionDetector } from "./CollisionDetector";
-
-export interface Collidable extends Shape {
-    checkBoundaries: boolean;
-    isColliding: boolean;
-    collisionObjects: Collidable[];
-}
-
-export function isCollidable(object: any): object is Collidable {
-    return (object as Collidable).isColliding !== undefined;
-}
+import { GameObject } from "../GameObject";
 
 export namespace Collision {
-    export function detectAndResolveCollisions(collidables: Collidable[], boundaries?: BoundaryRect) {
+    export function detectAndResolveCollisions(collidables: GameObject[], boundaries?: BoundaryRect) {
         collidables.forEach(object => object.collisionObjects = []);
         for (let i = 0; i < collidables.length; i++) {
             const collidableA = collidables[i];
@@ -27,8 +17,8 @@ export namespace Collision {
                     let isColliding = CollisionDetector.isColliding(collidableA, collidableB);
                     // TODO create proper information collidable about collision participants
                     if (isColliding) {
-                        collidableA.collisions.push(collidableB);
-                        collidableB.collisions.push(collidableA);
+                        collidableA.collisionObjects.push(collidableB);
+                        collidableB.collisionObjects.push(collidableA);
                     }
                 }
             }

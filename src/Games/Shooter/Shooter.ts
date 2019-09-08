@@ -1,11 +1,11 @@
-import { Renderer } from "../../Engine";
+import { MainLoop } from "../../Engine";
 import { Color, Controls } from "../../Engine/utils";
 import { Point } from "../../Engine/Geometry";
 
 import { PlayerControls, Player } from "./Player";
 
-export const Shooter = (renderer: Renderer) => {
-    const canvas = renderer.context.canvas;
+export const Shooter = (mainLoop: MainLoop) => {
+    const canvas = mainLoop.context.canvas;
     const controls = Controls.getInstance();
     
     canvas.width = 1200;
@@ -21,8 +21,8 @@ export const Shooter = (renderer: Renderer) => {
     };
     const ranzPosition = new Point(canvas.width - 20, canvas.height / 2);
 
-    const ranz = new Player("Ranz", ranzPosition, Color.BLACK, Color.RED, renderer);
-    const lisi = new Player("Lisi", lisiPosition, Color.MAGENTA, Color.GREEN, renderer, lisiControls);
+    const ranz = new Player("Ranz", ranzPosition, Color.BLACK, Color.RED, mainLoop);
+    const lisi = new Player("Lisi", lisiPosition, Color.MAGENTA, Color.GREEN, mainLoop, lisiControls);
     ranz.opponents.push(lisi);
     lisi.opponents.push(ranz);
     
@@ -35,13 +35,13 @@ export const Shooter = (renderer: Renderer) => {
         });
     })
 
-    renderer.onLoopEnd$.subscribe(_ => {
+    mainLoop.onLoopEnd$.subscribe(_ => {
         const winningScore = 20;
         players.forEach((player, index) => {
-            renderer.context.strokeText(`count ${player.name}: ${player.score}`, 1100, 50 + 50 * index);
+            mainLoop.context.strokeText(`count ${player.name}: ${player.score}`, 1100, 50 + 50 * index);
             if (player.score === winningScore) {
-                renderer.pause();
-                renderer.context.strokeText(`${player.name} hat große Balls`, 600, 300);
+                mainLoop.pause();
+                mainLoop.context.strokeText(`${player.name} hat große Balls`, 600, 300);
             }
         })
     });
