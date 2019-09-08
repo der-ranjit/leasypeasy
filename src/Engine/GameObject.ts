@@ -12,22 +12,28 @@ export class DrawConfiguration {
     }
 }
 
-export interface PhysicsConfiguration {
+export class PhysicsConfiguration {
     
 }
 
-export interface CollisionConfiguration {
-    indicateCollision: boolean,
-    checkBoundaries: boolean
+export class CollisionConfiguration {
+    public collisionObjects: GameObject[] = [];
+    public isColliding = false;
+
+    constructor(
+        public checkBoundaries = true,
+        public indicateCollision = true
+    ) {
+    }
 }
 
 export abstract class GameObject {
     /* unique id for the GameObject */
     public readonly id: string;
-    
-    public checkBoundaries = true;
-    public collisionObjects: GameObject[] = [];
 
+    public collisionConfiguration = new CollisionConfiguration();
+    public physics = new PhysicsConfiguration();
+    
     constructor(
         protected mainLoop: MainLoop,
         public drawConfiguration: DrawConfiguration

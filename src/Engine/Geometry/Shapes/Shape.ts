@@ -14,10 +14,6 @@ export abstract class Shape extends GameObject {
     public onBoundaryCollision$ = new Subject<void>();
     public controls: null | (() => void) = null;
     
-    public isColliding = false;
-    public indicateCollision = true;
-
-    public checkBoundaries = true;
     public gravityEnabled = false;
 
     public mass = 1;
@@ -63,8 +59,8 @@ export abstract class Shape extends GameObject {
     }
 
     public draw(delta: number) {
-        if (this.indicateCollision) {
-            if (this.collisionObjects.length > 0) {
+        if (this.collisionConfiguration.indicateCollision) {
+            if (this.collisionConfiguration.collisionObjects.length > 0) {
                 this.setColor(Color.RED);
             } else {
                 this.setColor(this.creationFill, this.creationStroke);
