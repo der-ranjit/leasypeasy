@@ -1,7 +1,7 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { MainLoop, GameObject } from "../../Engine";
+import { MainLoop, GameObject, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Point, Square, Circle, Vector2D } from "../../Engine/Geometry";
 import { Player } from "../Shooter/Player";
@@ -65,11 +65,11 @@ export class Platformer extends Game {
     }
 
     private createPlayer() {
-        const player = new Circle(new Point(200, 200), 20, this.mainLoop, {
-            fillColor: Color.RED,
-            strokeColor: Color.BLACK,
-            lineWidth: 1
-        });
+        const player = new Circle(new Point(200, 200), 20, this.mainLoop, new DrawConfiguration(
+            Color.RED,
+            Color.BLACK,
+            1
+        ));
         player.velocity = new Vector2D(0, 0);
         player.gravityEnabled = true;
         // player.showStats = true;

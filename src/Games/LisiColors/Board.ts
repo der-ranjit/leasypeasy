@@ -1,4 +1,4 @@
-import { MainLoop, GameObject } from "../../Engine";
+import { MainLoop, GameObject, DrawConfiguration } from "../../Engine";
 import { Circle, Rectangle, Square, ShapeType,  Point } from "../../Engine/Geometry";
 import { Color, Controls, MathUtils } from "../../Engine/utils";
 import { ShapedPiece } from "./ShapedPiece";
@@ -46,11 +46,7 @@ export class Board extends GameObject {
         public fieldOutlineColor: Color,
         mainLoop: MainLoop
     ) {
-        super(mainLoop, {
-            fillColor: Color.BLACK,
-            strokeColor: Color.BLACK,
-            lineWidth: 1
-        });
+        super(mainLoop, new DrawConfiguration());
         this.field = this.createBoard(columns, rows);
 
         this.initControls();
@@ -75,11 +71,10 @@ export class Board extends GameObject {
                     this.position.x + x * this.fieldWidth,
                     this.position.y + y * this.fieldHeight
                 );
-                field[x][y] = new Square(position, this.fieldWidth, this.mainLoop, {
-                    fillColor: this.fieldColor,
-                    strokeColor: this.fieldOutlineColor,
-                    lineWidth: 1
-                }); 
+                field[x][y] = new Square(position, this.fieldWidth, this.mainLoop, new DrawConfiguration(
+                    this.fieldColor,
+                    this.fieldOutlineColor,
+                )); 
             }   
         }
         return field;
@@ -110,11 +105,10 @@ export class Board extends GameObject {
                 0 + column * this.fieldWidth,
                 0 + row * this.fieldHeight,
             )
-            this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.mainLoop, {
-                fillColor: this.fieldColor,
-                strokeColor: this.fieldOutlineColor,
-                lineWidth: 1
-            });
+            this.field[column][row] = new Square(squarePosition, this.fieldWidth, this.mainLoop, new DrawConfiguration(
+                this.fieldColor,
+                this.fieldOutlineColor,
+            ));
         } else {
             this.field[column][row].destroy();
             this.field[column][row] = <any>null;
@@ -126,11 +120,10 @@ export class Board extends GameObject {
             const lastSquareIndex = this.field[x].length - 1;
             const lastSquare = this.field[x][lastSquareIndex];
             const position = new Point(lastSquare.position.x, lastSquare.position.y + this.fieldHeight);
-            this.field[x].push(new Square(position, this.fieldWidth, this.mainLoop, {
-                fillColor: this.fieldColor,
-                strokeColor: this.fieldOutlineColor,
-                lineWidth: 1
-            }));
+            this.field[x].push(new Square(position, this.fieldWidth, this.mainLoop, new DrawConfiguration(
+                this.fieldColor,
+                this.fieldOutlineColor,
+            )));
         }
         this.rows++;
     }

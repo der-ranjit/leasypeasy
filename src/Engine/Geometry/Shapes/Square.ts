@@ -11,10 +11,6 @@ export class Square extends Rectangle {
         mainLoop: MainLoop,
         drawConfiguration: DrawConfiguration
     ) {
-        super(position, width, width, mainLoop, {
-            fillColor: drawConfiguration.fillColor || Color.BLACK,
-            strokeColor: drawConfiguration.strokeColor || Color.BLACK,
-            lineWidth: drawConfiguration.lineWidth || 1
-        });
+        super(position, width, width, mainLoop, drawConfiguration);
     }
 }

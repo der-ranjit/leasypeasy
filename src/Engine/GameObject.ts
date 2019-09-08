@@ -1,25 +1,36 @@
 import { Color, Common } from "./utils";
 import { MainLoop } from "./MainLoop";
 
-export interface DrawConfiguration {
-    fillColor: Color;
-    strokeColor: Color;
-    lineWidth: number;
+export class DrawConfiguration {
+    constructor(
+        public fillColor = Color.BLACK,
+        public strokeColor = Color.BLACK,
+        public lineWidth = 1,
+        public zIndex = 1 ,
+        public drawn = true
+    ) {
+    }
+}
+
+export interface PhysicsConfiguration {
+    
+}
+
+export interface CollisionConfiguration {
+    indicateCollision: boolean,
+    checkBoundaries: boolean
 }
 
 export abstract class GameObject {
     /* unique id for the GameObject */
     public readonly id: string;
-    /* controls if the object is drawn */
-    public drawn = true;
-    public zIndex = 1;
     
     public checkBoundaries = true;
     public collisionObjects: GameObject[] = [];
 
     constructor(
         protected mainLoop: MainLoop,
-        protected drawConfiguration: DrawConfiguration
+        public drawConfiguration: DrawConfiguration
     ) {
         this.mainLoop.addGameObject(this);
         this.id = Common.createUniqueId();

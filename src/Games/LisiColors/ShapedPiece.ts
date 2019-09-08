@@ -1,4 +1,4 @@
-import { MainLoop } from "../../Engine";
+import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Circle, Point, Square, Shape, ShapeType } from "../../Engine/Geometry";
 
@@ -25,14 +25,14 @@ export class ShapedPiece {
     ) {
         if (shapeType === Circle) {
             const radius = this.width / 2;
-            this.shape = new Circle(boardField, radius, mainLoop, {fillColor, strokeColor, lineWidth});
+            this.shape = new Circle(boardField, radius, mainLoop, new DrawConfiguration(fillColor, strokeColor, lineWidth));
         }
         if (shapeType === Square) {
-            this.shape = new Square(boardField, width, mainLoop, {fillColor, strokeColor, lineWidth})
+            this.shape = new Square(boardField, width, mainLoop, new DrawConfiguration(fillColor, strokeColor, lineWidth));
         }
         
         if (this.shape) {
-            this.shape.zIndex = zIndex;
+            this.shape.drawConfiguration.zIndex = zIndex;
             this.shape.centerArountPoint(boardField);
         }
     }

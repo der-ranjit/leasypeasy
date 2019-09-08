@@ -14,11 +14,7 @@ export class Rectangle extends Shape {
         mainLoop: MainLoop,
         drawConfiguration: DrawConfiguration,
     ) {
-        super(position, mainLoop, {
-            fillColor: drawConfiguration.fillColor || Color.BLACK,
-            strokeColor: drawConfiguration.strokeColor || Color.BLACK,
-            lineWidth: drawConfiguration.lineWidth || 1
-        });
+        super(position, mainLoop, drawConfiguration);
     }
 
     public updateShape(delta: number) {

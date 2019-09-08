@@ -15,11 +15,7 @@ export class Circle extends Shape {
         mainLoop: MainLoop,
         drawConfiguration: DrawConfiguration
     ) {
-        super(position, mainLoop, {
-            fillColor: drawConfiguration.fillColor || Color.BLACK,
-            strokeColor: drawConfiguration.strokeColor || Color.BLACK,
-            lineWidth: drawConfiguration.lineWidth || 1
-        });
+        super(position, mainLoop, drawConfiguration);
         this.mass = radius * radius * Math.PI;
     }
 

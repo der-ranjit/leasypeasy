@@ -1,4 +1,4 @@
-import { MainLoop } from "../../Engine";
+import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, Controls } from "../../Engine/utils";
 import { Circle, Rectangle, Point, Shape, Vector2D } from "../../Engine/Geometry";
 
@@ -32,43 +32,37 @@ export const LisiCollision = (mainLoop: MainLoop) => {
     }
 
     const circlesColor = Color.YELLOW;
-    const circle1 = new Circle(new Point(100, 100), 50, mainLoop, {
-        fillColor: circlesColor,
-        strokeColor: circlesColor,
-        lineWidth: 1
-    });
+    const circle1 = new Circle(new Point(100, 100), 50, mainLoop, new DrawConfiguration(
+        circlesColor,
+        circlesColor
+    ));
     circle1.controls = () => shapeControls(circle1);
-    const circle2 = new Circle(new Point(300, 100), 50, mainLoop, {
-        fillColor: circlesColor,
-        strokeColor: circlesColor,
-        lineWidth: 1
-    });
+    const circle2 = new Circle(new Point(300, 100), 50, mainLoop, new DrawConfiguration(
+        circlesColor,
+        circlesColor
+    ));
     
     const rectsColor = Color.GREEN;
-    const rect1 = new Rectangle(new Point(50, 300), 100, 50, mainLoop, {
-        fillColor: rectsColor,
-        strokeColor: rectsColor,
-        lineWidth: 1
-    });
+    const rect1 = new Rectangle(new Point(50, 300), 100, 50, mainLoop, new DrawConfiguration(
+        rectsColor,
+        rectsColor
+    ));
     rect1.controls = () => shapeControls(rect1);
-    const rect2 = new Rectangle(new Point(200, 300), 100, 50, mainLoop, {
-        fillColor: rectsColor,
-        strokeColor: rectsColor,
-        lineWidth: 1
-    });
+    const rect2 = new Rectangle(new Point(200, 300), 100, 50, mainLoop, new DrawConfiguration(
+        rectsColor,
+        rectsColor
+    ));
     
     const circleRectColor = Color.MAGENTA;
-    const circle3 = new Circle(new Point(100, 500), 50, mainLoop, {
-        fillColor: circleRectColor,
-        strokeColor: circleRectColor,
-        lineWidth: 1
-    });
+    const circle3 = new Circle(new Point(100, 500), 50, mainLoop, new DrawConfiguration(
+        circleRectColor,
+        circleRectColor
+    ));
     circle3.controls = () => shapeControls(circle3);
-    const rect3 = new Rectangle(new Point(250, 500), 100, 50, mainLoop, {
-        fillColor: circleRectColor,
-        strokeColor: circleRectColor,
-        lineWidth: 1
-    });
+    const rect3 = new Rectangle(new Point(250, 500), 100, 50, mainLoop, new DrawConfiguration(
+        circleRectColor,
+        circleRectColor
+    ));
 
     const controllables = [circle1, rect1, circle3];
     let controlledIndex = 0;

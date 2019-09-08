@@ -1,7 +1,7 @@
 import { Subject, fromEvent } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-import { MainLoop } from "../../Engine";
+import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Circle, Vector2D, Point } from "../../Engine/Geometry";
 import { Game } from "../Game.abstract";
@@ -46,11 +46,8 @@ export class GravitySimulation extends Game {
                 this.canvas.height / 2 - offset
             ),
             gravityRadius,
-            this.mainLoop, {
-                fillColor: Color.BLACK,
-                strokeColor: Color.BLACK,
-                lineWidth: 1
-            }
+            this.mainLoop,
+            new DrawConfiguration()
         );
         gravitySourceA.mass = 1000;
         this.gravitationSources.push(gravitySourceA)
@@ -102,11 +99,8 @@ export class GravitySimulation extends Game {
             const circle = new Circle(
                 position,
                 15,
-                this.mainLoop, {
-                    fillColor: Color.RANDOM_COLOR,
-                    strokeColor: Color.RANDOM_COLOR,
-                    lineWidth: 1
-                }
+                this.mainLoop,
+                new DrawConfiguration(Color.RANDOM_COLOR, Color.RANDOM_COLOR)
             );
             circle.controls = () => circleControls(circle);
             circle.mass = 150;
