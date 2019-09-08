@@ -20,7 +20,6 @@ const main = () => {
             
             // LisiColors(renderer);
             // LisiCollision(renderer);
-            // GravitySimulation(renderer);
             // mixinTest(renderer.context);
             // Shooter(renderer);
             
