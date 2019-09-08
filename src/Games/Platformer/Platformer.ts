@@ -7,6 +7,7 @@ import { Game } from "../Game.abstract";
 import { Circle } from "../../Engine/Geometry/Shapes/Circle";
 import { Point } from "../../Engine/Geometry/Point";
 import { Vector2D } from "../../Engine/Geometry/Vector2D";
+import { Rectangle } from "../../Engine/Geometry/Shapes/Rectangle";
 
 export class Platformer extends Game {
     public name = "platformz aiiight";
@@ -44,24 +45,26 @@ export class Platformer extends Game {
         const player = this.player;
         const movementVector = new Vector2D(1, 0);
         const jumpVector = new Vector2D(0, 20);
+
+        const platforms: Rectangle[] = [];
+        const platform = new Rectangle(new Point(400, 400), 100, 20, this.mainLoop, new DrawConfiguration());
+        const platform2 = new Rectangle(new Point(600, 300), 100, 20, this.mainLoop, new DrawConfiguration());
+
+
+
+
         this.mainLoop.onLoopStart$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             if (this.controls.isKeyPressed("ArrowRight")) {
-                // player.velocity.setAngle(MathUtils.degreesToRadian(0));
-                // player.velocity.setLength(10);
                 player!.physics.velocity.add(movementVector);
             }
             if (this.controls.isKeyPressed("ArrowLeft")) {
-                // player.velocity.setAngle(MathUtils.degreesToRadian(180));
-                // player.velocity.setLength(10);
                 player!.physics.velocity.add(Vector2D.from(movementVector).scale(-1));
             }
         });
         
-        this.controls.onKeyDown(" ").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
+        this.controls.onKeyDown("ArrowUp").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             player!.physics.velocity.setAngle(MathUtils.degreesToRadian(270));
             player!.physics.velocity.setLength(25);
-            // player.velocity.add(jumpVector);
-            // player.velocity.setLength(50);
         });
     }
 
