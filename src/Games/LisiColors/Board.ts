@@ -1,7 +1,11 @@
 import { MainLoop, GameObject, DrawConfiguration } from "../../Engine";
-import { Circle, Rectangle, Square, ShapeType,  Point } from "../../Engine/Geometry";
+import { Point } from "../../Engine/Geometry";
 import { Color, Controls, MathUtils } from "../../Engine/utils";
 import { ShapedPiece } from "./ShapedPiece";
+import { Rectangle } from "../../Engine/Geometry/Shapes/Rectangle";
+import { Square } from "../../Engine/Geometry/Shapes/Square";
+import { ShapeType } from "../../Engine/Geometry/Shapes/Shape";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
 
 export class BoardField {
     private rectangle!: Rectangle;
@@ -46,7 +50,7 @@ export class Board extends GameObject {
         public fieldOutlineColor: Color,
         mainLoop: MainLoop
     ) {
-        super(mainLoop, new DrawConfiguration());
+        super(mainLoop, new DrawConfiguration(), Point.ORIGIN);
         this.field = this.createBoard(columns, rows);
 
         this.initControls();

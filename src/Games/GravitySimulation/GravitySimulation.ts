@@ -3,8 +3,9 @@ import { takeUntil } from "rxjs/operators";
 
 import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
-import { Circle, Vector2D, Point } from "../../Engine/Geometry";
+import { Vector2D, Point } from "../../Engine/Geometry";
 import { Game } from "../Game.abstract";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
 
 export class GravitySimulation extends Game {
     public name = "gravity b1tches";
@@ -49,7 +50,7 @@ export class GravitySimulation extends Game {
             this.mainLoop,
             new DrawConfiguration()
         );
-        gravitySourceA.mass = 1000;
+        gravitySourceA.physics.mass = 1000;
         this.gravitationSources.push(gravitySourceA)
 
 
@@ -70,23 +71,23 @@ export class GravitySimulation extends Game {
             // renderer.context.strokeText(`${speed}`, 100, 150);
         
             if (this.controls.isKeyPressed(left)) {
-                circle.velocity.rotate(-4);;
+                circle.physics.velocity.rotate(-4);;
             }
             if (this.controls.isKeyPressed(right)) {
-                circle.velocity.rotate(4);
+                circle.physics.velocity.rotate(4);
             }
 
-            speedVector.copy(circle.velocity).setLength(Math.abs(speed / 15));
-            const currentLength = circle.velocity.getLength();
+            speedVector.copy(circle.physics.velocity).setLength(Math.abs(speed / 15));
+            const currentLength = circle.physics.velocity.getLength();
             if (this.controls.isKeyPressed(down)) {
                 const deccelerate = 0.2;
                 speed -= deccelerate;
-                circle.velocity.add(speedVector.scale(-2));
+                circle.physics.velocity.add(speedVector.scale(-2));
             }
             if (this.controls.isKeyPressed(up)) {
                 const accelerate = 0.2;
                 speed += accelerate;
-                circle.velocity.add(speedVector);
+                circle.physics.velocity.add(speedVector);
             }
             const frictionFactor = 0.9;
             speed = speed * frictionFactor;
@@ -103,17 +104,17 @@ export class GravitySimulation extends Game {
                 new DrawConfiguration(Color.RANDOM_COLOR, Color.RANDOM_COLOR)
             );
             circle.controls = () => circleControls(circle);
-            circle.mass = 150;
-            circle.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ =>  circle.velocity.scale(0.7));
-            circle.gravitationSources.push(...this.gravitationSources, ...this.circles);
-            this.circles.forEach(_circle => _circle.gravitationSources.push(circle));
-            circle.gravityEnabled = gravityEnabled;
+            circle.physics.mass = 150;
+            circle.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ =>  circle.physics.velocity.scale(0.7));
+            circle.physics.gravitationSources.push(...this.gravitationSources, ...this.circles);
+            this.circles.forEach(_circle => _circle.physics.gravitationSources.push(circle));
+            circle.physics.gravityEnabled = gravityEnabled;
             circle.showVelocityIndicator = showVelocityIndicator;
             circle.showStats = showStats;
             const speed = MathUtils.randomInt(1, 5);
             const angle = MathUtils.degreesToRadian(MathUtils.randomInt(1, 360));
-            circle.velocity.setLength(speed);
-            circle.velocity.setAngle(angle);
+            circle.physics.velocity.setLength(speed);
+            circle.physics.velocity.setAngle(angle);
             this.circles.push(circle);
         }
         
@@ -123,7 +124,7 @@ export class GravitySimulation extends Game {
 
         this.controls.onKeyDown(" ").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             for (const circle of this.circles) {
-                circle.velocity.add(new Vector2D(0, -10));
+                circle.physics.velocity.add(new Vector2D(0, -10));
             }
         });
 
@@ -137,9 +138,9 @@ export class GravitySimulation extends Game {
             useGravitationSource = !useGravitationSource
             this.circles.forEach(circle => {
                 if (useGravitationSource) {
-                    circle.gravitationSources.push(...this.gravitationSources);
+                    circle.physics.gravitationSources.push(...this.gravitationSources);
                 } else {
-                    circle.gravitationSources = [];
+                    circle.physics.gravitationSources = [];
                 }
             });
         });
@@ -151,7 +152,7 @@ export class GravitySimulation extends Game {
 
         this.controls.onKeyDown("g").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             gravityEnabled = !gravityEnabled;
-            this.circles.forEach(circle => circle.gravityEnabled = gravityEnabled);
+            this.circles.forEach(circle => circle.physics.gravityEnabled = gravityEnabled);
         });
         
         this.controls.onKeyDown("d").pipe(takeUntil(this.destroyed$)).subscribe(_ => {

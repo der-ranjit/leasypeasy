@@ -1,5 +1,6 @@
-import { Rectangle, Circle } from "../Geometry/Shapes";
 import { GameObject } from "../GameObject";
+import { Rectangle } from "../Geometry/Shapes/Rectangle";
+import { Circle } from "../Geometry/Shapes/Circle";
 
 export interface BoundaryRect {
      left: number;
@@ -39,7 +40,7 @@ export namespace CollisionResolver {
                 shape.position.x += boundaryRect.left - (position.x - shape.radius);
             }
             // invert velocity
-            shape.velocity.x = -shape.velocity.x;
+            shape.physics.velocity.x = -shape.physics.velocity.x;
             shape.onBoundaryCollision$.next();
         }
         if (bottomCollision || topCollision) {
@@ -49,7 +50,7 @@ export namespace CollisionResolver {
                 shape.position.y += boundaryRect.top - (position.y - shape.radius);
             }
             // invert velocity
-            shape.velocity.y = -shape.velocity.y;
+            shape.physics.velocity.y = -shape.physics.velocity.y;
             shape.onBoundaryCollision$.next();
         }
     }
@@ -67,7 +68,7 @@ export namespace CollisionResolver {
                 shape.position.x += boundaryRect.left - position.x ;
             }
             // invert velocity
-            shape.velocity.x = -shape.velocity.x;
+            shape.physics.velocity.x = -shape.physics.velocity.x;
             shape.onBoundaryCollision$.next();
         }
         if (bottomCollision || topCollision) {
@@ -77,7 +78,7 @@ export namespace CollisionResolver {
                 shape.position.y += boundaryRect.top - position.y; 
             }
             // invert velocity
-            shape.velocity.y = -shape.velocity.y;
+            shape.physics.velocity.y = -shape.physics.velocity.y;
             shape.onBoundaryCollision$.next();
         }
     }

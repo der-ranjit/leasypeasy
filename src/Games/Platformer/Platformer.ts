@@ -3,9 +3,10 @@ import { takeUntil } from "rxjs/operators";
 
 import { MainLoop, GameObject, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
-import { Point, Square, Circle, Vector2D } from "../../Engine/Geometry";
-import { Player } from "../Shooter/Player";
 import { Game } from "../Game.abstract";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
+import { Point } from "../../Engine/Geometry/Point";
+import { Vector2D } from "../../Engine/Geometry/Vector2D";
 
 export class Platformer extends Game {
     public name = "platformz aiiight";
@@ -47,18 +48,18 @@ export class Platformer extends Game {
             if (this.controls.isKeyPressed("ArrowRight")) {
                 // player.velocity.setAngle(MathUtils.degreesToRadian(0));
                 // player.velocity.setLength(10);
-                player!.velocity.add(movementVector);
+                player!.physics.velocity.add(movementVector);
             }
             if (this.controls.isKeyPressed("ArrowLeft")) {
                 // player.velocity.setAngle(MathUtils.degreesToRadian(180));
                 // player.velocity.setLength(10);
-                player!.velocity.add(Vector2D.from(movementVector).scale(-1));
+                player!.physics.velocity.add(Vector2D.from(movementVector).scale(-1));
             }
         });
         
         this.controls.onKeyDown(" ").pipe(takeUntil(this.destroyed$)).subscribe(_ => {
-            player!.velocity.setAngle(MathUtils.degreesToRadian(270));
-            player!.velocity.setLength(25);
+            player!.physics.velocity.setAngle(MathUtils.degreesToRadian(270));
+            player!.physics.velocity.setLength(25);
             // player.velocity.add(jumpVector);
             // player.velocity.setLength(50);
         });
@@ -70,11 +71,11 @@ export class Platformer extends Game {
             Color.BLACK,
             1
         ));
-        player.velocity = new Vector2D(0, 0);
-        player.gravityEnabled = true;
+        player.physics.velocity = new Vector2D(0, 0);
+        player.physics.gravityEnabled = true;
         // player.showStats = true;
         player.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            player.velocity.scale(0.5);
+            player.physics.velocity.scale(0.5);
         });
         this.objects.push(player);
         return player;

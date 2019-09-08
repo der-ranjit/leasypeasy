@@ -1,3 +1,4 @@
+import { MainLoop } from "./Engine";
 import { Controls } from "./Engine/utils";
 
 import { LisiColors } from "./Games/LisiColors/LisiColors";
@@ -8,7 +9,6 @@ import { Shooter } from "./Games/Shooter/Shooter";
 import { Platformer } from "./Games/Platformer/Platformer";
 import { Game } from "./Games/Game.abstract";
 import { Fountains } from "./Games/Fountains/Fountains";
-import { MainLoop } from "./Engine";
 
 const main = () => {
     const canvas = document.querySelector("canvas");
@@ -23,7 +23,7 @@ const main = () => {
             // mixinTest(renderer.context);
             // Shooter(renderer);
             
-            const games = [
+            const games: Game[] = [
                 new Fountains(mainLoop),
                 new Platformer(mainLoop),
                 new GravitySimulation(mainLoop)

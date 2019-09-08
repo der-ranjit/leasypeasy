@@ -1,5 +1,7 @@
 import { Color, Common } from "./utils";
 import { MainLoop } from "./MainLoop";
+import { Vector2D, Point } from "./Geometry";
+import { Shape } from "./Geometry/Shapes/Shape";
 
 export class DrawConfiguration {
     constructor(
@@ -13,7 +15,16 @@ export class DrawConfiguration {
 }
 
 export class PhysicsConfiguration {
-    
+    constructor(
+        public gravityEnabled = false,
+        public mass = 1,
+        public gravitationSources: Shape[] = [],
+        public velocity = new Vector2D(0, 0),
+        public acceleration = new Vector2D(0,0),
+        public gravityVector = new Vector2D(0, 0),
+        public defaultGravity = new Vector2D(0, 0.1)
+    ) {
+    }
 }
 
 export class CollisionConfiguration {
@@ -36,7 +47,8 @@ export abstract class GameObject {
     
     constructor(
         protected mainLoop: MainLoop,
-        public drawConfiguration: DrawConfiguration
+        public drawConfiguration: DrawConfiguration,
+        public position: Point
     ) {
         this.mainLoop.addGameObject(this);
         this.id = Common.createUniqueId();
@@ -58,6 +70,11 @@ export abstract class GameObject {
         } 
         this.drawConfiguration.fillColor = fillColor;
         this.drawConfiguration.strokeColor = stroke; 
+    }
+
+    public move(vector: Vector2D) {
+        const newPosition = Point.add(this.position, vector.point)
+        this.position = newPosition;
     }
 
     public destroy() {

@@ -4,7 +4,9 @@ import { takeUntil } from "rxjs/operators";
 import { MainLoop, DrawConfiguration } from "../../Engine";
 import { CollisionDetector } from "../../Engine/Collision";
 import { Color, Controls } from "../../Engine/utils";
-import { Point, Circle, Vector2D } from "../../Engine/Geometry";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
+import { Point } from "../../Engine/Geometry/Point";
+import { Vector2D } from "../../Engine/Geometry/Vector2D";
 
 export interface PlayerControls {
     up: string;
@@ -77,7 +79,7 @@ export class Player {
         let bullet = new Circle(this.circle.position, this.bulletRadius, this.mainLoop, new DrawConfiguration(
             this.playerColor
         ));
-        bullet.velocity = Vector2D.from(this.circle.velocity).setLength(this.bulletSpeed);
+        bullet.physics.velocity = Vector2D.from(this.circle.physics.velocity).setLength(this.bulletSpeed);
         bullet.onBoundaryCollision$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
             this.destroyBullet(bullet);
         })
@@ -113,25 +115,25 @@ export class Player {
     }
 
     private executeControls(controls: PlayerControls) {
-        const currentLength = this.circle.velocity.getLength();
+        const currentLength = this.circle.physics.velocity.getLength();
         if (this.controls.isKeyPressed(controls.left)) {
-            this.circle.velocity.rotate(-4);;
+            this.circle.physics.velocity.rotate(-4);;
         }
         if (this.controls.isKeyPressed(controls.right)) {
-            this.circle.velocity.rotate(4);
+            this.circle.physics.velocity.rotate(4);
         }
         if (this.controls.isKeyPressed(controls.down)) {
             const deccelerate = 0.2;
             let newLength = currentLength - deccelerate;
             newLength = (newLength < 0) ? 0 : newLength;
-            this.circle.velocity.setLength(newLength);
+            this.circle.physics.velocity.setLength(newLength);
         }
         if (this.controls.isKeyPressed(controls.up)) {
             const accelerate = 0.1;
             const maxSpeed = 5;
             let newLength = currentLength + accelerate;
             newLength = (newLength > maxSpeed) ? maxSpeed : newLength;
-            this.circle.velocity.setLength(newLength);
+            this.circle.physics.velocity.setLength(newLength);
         }
     }
 }

@@ -57,10 +57,10 @@ export class Fountains extends Game {
             Color.RANDOM_COLOR, Color.RANDOM_COLOR,
             this.mainLoop
         );
-        fountain.circle.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
+        fountain.circle.physics.velocity.setLength(1).setAngle(MathUtils.degreesToRadian(MathUtils.randomInt(0, 100)));
         this.fountains.push(fountain);
         this.mainLoop.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(_ => {
-            fountain.circle.velocity.rotate(i % 2 === 0 ? 3 : -3);
+            fountain.circle.physics.velocity.rotate(i % 2 === 0 ? 3 : -3);
             fountain.shoot();
         });
     }

@@ -1,8 +1,11 @@
 import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
-import { Circle, Point, Square, Shape, ShapeType } from "../../Engine/Geometry";
+import { Point } from "../../Engine/Geometry";
 
 import { Board } from "./Board";
+import { Shape, ShapeType } from "../../Engine/Geometry/Shapes/Shape";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
+import { Square } from "../../Engine/Geometry/Shapes/Square";
 
 export class ShapedPiece {
     private shape!: Shape;

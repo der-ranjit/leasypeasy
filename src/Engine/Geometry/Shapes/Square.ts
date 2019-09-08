@@ -1,4 +1,3 @@
-import { Color } from "../../utils";
 import { Point } from "../Point";
 import { Rectangle } from "./Rectangle";
 import { MainLoop } from "../../MainLoop";

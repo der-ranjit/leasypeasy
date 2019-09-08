@@ -1,6 +1,8 @@
-import { Point, Circle, Rectangle } from "../Geometry";
+import { Point } from "../Geometry";
 import { MathUtils } from "../utils";
 import { GameObject } from "../GameObject";
+import { Circle } from "../Geometry/Shapes/Circle";
+import { Rectangle } from "../Geometry/Shapes/Rectangle";
 
 export namespace CollisionDetector {
     export function isColliding(gameObjectA: GameObject, gameObjectB: GameObject): boolean {

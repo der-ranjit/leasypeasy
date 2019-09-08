@@ -1,6 +1,9 @@
 import { MainLoop, DrawConfiguration } from "../../Engine";
 import { Color, Controls } from "../../Engine/utils";
-import { Circle, Rectangle, Point, Shape, Vector2D } from "../../Engine/Geometry";
+import { Point, Vector2D } from "../../Engine/Geometry";
+import { Shape } from "../../Engine/Geometry/Shapes/Shape";
+import { Circle } from "../../Engine/Geometry/Shapes/Circle";
+import { Rectangle } from "../../Engine/Geometry/Shapes/Rectangle";
 
 
 export const LisiCollision = (mainLoop: MainLoop) => {

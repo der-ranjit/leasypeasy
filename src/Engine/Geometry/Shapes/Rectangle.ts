@@ -1,8 +1,5 @@
-import { Color } from "../../utils";
 import { Point } from "../Point";
-import { Vector2D } from "../Vector2D";
 import { Shape } from "./Shape";
-import { Circle } from "./Circle";
 import { MainLoop } from "../../MainLoop";
 import { DrawConfiguration } from "../../GameObject";
 
@@ -40,8 +37,4 @@ export class Rectangle extends Shape {
         const offsetPosition = new Point(-offsetX, -offsetY);
         this.position.add(offsetPosition);
     };
-
-    public gravitateTo(circle: Circle) {
-        return new Vector2D(0, 0);
-    }
 }

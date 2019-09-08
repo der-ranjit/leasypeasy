@@ -16,7 +16,7 @@ export class Circle extends Shape {
         drawConfiguration: DrawConfiguration
     ) {
         super(position, mainLoop, drawConfiguration);
-        this.mass = radius * radius * Math.PI;
+        this.physics.mass = radius * radius * Math.PI;
     }
 
     public updateShape(delta: number) {
@@ -27,9 +27,9 @@ export class Circle extends Shape {
         this.drawCircle();
 
         if (this.showVelocityIndicator) {
-           this.drawVectorIndicator(this.velocity, Color.RED);
-            if (this.gravityEnabled) {
-                this.drawVectorIndicator(this.gravityVector, Color.BLACK, 20);
+           this.drawVectorIndicator(this.physics.velocity, Color.RED);
+            if (this.physics.gravityEnabled) {
+                this.drawVectorIndicator(this.physics.gravityVector, Color.BLACK, 20);
             }
         }
 
@@ -40,21 +40,6 @@ export class Circle extends Shape {
 
     public centerArountPoint(point: Point) {
         this.position = point;
-    }
-
-    public gravitateTo(circle: Circle): Vector2D {
-        const gravity = new Vector2D(0, 0);
-        
-        let distance = Point.distanceBetween(this.position, circle.position);
-        const radii = circle.radius;
-        if (distance < radii) {
-            distance = radii;
-        }
-        
-        const mass = (this.mass + circle.mass) / 2;
-		gravity.setLength(mass / (distance * distance));
-		gravity.setAngle(this.position.angleTo(circle.position));
-		return gravity;
     }
 
     private drawCircle() {
@@ -108,9 +93,9 @@ export class Circle extends Shape {
         const posX = this.position.x + this.radius + 2;
         const posY = this.position.y - this.radius
         const stats = [
-            this.gravityEnabled ? `gravity (${this.gravityVector.x.toFixed(4)} | ${this.gravityVector.y.toFixed(4)})` : `gravity disabled`,
-            `velocity (${this.velocity.x.toFixed(4)} | ${this.velocity.y.toFixed(4)}) | ${this.velocity.getLength().toFixed(2)}`,
-            `mass (${this.mass})`
+            this.physics.gravityEnabled ? `gravity (${this.physics.gravityVector.x.toFixed(4)} | ${this.physics.gravityVector.y.toFixed(4)})` : `gravity disabled`,
+            `velocity (${this.physics.velocity.x.toFixed(4)} | ${this.physics.velocity.y.toFixed(4)}) | ${this.physics.velocity.getLength().toFixed(2)}`,
+            `mass (${this.physics.mass})`
         ]
         
         stats.forEach((stat, index) => {
