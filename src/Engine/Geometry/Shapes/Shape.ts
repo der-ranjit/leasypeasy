@@ -39,8 +39,8 @@ export abstract class Shape extends GameObject {
     }
 
     public draw(delta: number) {
-        if (this.collisionConfiguration.indicateCollision) {
-            if (this.collisionConfiguration.collisionObjects.length > 0) {
+        if (this.collision.indicateCollision) {
+            if (this.collision.collisions.length > 0) {
                 this.setColor(Color.RED);
             } else {
                 this.setColor(this.creationFill, this.creationStroke);

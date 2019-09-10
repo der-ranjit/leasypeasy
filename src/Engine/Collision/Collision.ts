@@ -4,10 +4,10 @@ import { GameObject } from "../GameObject";
 
 export namespace Collision {
     export function detectAndResolveCollisions(collidables: GameObject[], boundaries?: BoundaryRect) {
-        collidables.forEach(object => object.collisionConfiguration.collisionObjects = []);
+        collidables.forEach(object => object.collision.collisions = []);
         for (let i = 0; i < collidables.length; i++) {
             const collidableA = collidables[i];
-            if (boundaries && collidableA.collisionConfiguration.checkBoundaries) {
+            if (boundaries && collidableA.collision.checkBoundaries) {
                 CollisionResolver.checkAndResolveBoundaries(collidableA, boundaries);
                 
             }
@@ -17,8 +17,8 @@ export namespace Collision {
                     let isColliding = CollisionDetector.isColliding(collidableA, collidableB);
                     // TODO create proper information collidable about collision participants
                     if (isColliding) {
-                        collidableA.collisionConfiguration.collisionObjects.push(collidableB);
-                        collidableB.collisionConfiguration.collisionObjects.push(collidableA);
+                        collidableA.collision.collisions.push(collidableB);
+                        collidableB.collision.collisions.push(collidableA);
                     }
                 }
             }

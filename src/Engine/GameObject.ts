@@ -28,12 +28,13 @@ export class PhysicsConfiguration {
 }
 
 export class CollisionConfiguration {
-    public collisionObjects: GameObject[] = [];
+    public collisions: GameObject[] = [];
     public isColliding = false;
 
     constructor(
         public checkBoundaries = true,
-        public indicateCollision = true
+        public indicateCollision = false,
+        public noclip = false
     ) {
     }
 }
@@ -42,7 +43,7 @@ export abstract class GameObject {
     /* unique id for the GameObject */
     public readonly id: string;
 
-    public collisionConfiguration = new CollisionConfiguration();
+    public collision = new CollisionConfiguration();
     public physics = new PhysicsConfiguration();
     
     constructor(

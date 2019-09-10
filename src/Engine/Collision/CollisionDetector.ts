@@ -6,18 +6,20 @@ import { Rectangle } from "../Geometry/Shapes/Rectangle";
 
 export namespace CollisionDetector {
     export function isColliding(gameObjectA: GameObject, gameObjectB: GameObject): boolean {
-        if (gameObjectA instanceof Circle && gameObjectB instanceof Circle) {
-            return decideCircleCollision(gameObjectA, gameObjectB);
-        }
-
-        if (gameObjectA instanceof Rectangle && gameObjectB instanceof Rectangle) {
-            return decideRectangleCollision(gameObjectA, gameObjectB);
-        }
-
-        if (gameObjectA instanceof Rectangle && gameObjectB instanceof Circle ) {
-            return decideCircleRectangleCollision(gameObjectB, gameObjectA);
-        } else if (gameObjectA instanceof Circle && gameObjectB instanceof Rectangle ) {
-            return decideCircleRectangleCollision(gameObjectA, gameObjectB);
+        if (!gameObjectA.collision.noclip && !gameObjectB.collision.noclip) {
+            if (gameObjectA instanceof Circle && gameObjectB instanceof Circle) {
+                return decideCircleCollision(gameObjectA, gameObjectB);
+            }
+    
+            if (gameObjectA instanceof Rectangle && gameObjectB instanceof Rectangle) {
+                return decideRectangleCollision(gameObjectA, gameObjectB);
+            }
+    
+            if (gameObjectA instanceof Rectangle && gameObjectB instanceof Circle ) {
+                return decideCircleRectangleCollision(gameObjectB, gameObjectA);
+            } else if (gameObjectA instanceof Circle && gameObjectB instanceof Rectangle ) {
+                return decideCircleRectangleCollision(gameObjectA, gameObjectB);
+            }
         }
 
         return false;
@@ -69,6 +71,7 @@ export namespace CollisionDetector {
 
         // If the distance is less than the circle's radius, an intersection occurs
         const distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-        return distanceSquared < (circle.radius * circle.radius);
+        const result = distanceSquared < (circle.radius * circle.radius); 
+        return result;
     }
 }
