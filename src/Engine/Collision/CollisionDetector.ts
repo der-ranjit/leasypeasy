@@ -32,7 +32,7 @@ export namespace CollisionDetector {
      *  dann kollidieren die Kreise, wenn gilt:
      *  d <= r
      */
-    function decideCircleCollision(circleA: Circle, circleB: Circle): boolean {
+    export function decideCircleCollision(circleA: Circle, circleB: Circle): boolean {
         const distance = Point.distanceBetween(circleA.position, circleB.position);
         const radii = circleA.radius + circleB.radius;
         const isColliding = distance <= radii;
@@ -40,7 +40,7 @@ export namespace CollisionDetector {
         return isColliding;
     }
 
-    function decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
+    export function decideRectangleCollision(rectA: Rectangle, rectB: Rectangle): boolean {
         const xRangesIntersecting = MathUtils.rangesIntersect(
             rectA.position.x,
             rectA.position.x + rectA.width,
@@ -60,7 +60,7 @@ export namespace CollisionDetector {
         return false;
     }
     
-    function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
+    export function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
         // Find the closest point to the circle within the rectangle
         const closestX = MathUtils.clamp(circle.position.x, rect.position.x, rect.position.x + rect.width);
         const closestY = MathUtils.clamp(circle.position.y, rect.position.y, rect.position.y + rect.height);
