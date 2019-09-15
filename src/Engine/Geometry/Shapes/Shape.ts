@@ -6,11 +6,12 @@ import { Square } from "./Square";
 import { Rectangle } from "./Rectangle";
 import { MainLoop } from "../../MainLoop";
 import { GameObject, DrawConfiguration } from "../../GameObject";
+import { BoundaryCollision } from "../../Collision";
 
 export type ShapeType = typeof Circle | typeof Square | typeof Rectangle;
 
 export abstract class Shape extends GameObject {
-    public onBoundaryCollision$ = new Subject<void>();
+    public onBoundaryCollision$ = new Subject<BoundaryCollision>();
     public controls: null | (() => void) = null;
     
     private creationFill: Color;
