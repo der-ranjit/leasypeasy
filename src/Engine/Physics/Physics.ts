@@ -27,7 +27,7 @@ export namespace Physics {
                 }
             }
         } else {
-            const mass = gameObject.physics.mass / 50;
+            const mass = 20;
             gravity = Vector2D.scaled(gameObject.physics.defaultGravity, mass);
         }
 
