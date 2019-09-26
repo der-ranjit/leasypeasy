@@ -16,7 +16,7 @@ export class Platformer extends Game {
 
     private destroyed$ = new Subject<void>();
     private objects: GameObject[] = [];
-    private player: Circle | null = null;
+    private player: Rectangle | null = null;
     private platforms: Rectangle[] = [];
     private jumpMeter = 1;
 
@@ -44,20 +44,26 @@ export class Platformer extends Game {
         this.canvas.height = 600;
 
         this.player = this.createPlayer();
+
         this.setupControls();
         this.createInitialPlatforms();
 
+        this.mainLoop.onLoopEnd$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.context.strokeText(`${this.player!.physics.velocity.x} | ${this.player!.physics.velocity.y}`, 20 , 20);
+            this.context.strokeText(`${this.player!.position.x} | ${this.player!.position.y}`, 20 , 40);
+        });
         this.mainLoop.onUpdate$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.checkEndingConditions();
+
         });
-        this.mainLoop.onCollisionDetection$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        this.mainLoop.onRender$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.handlePlayerPlaftformsCollision();
         })
     }
 
 
     private createInitialPlatforms() {
-        const initialCount = 15
+        const initialCount = 5
         for (let index = 0; index < initialCount; index++) {
             const platform = this.createPlatform();
             this.platforms.push(platform);
@@ -65,50 +71,121 @@ export class Platformer extends Game {
         }
     }
 
+    private handleCollision(platform: Rectangle) {
+        const playerRect = this.player;
+        if (!playerRect) return;
+
+        const nextPositionX = new Point(
+            playerRect.position.x + playerRect.physics.velocity.x,
+            playerRect.position.y
+        )
+        const nextPositionY = new Point(
+            playerRect.position.x,
+            playerRect.position.y + playerRect.physics.velocity.y
+        )
+        
+        const check = (width: number, height: number, position: Point, rect: Rectangle) => {
+            const xRangesIntersecting = MathUtils.rangesIntersect(
+                position.x,
+                position.x + width,
+                rect.position.x,
+                rect.position.x + rect.width,
+            );
+            const yRangesIntersecting = MathUtils.rangesIntersect(
+                position.y,
+                position.y + height,
+                rect.position.y,
+                rect.position.y + rect.height,
+            );
+            if (xRangesIntersecting && yRangesIntersecting) {
+                return true;
+            }
+
+            return false;
+        }
+
+        const verticallyColliding = check(playerRect.width, playerRect.height, nextPositionY, platform);
+        const horizonticallyColliding = check(playerRect.width, playerRect.height, nextPositionX, platform);
+        if ( verticallyColliding ) {
+            debugger;
+            if (playerRect.physics.velocity.y > 0) {
+                playerRect.position.y = platform.position.y - playerRect.height;
+            } else if (playerRect.physics.velocity.y < 0){
+                playerRect.position.y = platform.position.y + platform.height;
+            }
+            playerRect.physics.velocity.y *= -0.7;
+        } else if ( horizonticallyColliding ) {
+            debugger;
+            if (playerRect.physics.velocity.x > 0) {
+                playerRect.position.x = platform.position.x - playerRect.width
+            } else if (playerRect.physics.velocity.x < 0){
+                playerRect.position.x = platform.position.x + platform.width;
+            }
+            playerRect.physics.velocity.x *= -0.7;
+        }         // const check = (radius: number, position: Point, rect: Rectangle) => {
+        //     // Find the closest point to the circle within the rectangle
+        //     const closestX = MathUtils.clamp(position.x, rect.position.x, rect.position.x + rect.width);
+        //     const closestY = MathUtils.clamp(position.y, rect.position.y, rect.position.y + rect.height);
+    
+        //     // Calculate the distance between the circle's center and this closest point
+        //     const distanceX = position.x - closestX;
+        //     const distanceY = position.y - closestY;
+    
+        //     // If the distance is less than the circle's radius, an intersection occurs
+        //     const distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+        //     const result = distanceSquared < (radius * radius); 
+        //     return result;
+        // }
+
+        // if (check(circle.radius, nextPositionX, platform)) {
+        //     if (circle.physics.velocity.x > 0) {
+        //         console.log("left");
+        //         circle.position.x = platform.position.x - circle.radius - 5
+        //     } else if (circle.physics.velocity.x < 0){
+        //         circle.position.x = platform.position.x + platform.width + circle.radius + 5;
+        //         console.log("right");
+        //     }
+        //     circle.physics.velocity.x *= -0.7;
+        // }
+        // if (check(circle.radius, nextPositionY, platform)) {
+        //     if (circle.physics.velocity.y > 0) {
+        //         console.log("top");
+        //         circle.position.y = platform.position.y - circle.radius - 5;
+        //     } else if (circle.physics.velocity.y < 0){
+        //         console.log("bottom");
+        //         circle.position.y = platform.position.y + platform.height + circle.radius + 5;
+        //     }
+        //     circle.physics.gravityEnabled = false;
+        //     circle.physics.velocity.y *= -0.7;
+        // } else {
+        //     circle.physics.gravityEnabled = true;
+        // }
+    }
+
     private handlePlayerPlaftformsCollision() {
         const player = this.player;
         if (player) {
             this.platforms.forEach(platform => {
-                const collides = CollisionDetector.decideCircleRectangleCollision(player, platform);
-                if (collides) {
-                    let hitOnTop = player.physics.velocity.y > 0 && MathUtils.inRange(player.position.x, platform.position.x, platform.position.x + platform.width);
-                    let hitOnBottom = player.physics.velocity.y < 0 && MathUtils.inRange(player.position.x, platform.position.x, platform.position.x + platform.width);
-                    let hitOnLeft = player.physics.velocity.x > 0 && MathUtils.inRange(player.position.y, platform.position.y, platform.position.y + platform.height);
-                    let hitOnRight = player.physics.velocity.x < 0 && MathUtils.inRange(player.position.y, platform.position.y, platform.position.y + platform.height);
-                    if (hitOnTop) {
-                        player.position.y = platform.position.y - player.radius - 1;
-                        player.physics.velocity.y *= -1 * 0.5;
-                    } else if (hitOnBottom) {
-                        player.position.y = platform.position.y + platform.height + player.radius + 1;
-                        player.physics.velocity.y *= -1;
-                    }else if (hitOnRight) {
-                        player.physics.velocity.x *= -1;
-                        player.position.x = platform.position.x + platform.width + player.radius + 1;
-                    }   else if (hitOnLeft) {
-                        player.physics.velocity.x *= -1;
-                        player.position.x = platform.position.x - player.radius - 1;
-                    }
-                    
-                }
+                this.handleCollision(platform);
             })
         }
     }
 
     private checkEndingConditions() {
-        if (this.player && this.player.position.y + this.player.radius >= this.canvas.height) {
-            this.mainLoop.pause();
-            this.destroy();
-            this.start();
-        }
+        // if (this.player && this.player.position.y + this.player.height >= this.canvas.height) {
+        //     this.mainLoop.pause();
+        //     this.destroy();
+        //     this.start();
+        // }
         this.platforms.forEach(platform => {
             platform.physics.velocity = new Vector2D(-2, 0);
         });
     }
 
     private setupControls() {
-        const maxSpeed = 8;
-        const friction = 0.95;
-        const acceleration = 0.5;
+        const maxSpeed = 4;
+        const friction = 0.4;
+        const acceleration = 0.2;
         const stopSpeedThreshold = 0.1;
         const jumpReloadRate = 0.05;
 
@@ -145,7 +222,7 @@ export class Platformer extends Game {
     }
 
     private createPlayer() {
-        const player = new Circle(new Point(200, 200), 20, this.mainLoop, new DrawConfiguration(
+        const player = new Rectangle(new Point(200, 200), 20, 40, this.mainLoop, new DrawConfiguration(
             Color.GREEN,
             Color.BLACK,
             1,
@@ -176,7 +253,7 @@ export class Platformer extends Game {
         const platform = new Rectangle(
             new Point(
                 atRightEdge ? this.canvas.width - width : MathUtils.randomInt(0, this.canvas.width - width),
-                MathUtils.randomInt(0, this.canvas.height - height),
+                MathUtils.randomInt(this.canvas.height - 200, this.canvas.height),
             ),
             width,
             height,
