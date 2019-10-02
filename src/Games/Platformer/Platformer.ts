@@ -4,11 +4,9 @@ import { takeUntil } from "rxjs/operators";
 import { MainLoop, GameObject, DrawConfiguration } from "../../Engine";
 import { Color, MathUtils } from "../../Engine/utils";
 import { Game } from "../Game.abstract";
-import { Circle } from "../../Engine/Geometry/Shapes/Circle";
 import { Point } from "../../Engine/Geometry/Point";
 import { Vector2D } from "../../Engine/Geometry/Vector2D";
 import { Rectangle } from "../../Engine/Geometry/Shapes/Rectangle";
-import { CollisionDetector } from "../../Engine/Collision";
 
 export class Platformer extends Game {
     public name = "platformz aiiight";
@@ -56,9 +54,6 @@ export class Platformer extends Game {
             this.checkEndingConditions();
 
         });
-        this.mainLoop.onRender$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.handlePlayerPlaftformsCollision();
-        })
     }
 
 
@@ -71,105 +66,6 @@ export class Platformer extends Game {
         }
     }
 
-    private handleCollision(platform: Rectangle) {
-        const playerRect = this.player;
-        if (!playerRect) return;
-
-        const nextPositionX = new Point(
-            playerRect.position.x + playerRect.physics.velocity.x,
-            playerRect.position.y
-        )
-        const nextPositionY = new Point(
-            playerRect.position.x,
-            playerRect.position.y + playerRect.physics.velocity.y
-        )
-        
-        const check = (width: number, height: number, position: Point, rect: Rectangle) => {
-            const xRangesIntersecting = MathUtils.rangesIntersect(
-                position.x,
-                position.x + width,
-                rect.position.x,
-                rect.position.x + rect.width,
-            );
-            const yRangesIntersecting = MathUtils.rangesIntersect(
-                position.y,
-                position.y + height,
-                rect.position.y,
-                rect.position.y + rect.height,
-            );
-            if (xRangesIntersecting && yRangesIntersecting) {
-                return true;
-            }
-
-            return false;
-        }
-
-        const verticallyColliding = check(playerRect.width, playerRect.height, nextPositionY, platform);
-        const horizonticallyColliding = check(playerRect.width, playerRect.height, nextPositionX, platform);
-        if ( verticallyColliding ) {
-            debugger;
-            if (playerRect.physics.velocity.y > 0) {
-                playerRect.position.y = platform.position.y - playerRect.height;
-            } else if (playerRect.physics.velocity.y < 0){
-                playerRect.position.y = platform.position.y + platform.height;
-            }
-            playerRect.physics.velocity.y *= -0.7;
-        } else if ( horizonticallyColliding ) {
-            debugger;
-            if (playerRect.physics.velocity.x > 0) {
-                playerRect.position.x = platform.position.x - playerRect.width
-            } else if (playerRect.physics.velocity.x < 0){
-                playerRect.position.x = platform.position.x + platform.width;
-            }
-            playerRect.physics.velocity.x *= -0.7;
-        }         // const check = (radius: number, position: Point, rect: Rectangle) => {
-        //     // Find the closest point to the circle within the rectangle
-        //     const closestX = MathUtils.clamp(position.x, rect.position.x, rect.position.x + rect.width);
-        //     const closestY = MathUtils.clamp(position.y, rect.position.y, rect.position.y + rect.height);
-    
-        //     // Calculate the distance between the circle's center and this closest point
-        //     const distanceX = position.x - closestX;
-        //     const distanceY = position.y - closestY;
-    
-        //     // If the distance is less than the circle's radius, an intersection occurs
-        //     const distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-        //     const result = distanceSquared < (radius * radius); 
-        //     return result;
-        // }
-
-        // if (check(circle.radius, nextPositionX, platform)) {
-        //     if (circle.physics.velocity.x > 0) {
-        //         console.log("left");
-        //         circle.position.x = platform.position.x - circle.radius - 5
-        //     } else if (circle.physics.velocity.x < 0){
-        //         circle.position.x = platform.position.x + platform.width + circle.radius + 5;
-        //         console.log("right");
-        //     }
-        //     circle.physics.velocity.x *= -0.7;
-        // }
-        // if (check(circle.radius, nextPositionY, platform)) {
-        //     if (circle.physics.velocity.y > 0) {
-        //         console.log("top");
-        //         circle.position.y = platform.position.y - circle.radius - 5;
-        //     } else if (circle.physics.velocity.y < 0){
-        //         console.log("bottom");
-        //         circle.position.y = platform.position.y + platform.height + circle.radius + 5;
-        //     }
-        //     circle.physics.gravityEnabled = false;
-        //     circle.physics.velocity.y *= -0.7;
-        // } else {
-        //     circle.physics.gravityEnabled = true;
-        // }
-    }
-
-    private handlePlayerPlaftformsCollision() {
-        const player = this.player;
-        if (player) {
-            this.platforms.forEach(platform => {
-                this.handleCollision(platform);
-            })
-        }
-    }
 
     private checkEndingConditions() {
         // if (this.player && this.player.position.y + this.player.height >= this.canvas.height) {
@@ -261,7 +157,7 @@ export class Platformer extends Game {
             new DrawConfiguration()
         );
 
-        platform.collision.noclip = true;
+        // platform.collision.noclip = true;
         platform.onBoundaryCollision$.subscribe(_ => {
             this.platforms.splice(this.platforms.indexOf(platform), 1);
             this.objects.splice(this.objects.indexOf(platform), 1);

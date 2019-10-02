@@ -60,6 +60,26 @@ export namespace CollisionDetector {
         return false;
     }
     
+
+    export function decideRectangleCollisionDeltaPosition(rectA: Rectangle, deltaPosition: Point, rectB: Rectangle): boolean {
+        const xRangesIntersecting = MathUtils.rangesIntersect(
+            deltaPosition.x,
+            deltaPosition.x + rectA.width,
+            rectB.position.x,
+            rectB.position.x + rectB.width,
+        );
+        const yRangesIntersecting = MathUtils.rangesIntersect(
+            deltaPosition.y,
+            deltaPosition.y + rectA.height,
+            rectB.position.y,
+            rectB.position.y + rectB.height,
+        );
+        if (xRangesIntersecting && yRangesIntersecting) {
+            return true;
+        }
+        return false;
+    }
+    
     export function decideCircleRectangleCollision(circle: Circle, rect: Rectangle): boolean {
         // Find the closest point to the circle within the rectangle
         const closestX = MathUtils.clamp(circle.position.x, rect.position.x, rect.position.x + rect.width);

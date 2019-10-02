@@ -11,16 +11,19 @@ export namespace Collision {
                 CollisionResolver.checkAndResolveBoundaries(collidableA, boundaries);
                 
             }
-            for (let j = i + 1; j < collidables.length; j++) {
-                let collidableB = collidables[j];
-                if (collidableA && collidableB) {
-                    let isColliding = CollisionDetector.isColliding(collidableA, collidableB);
-                    // TODO create proper information collidable about collision participants
-                    if (isColliding) {
-                        collidableA.collision.collisions.push(collidableB);
-                        collidableB.collision.collisions.push(collidableA);
+            for (let j = 0; j < collidables.length; j++) {
+                if (i !== j) {
+                    let collidableB = collidables[j];
+                    if (collidableA && collidableB) {
+                        let isColliding = CollisionDetector.isColliding(collidableA, collidableB);
+                        // TODO create proper information collidable about collision participants
+                        if (isColliding) {
+                            collidableA.collision.collisions.push(collidableB);
+                            collidableB.collision.collisions.push(collidableA);
+                            CollisionResolver.resolveCollision(collidableA, collidableB);
+                        }
                     }
-                }
+                } 
             }
         }
     }
