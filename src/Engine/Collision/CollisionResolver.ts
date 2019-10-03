@@ -139,12 +139,10 @@ export namespace CollisionResolver {
             rectangleA.physics.velocity.y *= -0.7;
         } else if ( horizonticallyColliding ) {
             console.log("collision");
-            if (rectangleA.physics.velocity.x > 0) {
+            if (rectangleA.physics.velocity.x > 0 || rectangleB.physics.velocity.x < 0 ) {
                 rectangleA.position.x = rectangleB.position.x - rectangleA.width
-            } else if (rectangleA.physics.velocity.x < 0){
+            } else if (rectangleA.physics.velocity.x < 0 || rectangleB.physics.velocity.x > 0 ){
                 rectangleA.position.x = rectangleB.position.x + rectangleB.width;
-            } else {
-
             }
             rectangleA.physics.velocity.x *= -0.7;
         }        
