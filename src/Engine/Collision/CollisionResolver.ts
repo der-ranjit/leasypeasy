@@ -39,7 +39,7 @@ export namespace CollisionResolver {
             }
     
             if (gameObjectA instanceof Rectangle && gameObjectB instanceof Rectangle) {
-                return resolveRectangleRectangleCollision(gameObjectA, gameObjectB);
+                // Rectangle Rectangle
             }
     
             if (gameObjectA instanceof Rectangle && gameObjectB instanceof Circle ) {
@@ -109,43 +109,8 @@ export namespace CollisionResolver {
     }
 
     function resolveRectangleRectangleCollision(rectangleA: Rectangle, rectangleB: Rectangle): boolean {
-        const nextPositionX = new Point(
-            rectangleA.position.x + rectangleA.physics.velocity.x,
-            rectangleA.position.y
-        )
-        const nextPositionY = new Point(
-            rectangleA.position.x,
-            rectangleA.position.y + rectangleA.physics.velocity.y
-        )
-        const horizonticallyColliding = CollisionDetector.decideRectangleCollisionDeltaPosition(
-            rectangleA,
-            nextPositionX,
-            rectangleB
-        );
-        const verticallyColliding = CollisionDetector.decideRectangleCollisionDeltaPosition(
-            rectangleA,
-            nextPositionY,
-            rectangleB
-        );
-        if ( verticallyColliding ) {
-            console.log("collision");
-            if (rectangleA.physics.velocity.y > 0) {
-                rectangleA.position.y = rectangleB.position.y - rectangleA.height;
-            } else if (rectangleA.physics.velocity.y < 0){
-                rectangleA.position.y = rectangleB.position.y + rectangleB.height;
-            } else {
-
-            }
-            rectangleA.physics.velocity.y *= -0.7;
-        } else if ( horizonticallyColliding ) {
-            console.log("collision");
-            if (rectangleA.physics.velocity.x > 0 || rectangleB.physics.velocity.x < 0 ) {
-                rectangleA.position.x = rectangleB.position.x - rectangleA.width
-            } else if (rectangleA.physics.velocity.x < 0 || rectangleB.physics.velocity.x > 0 ){
-                rectangleA.position.x = rectangleB.position.x + rectangleB.width;
-            }
-            rectangleA.physics.velocity.x *= -0.7;
-        }        
-        return false;
+        // rectangles are already colliding.
+        // check which rectangle is contained more inside of the other, and push it out
+        return true;
     }
 }

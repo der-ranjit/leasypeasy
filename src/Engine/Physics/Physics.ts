@@ -1,6 +1,8 @@
 import { GameObject } from "../GameObject";
 import { Vector2D, Point } from "../Geometry";
 import { Circle } from "../Geometry/Shapes/Circle";
+import { Rectangle } from "../Geometry/Shapes/Rectangle";
+import { CollisionDetector } from "../Collision";
 
 export namespace Physics {
     export function applyPhysics(physicObjects: GameObject[], delta: number) {
@@ -9,10 +11,21 @@ export namespace Physics {
                 object.physics.gravityVector = computeGravity(object);
                 object.physics.velocity.add(object.physics.gravityVector);
             } 
-            
-                    object.physics.velocity.add(object.physics.acceleration);
-                    object.move(object.physics.velocity);
-            
+
+            object.physics.velocity.add(object.physics.acceleration);
+
+            let resolved = false;
+            for (let i = 0; i < physicObjects.length; i++) {
+                const otherObject = physicObjects[i];
+                if (otherObject !== object && object instanceof Rectangle && otherObject instanceof Rectangle) {
+                    if (resolveRectangleRectangleCollision(object, otherObject)) {
+                        resolved = true;
+                    }
+                }
+            }
+            if (!resolved) {
+                object.move(object.physics.velocity);
+            }
         })
     }
 
@@ -47,5 +60,53 @@ export namespace Physics {
 		gravity.setLength(mass / (distance * distance));
 		gravity.setAngle(from.position.angleTo(to.position));
 		return gravity;
+    }
+
+    function resolveRectangleRectangleCollision(rectangleA: Rectangle, rectangleB: Rectangle): boolean {
+        const nextPositionX = new Point(
+            rectangleA.position.x + rectangleA.physics.velocity.x,
+            rectangleA.position.y
+        )
+        const nextPositionY = new Point(
+            rectangleA.position.x,
+            rectangleA.position.y + rectangleA.physics.velocity.y
+        )
+        const horizonticallyColliding = CollisionDetector.decideRectangleCollisionDeltaPosition(
+            rectangleA,
+            nextPositionX,
+            rectangleB
+        );
+        const verticallyColliding = CollisionDetector.decideRectangleCollisionDeltaPosition(
+            rectangleA,
+            nextPositionY,
+            rectangleB
+        );
+        if ( verticallyColliding ) {
+            if (rectangleA.physics.velocity.y > 0) {
+                rectangleA.position.y = rectangleB.position.y - rectangleA.height - 1;
+            } else if (rectangleA.physics.velocity.y < 0){
+                rectangleA.position.y = rectangleB.position.y + rectangleB.height + 1;
+            } else {
+
+            }
+
+            rectangleA.physics.velocity.y = 0;
+            rectangleA.position.x += rectangleA.physics.velocity.x;
+            
+            return true;
+        } else if ( horizonticallyColliding ) {
+            if (rectangleA.physics.velocity.x > 0 || rectangleB.physics.velocity.x < 0 ) {
+                rectangleA.position.x = rectangleB.position.x - rectangleA.width -1;
+            } else if (rectangleA.physics.velocity.x < 0 || rectangleB.physics.velocity.x > 0 ){
+                rectangleA.position.x = rectangleB.position.x + rectangleB.width + 1;
+            }
+            
+            rectangleA.physics.velocity.x = 0;
+            rectangleA.position.y += rectangleA.physics.velocity.y;
+
+            return true;
+        }        
+
+        return false;
     }
 }
