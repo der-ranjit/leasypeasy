@@ -15,10 +15,18 @@ export namespace Physics {
             object.physics.velocity.add(object.physics.acceleration);
 
             let resolved = false;
+            physicObjects.forEach(object => object.physics.resolvedCollisions = []);
             for (let i = 0; i < physicObjects.length; i++) {
                 const otherObject = physicObjects[i];
-                if (otherObject !== object && object instanceof Rectangle && otherObject instanceof Rectangle) {
-                    if (resolveRectangleRectangleCollision(object, otherObject)) {
+                if (otherObject !== object &&
+                    object instanceof Rectangle &&
+                    otherObject instanceof Rectangle &&
+                    !object.physics.resolvedCollisions.includes(otherObject) &&
+                    !otherObject.physics.resolvedCollisions.includes(object)
+                ) {
+                    const isResolved = resolveRectangleRectangleCollision(object, otherObject);
+                    if (isResolved) {
+                        object.physics.resolvedCollisions.push(otherObject);
                         resolved = true;
                     }
                 }
@@ -86,8 +94,6 @@ export namespace Physics {
                 rectangleA.position.y = rectangleB.position.y - rectangleA.height - 1;
             } else if (rectangleA.physics.velocity.y < 0){
                 rectangleA.position.y = rectangleB.position.y + rectangleB.height + 1;
-            } else {
-
             }
 
             rectangleA.physics.velocity.y = 0;
@@ -95,9 +101,9 @@ export namespace Physics {
             
             return true;
         } else if ( horizonticallyColliding ) {
-            if (rectangleA.physics.velocity.x > 0 || rectangleB.physics.velocity.x < 0 ) {
+            if (rectangleA.physics.velocity.x > 0 ) {
                 rectangleA.position.x = rectangleB.position.x - rectangleA.width -1;
-            } else if (rectangleA.physics.velocity.x < 0 || rectangleB.physics.velocity.x > 0 ){
+            } else if (rectangleA.physics.velocity.x < 0 ){
                 rectangleA.position.x = rectangleB.position.x + rectangleB.width + 1;
             }
             

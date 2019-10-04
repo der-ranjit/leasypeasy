@@ -15,6 +15,8 @@ export class DrawConfiguration {
 }
 
 export class PhysicsConfiguration {
+    public resolvedCollisions: GameObject[] = [];
+    
     constructor(
         public gravityEnabled = false,
         public mass = 1,
